@@ -1,0 +1,128 @@
+{
+  "details": [
+    {
+      "question": "Nghị định 145/2020/NĐ-CP hướng dẫn trợ cấp mất việc làm dựa trên căn cứ Điều nào của Bộ luật Lao động, và điều kiện tối thiểu về thời gian làm việc thường xuyên để được hưởng là gì?",
+      "condition": "baseline_no_decompose",
+      "sub_queries": [],
+      "n_candidates": 10,
+      "answer": "Nghị định 145/2020/NĐ-CP hướng dẫn trợ cấp mất việc làm dựa trên Điều 34 của Bộ luật Lao động. Điều kiện tối thiểu về thời gian làm việc thường xuyên để được hưởng trợ cấp mất việc là từ đủ 12 tháng trở lên.\n\n**Markdown:**\n\n> **Nghị định 145/2020/NĐ-CP hướng dẫn trợ cấp mất việc làm dựa trên Điều 34 của Bộ luật Lao động.**\n>\n> **Điều kiện tối thiểu về thời gian làm việc thường xuyên để được hưởng là từ đủ 12 tháng trở lên.**",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "recall@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời xác định đúng điều kiện thời gian làm việc (12 tháng) dựa trên context, nhưng thông tin về căn cứ pháp lý bị thiếu sót vì Nghị định 145/2020/NĐ-CP hướng dẫn dựa trên Điều 47 của Bộ luật Lao động, không phải chỉ dựa trên Điều 34.",
+        "answer_relevancy": 1.0
+      }
+    },
+    {
+      "question": "Nghị định 145/2020/NĐ-CP hướng dẫn trợ cấp mất việc làm dựa trên căn cứ Điều nào của Bộ luật Lao động, và điều kiện tối thiểu về thời gian làm việc thường xuyên để được hưởng là gì?",
+      "condition": "decomposition",
+      "sub_queries": [
+        "Nghị định 145/2020/NĐ-CP hướng dẫn trợ cấp mất việc làm dựa trên căn cứ Điều nào của Bộ luật Lao động?",
+        "điều kiện tối thiểu về thời gian làm việc thường xuyên để được hưởng trợ cấp mất việc làm là gì?"
+      ],
+      "n_candidates": 15,
+      "answer": "Theo Nghị định 145/2020/NĐ-CP, trợ cấp mất việc làm dựa trên căn cứ Điều 34 của Bộ luật Lao động. Điều kiện tối thiểu về thời gian làm việc thường xuyên để được hưởng trợ cấp mất việc là từ đủ 12 tháng trở lên.\n\nĐiều này được xác định trong tài liệu tham khảo như sau:\n\n- Tài liệu 1: \"Người sử dụng lao động có trách nhiệm chi trả trợ cấp mất việc làm theo quy định tại Điều 47 của Bộ luật Lao động đối với người lao động đã làm việc thường xuyên cho mình từ đủ 12 tháng trở lên mà bị mất việc làm theo quy định tại khoản 11 Điều 34 của Bộ luật Lao động.\"\n\n- Tài liệu 2: \"Người sử dụng lao động trả trợ cấp mất việc làm cho người lao động đã làm việc thường xuyên cho mình từ đủ 12 tháng trở lên mà bị mất việc làm theo quy định tại khoản 11 Điều 34 của Bộ luật này, cứ mỗi năm làm việc trả 01 tháng tiền lương nhưng ít nhất bằng 02 tháng tiền.\"\n\n- Tài liệu 3: \"Người sử dụng lao động có trách nhiệm chi trả trợ cấp thôi việc theo quy định tại Điều 46 của Bộ luật Lao động đối với người lao động đã làm việc thường xuyên cho mình từ đủ 12 tháng trở lên khi hợp đồng lao động chấm dứt theo quy định tại các khoản 1, 2, 3, 4, 6, 7, 9 và 10 Điều 34 của Bộ luật Lao động.\"\n\nVì vậy, Nghị định 145/2020/NĐ-CP hướng dẫn trợ cấp mất việc làm dựa trên căn cứ Điều 34 của Bộ luật Lao động, và điều kiện tối thiểu về thời gian làm việc thường xuyên để được hưởng là từ đủ 12 tháng trở lên.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "recall@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời xác định sai căn cứ pháp lý chính. Context chỉ rõ trợ cấp mất việc làm được quy định tại Điều 47 của Bộ luật Lao động, trong khi Điều 34 chỉ là căn cứ xác định trường hợp mất việc làm.",
+        "answer_relevancy": 1.0
+      }
+    },
+    {
+      "question": "Mẫu điều lệ công ty TNHH một thành viên do cá nhân sở hữu và do tổ chức sở hữu có giống nhau về cấu trúc (số lượng và nội dung các Điều) không?",
+      "condition": "baseline_no_decompose",
+      "sub_queries": [],
+      "n_candidates": 10,
+      "answer": "Theo tài liệu tham khảo, mẫu điều lệ của Công ty TNHH một thành viên do cá nhân sở hữu và do tổ chức sở hữu có sự khác biệt về mô hình tổ chức công ty. \n\nĐiều lệ 1 (công ty theo mô hình là Chủ tịch công ty):\n- Có nội dung chủ yếu về việc thành lập công ty, dựa trên Điều 24 Luật Doanh nghiệp năm 2020.\n- Nội dung cụ thể bao gồm: tên tổ chức, mã số doanh nghiệp, ngày cấp và cơ quan cấp.\n\nĐiều lệ 2 (công ty theo mô hình là Hội đồng thành viên):\n- Có nội dung chủ yếu về việc thành lập công ty, dựa trên Điều 24 Luật Doanh nghiệp năm 2020.\n- Nội dung cụ thể bao gồm: thông tin cá nhân hoặc địa chỉ trụ sở chính của các thành viên (doanh nghiệp hoặc cá nhân), loại giấy tờ, số, ngày cấp và cơ quan cấp.\n\nVề cấu trúc, cả hai mẫu đều có nội dung tương tự về việc thành lập công ty dựa trên Luật Doanh nghiệp 2020. Tuy nhiên, Điều lệ 1 tập trung vào việc xác định Chủ tịch công ty, trong khi Điều lệ 2 tập trung vào việc xác định Hội đồng thành viên.\n\nVì vậy, mặc dù cả hai mẫu đều có số lượng và nội dung các điều tương tự nhau, nhưng cấu trúc của chúng khác nhau dựa trên mô hình tổ chức công ty.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "recall@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.6,
+        "faithfulness_reasoning": "Câu trả lời đưa ra các thông tin về cấu trúc không có trong ngữ cảnh (CONTEXT không cung cấp chi tiết về số lượng hay nội dung các Điều để so sánh). Ngoài ra, phần mô tả về Điều lệ 2 trong câu trả lời bị nhầm lẫn với mẫu của công ty nhiều thành viên thay vì công ty một thành viên.",
+        "answer_relevancy": 0.85
+      }
+    },
+    {
+      "question": "Mẫu điều lệ công ty TNHH một thành viên do cá nhân sở hữu và do tổ chức sở hữu có giống nhau về cấu trúc (số lượng và nội dung các Điều) không?",
+      "condition": "decomposition",
+      "sub_queries": [
+        "Cấu trúc của mẫu điều lệ công ty TNHH một thành viên do cá nhân sở hữu gồm những điều gì?",
+        "Cấu trúc của mẫu điều lệ công ty TNHH một thành viên do tổ chức sở hữu gồm những điều gì?",
+        "Điều lệ của cả hai loại công ty có số lượng và nội dung các Điều giống nhau không?"
+      ],
+      "n_candidates": 15,
+      "answer": "Theo tài liệu tham khảo, mẫu điều lệ của Công ty TNHH một thành viên do cá nhân sở hữu và do tổ chức sở hữu có một số điểm tương đồng cũng như khác biệt về cấu trúc.\n\n**Điều giống nhau:**\n1. Cả hai mẫu đều bắt đầu bằng văn bản pháp lý chung của Việt Nam, cụ thể là Điều lệ Công ty TNHH (Một Thành viên) được thông qua theo quy định của Luật Doanh nghiệp số 59/2020/QH14.\n2. Cả hai mẫu cũng đều có phần mô tả về tên tổ chức, mã số doanh nghiệp và cơ quan cấp phép.\n\n**Điều khác biệt:**\n1. **Mô hình công ty:** Mẫu Điều lệ 1 đề cập đến Công ty theo mô hình là Chủ tịch công ty, trong khi mẫu Điều lệ 2 đề cập đến Công ty theo mô hình là Hội đồng thành viên.\n2. **Nội dung cụ thể của Điều lệ:**\n   - **Điều lệ 1:** Có phần mô tả về việc Công ty (Tên tổ chức) là Chủ sở hữu của Công ty TNHH ... đồng ý ký tên và chấp thuận thành lập Công ty TNHH ....\n   - **Điều lệ 2:** Không có thông tin cụ thể về việc công ty nào là chủ sở hữu, thay vào đó mô tả các thành viên trong Hội đồng thành viên.\n\n**Tóm lại,** mặc dù hai mẫu đều bắt đầu với cấu trúc chung và có một số điểm tương đồng về nội dung, nhưng về số lượng và chi tiết của các Điều, chúng khác nhau do sự khác biệt về mô hình công ty.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "recall@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.6,
+        "faithfulness_reasoning": "Câu trả lời đưa ra các nhận định về sự khác biệt giữa mẫu cá nhân và tổ chức sở hữu, tuy nhiên context chỉ cung cấp mẫu theo mô hình tổ chức (Chủ tịch/Hội đồng thành viên) chứ không phân biệt mẫu cho cá nhân hay tổ chức sở hữu.",
+        "answer_relevancy": 0.9
+      }
+    },
+    {
+      "question": "Trong các mẫu điều lệ đã cung cấp (TNHH một thành viên, TNHH hai thành viên trở lên, công ty cổ phần), mẫu nào có khái niệm 'cổ phần' và 'cổ đông sáng lập'?",
+      "condition": "baseline_no_decompose",
+      "sub_queries": [],
+      "n_candidates": 10,
+      "answer": "Trong các mẫu điều lệ được cung cấp (mẫu điều lệ cho Công ty TNHH một thành viên, Công ty TNHH hai thành viên trở lên, và Công ty cổ phần), mẫu có khái niệm \"cổ phần\" và \"cổ đông sáng lập\" là mẫu điều lệ cho Công ty Cổ phần.\n\nCụ thể:\n- Mẫu điều lệ cho Công ty Cổ phần mô tả chi tiết về các cổ đông sáng lập, bao gồm thông tin cá nhân của họ như giới tính, ngày sinh, dân tộc, quốc tịch, số chứng minh thư hoặc căn cước công dân, địa chỉ liên lạc, và số lượng cổ phần phổ thông mà mỗi cổ đông sở hữu. Mẫu này cũng mô tả rõ về mệnh giá mỗi cổ phần phổ thông.\n- Các mẫu khác (mẫu cho Công ty TNHH một thành viên và Công ty TNHH hai thành viên trở lên) không có thông tin chi tiết như vậy, chỉ đề cập đến các cổ đông thông qua tổng số cổ phần mà họ sở hữu.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "recall@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.67,
+        "faithfulness_reasoning": "Câu trả lời xác định đúng mẫu Công ty Cổ phần có các khái niệm trên dựa trên context, nhưng lại đưa ra nhận định không có căn cứ về việc các mẫu TNHH có đề cập đến 'tổng số cổ phần' trong khi context không hề cung cấp thông tin về các mẫu TNHH đó.",
+        "answer_relevancy": 1.0
+      }
+    },
+    {
+      "question": "Trong các mẫu điều lệ đã cung cấp (TNHH một thành viên, TNHH hai thành viên trở lên, công ty cổ phần), mẫu nào có khái niệm 'cổ phần' và 'cổ đông sáng lập'?",
+      "condition": "decomposition",
+      "sub_queries": [
+        "Mẫu nào trong các mẫu điều lệ đã cung cấp (TNHH một thành viên, TNHH hai thành viên trở lên, công ty cổ phần) liên quan đến khái niệm 'cổ phần'?",
+        "Mẫu nào trong các mẫu điều lệ đã cung cấp (TNHH một thành viên, TNHH hai thành viên trở lên, công ty cổ phần) liên quan đến khái niệm 'cổ đông sáng lập'?"
+      ],
+      "n_candidates": 13,
+      "answer": "Trong các mẫu điều lệ được cung cấp, mẫu dành cho Công ty Cổ Phần (tài liệu 1) là mẫu duy nhất có khái niệm \"cổ phần\" và \"cổ đông sáng lập\". Mẫu này mô tả chi tiết về thông tin cơ bản của cổ đông sáng lập, bao gồm họ tên, giới tính, ngày sinh, dân tộc, quốc tịch, chứng minh nhân dân/căn cước công dân số, nơi cấp, nơi đăng ký hộ khẩu thường trú, địa chỉ liên lạc, và số cổ phần phổ thông mà mỗi cổ đông sở hữu cùng mệnh giá của mỗi cổ phần. Đây đều là thông tin quan trọng trong việc xác định vai trò cũng như quyền lợi của cổ đông sáng lập trong Công ty Cổ Phần.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.3333333333333333,
+        "recall@3": 1.0,
+        "recall@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác mẫu Công ty Cổ phần có chứa các khái niệm được hỏi dựa trên nội dung context, đồng thời liệt kê đúng các thông tin chi tiết về cổ đông sáng lập được đề cập trong tài liệu.",
+        "answer_relevancy": 1.0
+      }
+    }
+  ]
+}

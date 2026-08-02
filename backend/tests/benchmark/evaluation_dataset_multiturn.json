@@ -1,0 +1,152 @@
+[
+  {
+    "conversation_id": "mt_01",
+    "history": [
+      {"role": "user", "content": "Theo Luật An ninh mạng, 'Không gian mạng quốc gia' được định nghĩa là gì?"},
+      {"role": "assistant", "content": "Không gian mạng quốc gia là không gian mạng do Chính phủ xác lập, quản lý và kiểm soát (Điều 2, khoản 4, Luật An ninh mạng)."}
+    ],
+    "target_question": "Nhà nước bảo vệ nó bằng những biện pháp nào?",
+    "category": "pronoun_reference",
+    "expected_sources": [{"filename": "24-2018-qh14.pdf", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_02",
+    "history": [
+      {"role": "user", "content": "Cơ quan nào chịu trách nhiệm trước Chính phủ chủ trì, phối hợp thực hiện hợp tác quốc tế về an ninh mạng, trừ hoạt động hợp tác quốc tế của Bộ Quốc phòng?"},
+      {"role": "assistant", "content": "Bộ Công an chịu trách nhiệm trước Chính phủ chủ trì, phối hợp thực hiện hợp tác quốc tế về an ninh mạng, trừ hoạt động hợp tác quốc tế của Bộ Quốc phòng (Điều 7, Luật An ninh mạng)."}
+    ],
+    "target_question": "Còn Bộ Quốc phòng?",
+    "category": "elliptical_short",
+    "expected_sources": [{"filename": "24-2018-qh14.pdf", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_03",
+    "history": [
+      {"role": "user", "content": "Kiểm tra an ninh mạng đột xuất đối với hệ thống thông tin quan trọng về an ninh quốc gia được thực hiện trong trường hợp nào?"},
+      {"role": "assistant", "content": "Kiểm tra an ninh mạng đột xuất được thực hiện khi xảy ra sự cố an ninh mạng, hành vi xâm phạm an ninh mạng, hoặc có yêu cầu quản lý nhà nước về an ninh mạng (Điều 13, Luật An ninh mạng)."}
+    ],
+    "target_question": "Phải thông báo trước bao lâu?",
+    "category": "elliptical_short",
+    "expected_sources": [{"filename": "24-2018-qh14.pdf", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_04",
+    "history": [
+      {"role": "user", "content": "Theo Luật Bảo hiểm xã hội 2024, công dân Việt Nam từ đủ bao nhiêu tuổi trở lên thì được hưởng trợ cấp hưu trí xã hội (không thuộc hộ nghèo/cận nghèo)?"},
+      {"role": "assistant", "content": "Từ đủ 75 tuổi trở lên (Điều 21, Luật Bảo hiểm xã hội 2024)."}
+    ],
+    "target_question": "Ngoài điều kiện đó, còn cần gì nữa?",
+    "category": "pronoun_reference",
+    "expected_sources": [{"filename": "41-2024-qh15.pdf", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_05",
+    "history": [
+      {"role": "user", "content": "Văn bản ủy quyền nhận lương hưu, trợ cấp bảo hiểm xã hội có hiệu lực tối đa bao lâu kể từ ngày xác lập việc ủy quyền?"},
+      {"role": "assistant", "content": "Tối đa 12 tháng kể từ ngày xác lập việc ủy quyền (Luật Bảo hiểm xã hội 2024)."}
+    ],
+    "target_question": "Văn bản đó cần đáp ứng điều kiện gì để có giá trị?",
+    "category": "pronoun_reference",
+    "expected_sources": [{"filename": "41-2024-qh15.pdf", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_06",
+    "history": [
+      {"role": "user", "content": "Độ tuổi lao động tối thiểu của người lao động theo Bộ luật Lao động là bao nhiêu?"},
+      {"role": "assistant", "content": "Độ tuổi lao động tối thiểu là đủ 15 tuổi (Bộ luật Lao động)."}
+    ],
+    "target_question": "Có ngoại lệ nào không?",
+    "category": "elliptical_short",
+    "expected_sources": [{"filename": "luat-so-125.pdf", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_07",
+    "history": [
+      {"role": "user", "content": "Hai bên được giao kết hợp đồng lao động bằng lời nói trong trường hợp nào?"},
+      {"role": "assistant", "content": "Hai bên có thể giao kết hợp đồng lao động bằng lời nói đối với hợp đồng có thời hạn dưới 01 tháng, trừ một số trường hợp ngoại lệ (Bộ luật Lao động)."}
+    ],
+    "target_question": "Những trường hợp ngoại lệ đó là gì?",
+    "category": "pronoun_reference",
+    "expected_sources": [{"filename": "luat-so-125.pdf", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_08",
+    "history": [
+      {"role": "user", "content": "Theo Luật Giao dịch điện tử, 'Chữ ký số' được định nghĩa là gì?"},
+      {"role": "assistant", "content": "Chữ ký số là chữ ký điện tử sử dụng thuật toán khóa không đối xứng, gồm khóa bí mật và khóa công khai, bảo đảm tính xác thực, toàn vẹn và chống chối bỏ (Luật Giao dịch điện tử)."}
+    ],
+    "target_question": "Nó có bảo đảm được tính bí mật của thông điệp dữ liệu hay không?",
+    "category": "pronoun_reference",
+    "expected_sources": [{"filename": "luat20-2023-qh15__e7e78.pdf", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_09",
+    "history": [
+      {"role": "user", "content": "Nghị định 145/2020/NĐ-CP hướng dẫn thế nào về trợ cấp thôi việc, trợ cấp mất việc làm?"},
+      {"role": "assistant", "content": "Người sử dụng lao động có trách nhiệm chi trả trợ cấp thôi việc cho người lao động đã làm việc thường xuyên từ đủ 12 tháng trở lên khi hợp đồng chấm dứt (Điều 8, Nghị định 145/2020/NĐ-CP)."}
+    ],
+    "target_question": "Tiền lương để tính khoản đó được xác định như thế nào?",
+    "category": "pronoun_reference",
+    "expected_sources": [{"filename": "1452020nd-cp_25102023165145.docx", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_10",
+    "history": [
+      {"role": "user", "content": "Theo mẫu điều lệ công ty TNHH một thành viên (chủ sở hữu là cá nhân), chủ sở hữu công ty phải góp đủ vốn điều lệ đã cam kết trong thời hạn bao lâu kể từ ngày được cấp Giấy chứng nhận đăng ký doanh nghiệp?"},
+      {"role": "assistant", "content": "Chủ sở hữu phải góp đủ vốn điều lệ đã cam kết trong thời hạn quy định kể từ ngày được cấp Giấy chứng nhận đăng ký doanh nghiệp (Điều lệ công ty TNHH một thành viên)."}
+    ],
+    "target_question": "Nếu không làm được việc đó thì xử lý ra sao?",
+    "category": "pronoun_reference",
+    "expected_sources": [{"filename": "dieu-le-cong-ty-tnhh-1-thanh-vien-so-huu-ca-nhan .docx", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_11",
+    "history": [
+      {"role": "user", "content": "Theo mẫu quy chế tiền lương, người lao động trong thời gian thử việc được hưởng mức lương bằng bao nhiêu phần trăm lương chính thức?"},
+      {"role": "assistant", "content": "85% mức lương chính thức của công việc đó (Điều 3, Quy chế tiền lương)."}
+    ],
+    "target_question": "Còn lương khoán thì tính ra sao?",
+    "category": "topic_continuation",
+    "expected_sources": [{"filename": "quyet-dinh-ban-hanh-quy-che-tien-luong_1005174201.docx", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_12",
+    "history": [
+      {"role": "user", "content": "Theo mẫu quy chế tiền lương, mức phụ cấp trách nhiệm hàng tháng của chức danh Giám đốc là bao nhiêu?"},
+      {"role": "assistant", "content": "5.500.000 đồng/tháng (Điều 7, Quy chế tiền lương)."}
+    ],
+    "target_question": "Còn Kế toán trưởng thì bao nhiêu?",
+    "category": "elliptical_short",
+    "expected_sources": [{"filename": "quyet-dinh-ban-hanh-quy-che-tien-luong_1005174201.docx", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_13",
+    "history": [
+      {"role": "user", "content": "Độ tuổi lao động tối thiểu của người lao động theo Bộ luật Lao động là bao nhiêu?"},
+      {"role": "assistant", "content": "Đủ 15 tuổi (Bộ luật Lao động)."}
+    ],
+    "target_question": "Theo Luật An ninh mạng, 'Không gian mạng quốc gia' được định nghĩa là gì?",
+    "category": "topic_switch_control",
+    "expected_sources": [{"filename": "24-2018-qh14.pdf", "page_num": null}]
+  },
+  {
+    "conversation_id": "mt_14",
+    "history": [
+      {"role": "user", "content": "Chữ ký số được định nghĩa là gì theo Luật Giao dịch điện tử?"},
+      {"role": "assistant", "content": "Chữ ký số là chữ ký điện tử sử dụng thuật toán khóa không đối xứng, bảo đảm tính xác thực, toàn vẹn và chống chối bỏ (Luật Giao dịch điện tử)."}
+    ],
+    "target_question": "Mức lương tối thiểu vùng áp dụng cho năm 2026 theo Nghị định mới nhất là bao nhiêu?",
+    "category": "negative_control",
+    "expected_sources": []
+  },
+  {
+    "conversation_id": "mt_15",
+    "history": [
+      {"role": "user", "content": "Theo mẫu quy chế tiền lương, người lao động trong thời gian thử việc được hưởng mức lương bằng bao nhiêu phần trăm lương chính thức?"},
+      {"role": "assistant", "content": "85% mức lương chính thức của công việc đó (Điều 3, Quy chế tiền lương)."}
+    ],
+    "target_question": "Theo mẫu quy chế tiền lương, hạn trả lương hàng tháng là ngày nào?",
+    "category": "self_contained_control",
+    "expected_sources": [{"filename": "quyet-dinh-ban-hanh-quy-che-tien-luong_1005174201.docx", "page_num": null}]
+  }
+]

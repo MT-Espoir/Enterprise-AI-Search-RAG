@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Simple Test UI</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .sidebar {
+            width: 300px;
+            padding: 20px;
+            background: #fff;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 10px;
+        }
+
+        .msg {
+            padding: 12px 16px;
+            border-radius: 8px;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+
+        .msg.user {
+            background: #007bff;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .msg.bot {
+            background: #e9ecef;
+            color: black;
+            align-self: flex-start;
+        }
+
+        .sources {
+            font-size: 0.8em;
+            margin-top: 8px;
+            color: #666;
+            border-top: 1px solid #ccc;
+            padding-top: 4px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        #status {
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h2>Tài liệu</h2>
+        <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+            Hệ thống hỗ trợ lưu ngữ cảnh hội thoại. Hãy thử hỏi các câu nối tiếp nhau!
+        </div>
+        <input type="file" id="fileInput" accept=".pdf,.docx,.md,.txt">
+        <button id="uploadBtn" onclick="uploadFile()">Upload File</button>
+        <div id="status"></div>
+    </div>
+
+    <div class="chat-container">
+        <div class="messages" id="messages">
+            <div class="msg bot">Chào bạn! Hãy upload tài liệu bên trái, sau đó đặt câu hỏi ở đây.</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="questionInput" placeholder="Nhập câu hỏi của bạn..." style="flex: 1;"
+                onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button id="sendBtn" onclick="sendMessage()">Gửi</button>
+        </div>
+    </div>
+
+    <script>
+        let currentDocId = null;
+        let currentSessionId = null;
+
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const statusDiv = document.getElementById('status');
+            const uploadBtn = document.getElementById('uploadBtn');
+
+            if (!fileInput.files[0]) {
+                alert("Vui lòng chọn file!");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            statusDiv.innerHTML = "Đang upload...";
+            uploadBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/documents/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    currentDocId = data.doc_id;
+                    statusDiv.innerHTML = `Upload thành công! Đang xử lý...<br><small>Doc ID: ${currentDocId}</small>`;
+                    pollStatus(currentDocId);
+                } else {
+                    statusDiv.innerHTML = `<span style="color:red">Lỗi: ${data.error}</span>`;
+                    uploadBtn.disabled = false;
+                }
+            } catch (e) {
+                statusDiv.innerHTML = `<span style="color:red">Lỗi mạng: ${e.message}</span>`;
+                uploadBtn.disabled = false;
+            }
+        }
+
+        async function pollStatus(docId) {
+            const statusDiv = document.getElementById('status');
+            const uploadBtn = document.getElementById('uploadBtn');
+
+            const interval = setInterval(async () => {
+                const res = await fetch(`/api/documents/${docId}`);
+                if (res.ok) {
+                    const doc = await res.json();
+                    if (doc.status === 'done') {
+                        statusDiv.innerHTML = `<span style="color:green">✅ Đã xử lý xong ${doc.chunk_count} chunks. Sẵn sàng trả lời!</span>`;
+                        clearInterval(interval);
+                        uploadBtn.disabled = false;
+                    } else if (doc.status === 'failed') {
+                        statusDiv.innerHTML = `<span style="color:red">❌ Xử lý lỗi: ${doc.error_message}</span>`;
+                        clearInterval(interval);
+                        uploadBtn.disabled = false;
+                    } else {
+                        statusDiv.innerHTML = `Đang xử lý (${doc.status})...`;
+                    }
+                }
+            }, 2000);
+        }
+
+        function appendMessage(role, text, sources = []) {
+            const msgs = document.getElementById('messages');
+            const div = document.createElement('div');
+            div.className = `msg ${role}`;
+
+            // Format line breaks
+            let html = text.replace(/\n/g, '<br>');
+
+            if (sources && sources.length > 0) {
+                html += `<div class="sources"><b>Nguồn:</b><ul>`;
+                sources.forEach(s => {
+                    html += `<li>${s.filename} (trang ${s.page || 'N/A'})</li>`;
+                });
+                html += `</ul></div>`;
+            }
+
+            div.innerHTML = html;
+            msgs.appendChild(div);
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('questionInput');
+            const btn = document.getElementById('sendBtn');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            appendMessage('user', text);
+            input.value = '';
+            btn.disabled = true;
+
+            const payload = { message: text };
+            if (currentDocId) payload.doc_id = currentDocId;
+            if (currentSessionId) payload.session_id = currentSessionId;
+
+            try {
+                const res = await fetch('/api/chat/message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    currentSessionId = data.session_id; // Lưu lại session để gửi kèm lần sau
+                    appendMessage('bot', data.answer, data.sources);
+                } else {
+                    appendMessage('bot', `Lỗi: ${data.error}`);
+                }
+            } catch (e) {
+                appendMessage('bot', `Lỗi mạng: ${e.message}`);
+            } finally {
+                btn.disabled = false;
+                input.focus();
+            }
+        }
+    </script>
+</body>
+
+</html>

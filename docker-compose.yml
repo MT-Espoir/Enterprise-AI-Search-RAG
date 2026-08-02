@@ -1,0 +1,78 @@
+# ==============================================================
+# docker-compose.yml — Production Orchestration
+# ==============================================================
+# Services:
+#   - backend  : Flask API (port 5000)
+#   - frontend : React/Vite (port 3000, served by Nginx)
+#   - mongo    : MongoDB (port 27017)
+#   - chromadb : ChromaDB vector store (port 8000)
+#
+# Usage:
+#   docker-compose up --build
+#   docker-compose down -v  # xóa cả volumes
+# ==============================================================
+
+version: "3.9"
+
+services:
+  backend:
+    # TODO: Build từ backend/Dockerfile
+    # TODO: Map port 5000:5000
+    # TODO: Mount .env file
+    # TODO: Depends on: mongo, chromadb
+    # TODO: Environment variables từ .env
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+      - chromadb
+    volumes:
+      - ./backend/uploads:/app/uploads
+    restart: unless-stopped
+
+  frontend:
+    # TODO: Build từ frontend/Dockerfile
+    # TODO: Map port 3000:80 (Nginx)
+    # TODO: Environment variables VITE_API_BASE_URL
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    env_file:
+      - .env
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  mongo:
+    # TODO: MongoDB 7.x image
+    # TODO: Persistent volume cho data
+    # TODO: Tạo user/password qua environment
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: rag_db
+    restart: unless-stopped
+
+  chromadb:
+    # TODO: ChromaDB server image
+    # TODO: Persistent volume cho vector data
+    # TODO: Map port 8000:8000
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./chromadb_data:/chroma/chroma
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

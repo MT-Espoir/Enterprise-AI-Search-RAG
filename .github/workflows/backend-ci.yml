@@ -1,0 +1,68 @@
+# ==============================================================
+# backend-ci.yml — CI Pipeline cho Backend (Flask)
+# ==============================================================
+# Trigger: Push hoặc PR vào branch main/develop
+#
+# Jobs:
+#   1. lint     : Kiểm tra code style với flake8 + black
+#   2. test     : Chạy pytest với coverage report
+#   3. build    : Build Docker image để xác nhận không bị lỗi
+#
+# TODO: Thêm job deploy lên staging server sau khi test pass
+# ==============================================================
+
+name: Backend CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "backend/**"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "backend/**"
+
+jobs:
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # TODO: Install flake8, black, isort
+      # TODO: Run flake8 backend/
+      # TODO: Run black --check backend/
+      # TODO: Run isort --check backend/
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    services:
+      mongo:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # TODO: pip install -r backend/requirements.txt
+      # TODO: Set test environment variables
+      # TODO: Run pytest backend/tests/ --cov=app --cov-report=xml
+      # TODO: Upload coverage report to Codecov
+
+  build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      # TODO: Build docker image từ backend/Dockerfile
+      # TODO: docker build -t rag-backend ./backend

@@ -1,0 +1,40 @@
+# ==============================================================
+# docker-compose.dev.yml — Development Override
+# ==============================================================
+# Dùng lệnh: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+#
+# Khác biệt với production:
+#   - Hot reload cho backend (mount source code)
+#   - Vite dev server thay vì Nginx build
+#   - FLASK_DEBUG=True
+#   - Expose thêm cổng MongoDB để dùng GUI (MongoDB Compass)
+# ==============================================================
+
+version: "3.9"
+
+services:
+  backend:
+    # TODO: Override command để chạy với Flask debug mode
+    # TODO: Mount toàn bộ backend/app/ để hot reload
+    command: python run.py
+    volumes:
+      - ./backend:/app
+      - ./backend/uploads:/app/uploads
+    environment:
+      FLASK_ENV: development
+      FLASK_DEBUG: "True"
+
+  frontend:
+    # TODO: Chạy Vite dev server thay vì build Nginx
+    # TODO: Mount source code để hot reload
+    command: npm run dev -- --host
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+
+  mongo:
+    # TODO: Expose port để dùng với MongoDB Compass
+    ports:
+      - "27017:27017"

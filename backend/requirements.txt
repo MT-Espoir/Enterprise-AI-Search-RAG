@@ -1,0 +1,65 @@
+# ==============================================================
+# requirements.txt — Python dependencies
+# ==============================================================
+
+# ---- Web Framework ----
+flask
+flask-cors
+flask-jwt-extended
+flask-limiter            # Rate limiting (Layer 6) — storage memory:// (dev) / redis:// (multi-worker)
+
+# ---- Redis (rate-limit storage + BM25 cross-worker sync marker, Layer 6) ----
+redis
+
+# ---- Database ----
+Flask-PyMongo==3.0.1
+pymongo==4.7.2
+motor==3.4.0              # Async MongoDB driver (optional)
+
+# ---- Vector DB ----
+chromadb
+
+# ---- Google AI ----
+google-generativeai
+
+# ---- Document Parsing ----
+pymupdf
+python-docx
+markdown
+openpyxl              # Excel (.xlsx) — CSV dùng thư viện chuẩn `csv`, không cần thêm gì
+
+# ---- Reranker ----
+sentence-transformers
+torch
+
+# ---- Local Embedding (BGE-M3, offline, không cần API key) ----
+langchain-huggingface
+
+# ---- Text Processing ----
+langchain-text-splitters
+tiktoken
+
+# ---- Hybrid Retrieval (BM25) ----
+rank-bm25
+
+# ---- OCR (PDF scan) ----
+pytesseract
+Pillow
+
+# ---- Observability (request tracing, JSON logging) ----
+structlog
+
+# ---- Utility ----
+python-dotenv==1.0.1
+pydantic==2.7.4
+python-multipart==0.0.9   # File upload support
+gunicorn==22.0.0          # Production WSGI server
+bcrypt==4.1.3             # Băm mật khẩu
+
+# ---- Dev / Test ----
+pytest
+pytest-cov
+pytest-mock
+black
+flake8
+isort

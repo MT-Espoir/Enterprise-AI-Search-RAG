@@ -1,0 +1,1059 @@
+{
+  "summary": {
+    "total_conversations": 15,
+    "by_condition": {
+      "with_rewrite": {
+        "hit_rate": 0.786,
+        "mrr": 0.729,
+        "recall@3": 0.714,
+        "recall@5": 0.786,
+        "hit_rate_post_rerank@3": 0.786,
+        "faithfulness": 0.744,
+        "answer_relevancy": 0.887,
+        "refusal_rate": 0.0,
+        "rewrite_triggered_count": 0
+      },
+      "no_rewrite": {
+        "hit_rate": 0.786,
+        "mrr": 0.729,
+        "recall@3": 0.714,
+        "recall@5": 0.786,
+        "hit_rate_post_rerank@3": 0.786,
+        "faithfulness": 0.781,
+        "answer_relevancy": 0.867,
+        "refusal_rate": 0.0,
+        "rewrite_triggered_count": 0
+      }
+    },
+    "by_category_and_condition": {
+      "elliptical_short": {
+        "with_rewrite": {
+          "count": 4,
+          "hit_rate": 0.75,
+          "faithfulness": 0.877,
+          "answer_relevancy": 0.95,
+          "refusal_rate": 0.0
+        },
+        "no_rewrite": {
+          "count": 4,
+          "hit_rate": 0.75,
+          "faithfulness": 0.865,
+          "answer_relevancy": 0.95,
+          "refusal_rate": 0.0
+        }
+      },
+      "negative_control": {
+        "with_rewrite": {
+          "count": 1,
+          "hit_rate": null,
+          "faithfulness": 0.0,
+          "answer_relevancy": 0.0,
+          "refusal_rate": 0.0
+        },
+        "no_rewrite": {
+          "count": 1,
+          "hit_rate": null,
+          "faithfulness": 0.0,
+          "answer_relevancy": 0.0,
+          "refusal_rate": 0.0
+        }
+      },
+      "pronoun_reference": {
+        "with_rewrite": {
+          "count": 7,
+          "hit_rate": 0.714,
+          "faithfulness": 0.664,
+          "answer_relevancy": 0.929,
+          "refusal_rate": 0.0
+        },
+        "no_rewrite": {
+          "count": 7,
+          "hit_rate": 0.714,
+          "faithfulness": 0.75,
+          "answer_relevancy": 0.886,
+          "refusal_rate": 0.0
+        }
+      },
+      "self_contained_control": {
+        "with_rewrite": {
+          "count": 1,
+          "hit_rate": 1,
+          "faithfulness": 1.0,
+          "answer_relevancy": 1.0,
+          "refusal_rate": 0.0
+        },
+        "no_rewrite": {
+          "count": 1,
+          "hit_rate": 1,
+          "faithfulness": 1.0,
+          "answer_relevancy": 1.0,
+          "refusal_rate": 0.0
+        }
+      },
+      "topic_continuation": {
+        "with_rewrite": {
+          "count": 1,
+          "hit_rate": 1,
+          "faithfulness": 1.0,
+          "answer_relevancy": 1.0,
+          "refusal_rate": 0.0
+        },
+        "no_rewrite": {
+          "count": 1,
+          "hit_rate": 1,
+          "faithfulness": 1.0,
+          "answer_relevancy": 1.0,
+          "refusal_rate": 0.0
+        }
+      },
+      "topic_switch_control": {
+        "with_rewrite": {
+          "count": 1,
+          "hit_rate": 1,
+          "faithfulness": 1.0,
+          "answer_relevancy": 1.0,
+          "refusal_rate": 0.0
+        },
+        "no_rewrite": {
+          "count": 1,
+          "hit_rate": 1,
+          "faithfulness": 1.0,
+          "answer_relevancy": 1.0,
+          "refusal_rate": 0.0
+        }
+      }
+    }
+  },
+  "details": [
+    {
+      "conversation_id": "mt_01",
+      "category": "pronoun_reference",
+      "target_question": "Nhà nước bảo vệ nó bằng những biện pháp nào?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Nhà nước bảo vệ không gian mạng quốc gia bằng các biện pháp như:\n\n1. Bảo vệ không gian mạng quốc gia thông qua việc áp dụng các biện pháp để phòng ngừa, xử lý hành vi xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng (Điều 6).\n\n2. Hợp tác quốc tế về an ninh mạng nhằm thực hiện các biện pháp để phòng ngừa, xử lý hành vi xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng (Điều 7).\n\n3. Bảo mật thông tin, ngăn chặn và xử lý các hoạt động xâm nhập bất hợp pháp hoặc nguy cơ khác đe dọa an ninh mạng.\n\n4. Triển khai biện pháp quản lý, kỹ thuật để phòng ngừa, phát hiện, ngăn chặn hành vi gián điệp mạng, xâm phạm bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân, bí mật gia đình và đời sống riêng tư trên hệ thống thông tin.\n\n5. Phối hợp với lực lượng chuyên trách an ninh mạng về phòng, chống gián điệp mạng, bảo vệ thông tin thuộc bí mật nhà nước trên hệ thống thông tin (Điều 3).\n\n6. Bảo vệ thông tin được soạn thảo, lưu giữ hoặc trao đổi trên không gian mạng theo quy định của pháp luật về bảo vệ bí mật nhà nước (Điều 4).",
+      "top_chunk_texts": [
+        "46 CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 i) Yêu cầu xóa bỏ, truy cập xóa bỏ thông tin trái pháp luật hoặc thông tin sai sự thật trên không gian mạng xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân; k) Thu thập dữ liệu điện tử liên quan đến hoạt động xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng; l) Phong tỏa, hạn chế hoạt động của hệ thống thông tin; đình chỉ, tạm đình chỉ hoặc yêu cầu ngừng hoạt động của hệ thống thông tin, thu hồi tên miền theo quy định của pháp luật; m) Khởi tố, điều tra, truy tố, xét xử theo quy định của Bộ luật Tố tụng hình sự; n) Biện pháp khác theo quy định của pháp luật về an ninh quốc gia, pháp luật về xử lý vi phạm hành chính. 2. Chính phủ quy định trình tự, thủ tục áp dụng biện pháp bảo vệ an ninh mạng, trừ biện pháp quy định tại điểm m và điểm n khoản 1 Điều này. Điều 6. Bảo vệ không gian mạng quốc gia Nhà nước áp",
+        "chính. 2. Chính phủ quy định trình tự, thủ tục áp dụng biện pháp bảo vệ an ninh mạng, trừ biện pháp quy định tại điểm m và điểm n khoản 1 Điều này. Điều 6. Bảo vệ không gian mạng quốc gia Nhà nước áp dụng các biện pháp để bảo vệ không gian mạng quốc gia; phòng ngừa, xử lý hành vi xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng. Điều 7. Hợp tác quốc tế về an ninh mạng 1. Hợp tác quốc tế về an ninh mạng được thực hiện trên cơ sở tôn trọng độc lập, chủ quyền và toàn vẹn lãnh thổ, không can thiệp vào công việc nội bộ của nhau, bình đẳng và cùng có lợi. 2. Nội dung hợp tác quốc tế về an ninh mạng bao gồm: a) Nghiên cứu, phân tích xu hướng an ninh mạng; b) Xây dựng cơ chế, chính sách nhằm đẩy mạnh hợp tác giữa tổ chức, cá nhân Việt Nam với tổ chức, cá nhân nước ngoài, tổ chức quốc tế hoạt động về an ninh mạng; c) Chia sẻ thông tin, kinh nghiệm; hỗ trợ đào tạo, trang thiết bị, công nghệ bảo vệ an ninh mạng; d)",
+        "bảo mật; phát hiện, ngăn chặn và xử lý các hoạt động xâm nhập bất hợp pháp hoặc nguy cơ khác đe dọa an ninh mạng; b) Triển khai biện pháp quản lý, kỹ thuật để phòng ngừa, phát hiện, ngăn chặn hành vi gián điệp mạng, xâm phạm bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân, bí mật gia đình và đời sống riêng tư trên hệ thống thông tin và kịp thời gỡ bỏ thông tin liên quan đến hành vi này; c) Phối hợp, thực hiện yêu cầu của lực lượng chuyên trách an ninh mạng về phòng, chống gián điệp mạng, bảo vệ thông tin thuộc bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân, bí mật gia đình và đời sống riêng tư trên hệ thống thông tin. 3. Cơ quan soạn thảo, lưu trữ thông tin, tài liệu thuộc bí mật nhà nước có trách nhiệm bảo vệ bí mật nhà nước được soạn thảo, lưu giữ trên máy tính, thiết bị khác hoặc trao đổi trên không gian mạng theo quy định của pháp luật về bảo vệ bí mật nhà nước. 4. Bộ Công an có trách nhiệm sau đây, trừ quy định tại khoản 5 và khoản 6 Điều"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.8,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.83,
+        "faithfulness_reasoning": "Hầu hết các claim đều được hỗ trợ bởi context, tuy nhiên claim số 2 diễn giải sai mục đích của Điều 7 (hợp tác quốc tế không phải là biện pháp trực tiếp để xử lý hành vi xâm phạm như mô tả) và các trích dẫn điều luật (Điều 3, Điều 4) không khớp với nội dung trong context.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê chi tiết và đầy đủ các biện pháp nhà nước sử dụng để bảo vệ không gian mạng quốc gia theo quy định pháp luật.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_01",
+      "category": "pronoun_reference",
+      "target_question": "Nhà nước bảo vệ nó bằng những biện pháp nào?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Nhà nước bảo vệ không gian mạng quốc gia thông qua các biện pháp như:\n\n1. Yêu cầu xóa bỏ, truy cập xóa bỏ thông tin trái pháp luật hoặc thông tin sai sự thật trên không gian mạng.\n2. Thu thập dữ liệu điện tử liên quan đến hoạt động xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng.\n3. Phong tỏa, hạn chế hoạt động của hệ thống thông tin; đình chỉ, tạm đình chỉ hoặc yêu cầu ngừng hoạt động của hệ thống thông tin, thu hồi tên miền theo quy định của pháp luật.\n4. Khởi tố, điều tra, truy tố, xét xử theo quy định của Bộ Luật Tố tụng hình sự.\n5. Hợp tác quốc tế về an ninh mạng: bao gồm nghiên cứu, phân tích xu hướng an ninh mạng; xây dựng cơ chế, chính sách nhằm đẩy mạnh hợp tác giữa tổ chức, cá nhân Việt Nam với tổ chức, cá nhân nước ngoài, tổ chức quốc tế hoạt động về an ninh mạng; chia sẻ thông tin, kinh nghiệm; hỗ trợ đào tạo, trang thiết bị, công nghệ bảo vệ an ninh mạng.\n\nNhững biện pháp này nhằm phòng ngừa, xử lý hành vi xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng.",
+      "top_chunk_texts": [
+        "46 CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 i) Yêu cầu xóa bỏ, truy cập xóa bỏ thông tin trái pháp luật hoặc thông tin sai sự thật trên không gian mạng xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân; k) Thu thập dữ liệu điện tử liên quan đến hoạt động xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng; l) Phong tỏa, hạn chế hoạt động của hệ thống thông tin; đình chỉ, tạm đình chỉ hoặc yêu cầu ngừng hoạt động của hệ thống thông tin, thu hồi tên miền theo quy định của pháp luật; m) Khởi tố, điều tra, truy tố, xét xử theo quy định của Bộ luật Tố tụng hình sự; n) Biện pháp khác theo quy định của pháp luật về an ninh quốc gia, pháp luật về xử lý vi phạm hành chính. 2. Chính phủ quy định trình tự, thủ tục áp dụng biện pháp bảo vệ an ninh mạng, trừ biện pháp quy định tại điểm m và điểm n khoản 1 Điều này. Điều 6. Bảo vệ không gian mạng quốc gia Nhà nước áp",
+        "chính. 2. Chính phủ quy định trình tự, thủ tục áp dụng biện pháp bảo vệ an ninh mạng, trừ biện pháp quy định tại điểm m và điểm n khoản 1 Điều này. Điều 6. Bảo vệ không gian mạng quốc gia Nhà nước áp dụng các biện pháp để bảo vệ không gian mạng quốc gia; phòng ngừa, xử lý hành vi xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng. Điều 7. Hợp tác quốc tế về an ninh mạng 1. Hợp tác quốc tế về an ninh mạng được thực hiện trên cơ sở tôn trọng độc lập, chủ quyền và toàn vẹn lãnh thổ, không can thiệp vào công việc nội bộ của nhau, bình đẳng và cùng có lợi. 2. Nội dung hợp tác quốc tế về an ninh mạng bao gồm: a) Nghiên cứu, phân tích xu hướng an ninh mạng; b) Xây dựng cơ chế, chính sách nhằm đẩy mạnh hợp tác giữa tổ chức, cá nhân Việt Nam với tổ chức, cá nhân nước ngoài, tổ chức quốc tế hoạt động về an ninh mạng; c) Chia sẻ thông tin, kinh nghiệm; hỗ trợ đào tạo, trang thiết bị, công nghệ bảo vệ an ninh mạng; d)",
+        "bảo mật; phát hiện, ngăn chặn và xử lý các hoạt động xâm nhập bất hợp pháp hoặc nguy cơ khác đe dọa an ninh mạng; b) Triển khai biện pháp quản lý, kỹ thuật để phòng ngừa, phát hiện, ngăn chặn hành vi gián điệp mạng, xâm phạm bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân, bí mật gia đình và đời sống riêng tư trên hệ thống thông tin và kịp thời gỡ bỏ thông tin liên quan đến hành vi này; c) Phối hợp, thực hiện yêu cầu của lực lượng chuyên trách an ninh mạng về phòng, chống gián điệp mạng, bảo vệ thông tin thuộc bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân, bí mật gia đình và đời sống riêng tư trên hệ thống thông tin. 3. Cơ quan soạn thảo, lưu trữ thông tin, tài liệu thuộc bí mật nhà nước có trách nhiệm bảo vệ bí mật nhà nước được soạn thảo, lưu giữ trên máy tính, thiết bị khác hoặc trao đổi trên không gian mạng theo quy định của pháp luật về bảo vệ bí mật nhà nước. 4. Bộ Công an có trách nhiệm sau đây, trừ quy định tại khoản 5 và khoản 6 Điều"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.8,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các biện pháp được liệt kê trong câu trả lời đều được trích dẫn trực tiếp hoặc diễn giải chính xác từ các đoạn văn bản trong CONTEXT cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê đầy đủ và chính xác các biện pháp bảo vệ không gian mạng quốc gia theo quy định pháp luật, đáp ứng hoàn hảo yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_02",
+      "category": "elliptical_short",
+      "target_question": "Còn Bộ Quốc phòng?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Bộ Quốc phòng chịu trách nhiệm trước Chính phủ thực hiện quản lý nhà nước về an ninh mạng trong phạm vi quản lý, với beberapa nhiệm vụ như:\n\n- Ban hành hoặc trình cơ quan nhà nước có thẩm quyền ban hành và hướng dẫn thi hành văn bản quy phạm pháp luật về an ninh mạng trong phạm vi quản lý.\n- Xây dựng, đề xuất chiến lược, chủ trương, chính sách, kế hoạch và phương án bảo vệ an ninh mạng trong phạm vi quản lý.\n- Phòng ngừa, đấu tranh với các hoạt động sử dụng không gian mạng xâm phạm an ninh quốc gia trong phạm vi quản lý.\n- Phối hợp với Bộ Công an tổ chức diễn tập phòng, chống tấn công mạng, diễn tập ứng phó, khắc phục sự cố an ninh mạng đối với hệ thống thông tin quan trọng về an ninh quốc gia, triển khai thực hiện công tác bảo vệ an ninh mạng.\n- Kiểm tra, thanh tra, giải quyết khiếu nại, tố cáo và xử lý vi phạm pháp luật về an ninh mạng trong phạm vi quản lý.\n\nTuy nhiên, cần lưu ý rằng Bộ Quốc phòng không chịu trách nhiệm trước Chính phủ chủ trì, phối hợp thực hiện hợp tác quốc tế về an ninh mạng trừ hoạt động hợp tác quốc tế của Bộ Quốc phòng. Nhiệm vụ này thuộc trách nhiệm của Bộ Công an.",
+      "top_chunk_texts": [
+        "58 CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 c) Giám sát an ninh mạng đối với hệ thống thông tin quan trọng về an ninh quốc gia nhằm phát hiện, xử lý hoạt động thu thập trái phép thông tin thuộc bí mật nhà nước; d) Phát hiện, xử lý các hành vi đăng tải, lưu trữ, trao đổi trái phép thông tin, tài liệu có nội dung thuộc bí mật nhà nước trên không gian mạng; đ) Tham gia nghiên cứu, sản xuất sản phẩm lưu trữ, truyền đưa thông tin, tài liệu có nội dung thuộc bí mật nhà nước; sản phẩm mã hóa thông tin trên không gian mạng theo chức năng, nhiệm vụ được giao; e) Thanh tra, kiểm tra công tác bảo vệ bí mật nhà nước trên không gian mạng của cơ quan nhà nước và bảo vệ an ninh mạng của chủ quản hệ thống thông tin quan trọng về an ninh quốc gia; g) Tổ chức đào tạo, tập huấn nâng cao nhận thức và kiến thức về bảo vệ bí mật nhà nước trên không gian mạng, phòng, chống tấn công mạng, bảo vệ an ninh mạng đối với lực lượng bảo vệ an ninh mạng quy định tại khoản 2 Điều 30 của Luật này. 5. Bộ Quốc phòng có trách",
+        "CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 71 Điều 37. Trách nhiệm của Bộ Quốc phòng Bộ Quốc phòng chịu trách nhiệm trước Chính phủ thực hiện quản lý nhà nước về an ninh mạng trong phạm vi quản lý và có nhiệm vụ, quyền hạn sau đây: 1. Ban hành hoặc trình cơ quan nhà nước có thẩm quyền ban hành và hướng dẫn thi hành văn bản quy phạm pháp luật về an ninh mạng trong phạm vi quản lý; 2. Xây dựng, đề xuất chiến lược, chủ trương, chính sách, kế hoạch và phương án bảo vệ an ninh mạng trong phạm vi quản lý. 3. Phòng ngừa, đấu tranh với các hoạt động sử dụng không gian mạng xâm phạm an ninh quốc gia trong phạm vi quản lý. 4. Phối hợp với Bộ Công an tổ chức diễn tập phòng, chống tấn công mạng, diễn tập ứng phó, khắc phục sự cố an ninh mạng đối với hệ thống thông tin quan trọng về an ninh quốc gia, triển khai thực hiện công tác bảo vệ an ninh mạng. 5. Kiểm tra, thanh tra, giải quyết khiếu nại, tố cáo và xử lý vi phạm pháp luật về an ninh mạng trong phạm vi quản lý. Điều 38. Trách nhiệm của Bộ Thông tin",
+        "bảo vệ bí mật nhà nước trên không gian mạng, phòng, chống tấn công mạng, bảo vệ an ninh mạng đối với lực lượng bảo vệ an ninh mạng quy định tại khoản 2 Điều 30 của Luật này. 5. Bộ Quốc phòng có trách nhiệm thực hiện các nội dung quy định tại các điểm a, b, c, d, đ và e khoản 4 Điều này đối với hệ thống thông tin quân sự. 6. Ban Cơ yếu Chính phủ có trách nhiệm tổ chức thực hiện các quy định của pháp luật trong việc sử dụng mật mã để bảo vệ thông tin thuộc bí mật nhà nước được lưu trữ, trao đổi trên không gian mạng. Điều 18. Phòng, chống hành vi sử dụng không gian mạng, công nghệ thông tin, phương tiện điện tử để vi phạm pháp luật về an ninh quốc gia, trật tự, an toàn xã hội 1. Hành vi sử dụng không gian mạng, công nghệ thông tin, phương tiện điện tử để vi phạm pháp luật về an ninh quốc gia, trật tự, an toàn xã hội bao gồm: a) Đăng tải, phát tán thông tin trên không gian mạng có nội dung quy định tại các khoản 1, 2, 3, 4 và 5 Điều 16 và hành vi quy định tại khoản 1 Điều 17 của Luật này;"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.85,
+        "faithfulness_reasoning": "Các nhiệm vụ của Bộ Quốc phòng được trích dẫn chính xác từ Điều 37 của CONTEXT. Tuy nhiên, câu cuối về việc Bộ Quốc phòng không chịu trách nhiệm hợp tác quốc tế là thông tin không có trong CONTEXT cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê đầy đủ và chính xác các nhiệm vụ của Bộ Quốc phòng trong lĩnh vực an ninh mạng theo quy định pháp luật, đồng thời làm rõ phạm vi trách nhiệm so với Bộ Công an.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_02",
+      "category": "elliptical_short",
+      "target_question": "Còn Bộ Quốc phòng?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu tham khảo, Bộ Quốc phòng chịu trách nhiệm trước Chính phủ thực hiện quản lý nhà nước về an ninh mạng trong phạm vi quản lý. Tuy nhiên, họ không trực tiếp phụ trách các hoạt động hợp tác quốc tế về an ninh mạng như đã được chỉ rõ ở tài liệu 1 (Trang 17). Bộ Quốc phòng có trách nhiệm phòng ngừa và đấu tranh với các hoạt động sử dụng không gian mạng xâm phạm an ninh quốc gia trong phạm vi quản lý, đồng thời phối hợp với Bộ Công an tổ chức các hoạt động liên quan đến bảo vệ an ninh mạng.",
+      "top_chunk_texts": [
+        "58 CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 c) Giám sát an ninh mạng đối với hệ thống thông tin quan trọng về an ninh quốc gia nhằm phát hiện, xử lý hoạt động thu thập trái phép thông tin thuộc bí mật nhà nước; d) Phát hiện, xử lý các hành vi đăng tải, lưu trữ, trao đổi trái phép thông tin, tài liệu có nội dung thuộc bí mật nhà nước trên không gian mạng; đ) Tham gia nghiên cứu, sản xuất sản phẩm lưu trữ, truyền đưa thông tin, tài liệu có nội dung thuộc bí mật nhà nước; sản phẩm mã hóa thông tin trên không gian mạng theo chức năng, nhiệm vụ được giao; e) Thanh tra, kiểm tra công tác bảo vệ bí mật nhà nước trên không gian mạng của cơ quan nhà nước và bảo vệ an ninh mạng của chủ quản hệ thống thông tin quan trọng về an ninh quốc gia; g) Tổ chức đào tạo, tập huấn nâng cao nhận thức và kiến thức về bảo vệ bí mật nhà nước trên không gian mạng, phòng, chống tấn công mạng, bảo vệ an ninh mạng đối với lực lượng bảo vệ an ninh mạng quy định tại khoản 2 Điều 30 của Luật này. 5. Bộ Quốc phòng có trách",
+        "CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 71 Điều 37. Trách nhiệm của Bộ Quốc phòng Bộ Quốc phòng chịu trách nhiệm trước Chính phủ thực hiện quản lý nhà nước về an ninh mạng trong phạm vi quản lý và có nhiệm vụ, quyền hạn sau đây: 1. Ban hành hoặc trình cơ quan nhà nước có thẩm quyền ban hành và hướng dẫn thi hành văn bản quy phạm pháp luật về an ninh mạng trong phạm vi quản lý; 2. Xây dựng, đề xuất chiến lược, chủ trương, chính sách, kế hoạch và phương án bảo vệ an ninh mạng trong phạm vi quản lý. 3. Phòng ngừa, đấu tranh với các hoạt động sử dụng không gian mạng xâm phạm an ninh quốc gia trong phạm vi quản lý. 4. Phối hợp với Bộ Công an tổ chức diễn tập phòng, chống tấn công mạng, diễn tập ứng phó, khắc phục sự cố an ninh mạng đối với hệ thống thông tin quan trọng về an ninh quốc gia, triển khai thực hiện công tác bảo vệ an ninh mạng. 5. Kiểm tra, thanh tra, giải quyết khiếu nại, tố cáo và xử lý vi phạm pháp luật về an ninh mạng trong phạm vi quản lý. Điều 38. Trách nhiệm của Bộ Thông tin",
+        "bảo vệ bí mật nhà nước trên không gian mạng, phòng, chống tấn công mạng, bảo vệ an ninh mạng đối với lực lượng bảo vệ an ninh mạng quy định tại khoản 2 Điều 30 của Luật này. 5. Bộ Quốc phòng có trách nhiệm thực hiện các nội dung quy định tại các điểm a, b, c, d, đ và e khoản 4 Điều này đối với hệ thống thông tin quân sự. 6. Ban Cơ yếu Chính phủ có trách nhiệm tổ chức thực hiện các quy định của pháp luật trong việc sử dụng mật mã để bảo vệ thông tin thuộc bí mật nhà nước được lưu trữ, trao đổi trên không gian mạng. Điều 18. Phòng, chống hành vi sử dụng không gian mạng, công nghệ thông tin, phương tiện điện tử để vi phạm pháp luật về an ninh quốc gia, trật tự, an toàn xã hội 1. Hành vi sử dụng không gian mạng, công nghệ thông tin, phương tiện điện tử để vi phạm pháp luật về an ninh quốc gia, trật tự, an toàn xã hội bao gồm: a) Đăng tải, phát tán thông tin trên không gian mạng có nội dung quy định tại các khoản 1, 2, 3, 4 và 5 Điều 16 và hành vi quy định tại khoản 1 Điều 17 của Luật này;"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.66,
+        "faithfulness_reasoning": "Câu trả lời chứa thông tin sai lệch về việc Bộ Quốc phòng không phụ trách hợp tác quốc tế (thông tin này không có trong context và là bịa đặt), trong khi các claim về trách nhiệm quản lý nhà nước và phối hợp với Bộ Công an được hỗ trợ bởi context.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp thông tin cụ thể về trách nhiệm của Bộ Quốc phòng trong lĩnh vực an ninh mạng và làm rõ phạm vi phối hợp, đáp ứng đầy đủ yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_03",
+      "category": "elliptical_short",
+      "target_question": "Phải thông báo trước bao lâu?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu tham khảo, thông báo trước khi đơn phương chấm dứt hợp đồng lao động cần ít nhất 15 ngày. Tuy nhiên, đây chỉ là trường hợp áp dụng cho việc đơn phương chấm dứt hợp đồng lao động mà không cần lý do. Trong các trường hợp khác như quy định tại điểm a, b, c và g của Điều 13 Luật An ninh mạng, thông báo trước có thể ít nhất 45 ngày đối với hợp đồng lao động không xác định thời hạn (tài liệu số 1).",
+      "top_chunk_texts": [
+        "16 c) Do thiên tai, hỏa hoạn, dịch bệnh nguy hiểm, địch họa hoặc di dời, thu hẹp sản xuất, kinh doanh theo yêu cầu của cơ quan nhà nước có thẩm quyền mà người sử dụng lao động đã tìm mọi biện pháp khắc phục nhưng vẫn buộc phải giảm chỗ làm việc; d) Người lao động không có mặt tại nơi làm việc sau thời hạn quy định tại Điều 31 của Bộ luật này; đ) Người lao động đủ tuổi nghỉ hưu theo quy định tại Điều 169 của Bộ luật này, trừ trường hợp có thỏa thuận khác; e) Người lao động tự ý bỏ việc mà không có lý do chính đáng từ 05 ngày làm việc liên tục trở lên; g) Người lao động cung cấp không trung thực thông tin theo quy định tại khoản 2 Điều 16 của Bộ luật này khi giao kết hợp đồng lao động làm ảnh hưởng đến việc tuyển dụng người lao động. 2. Khi đơn phương chấm dứt hợp đồng lao động trong trường hợp quy định tại các điểm a, b, c, đ và g khoản 1 Điều này, người sử dụng lao động phải báo trước cho người lao động như sau: a) Ít nhất 45 ngày đối với hợp đồng lao động không xác định thời hạn; b)",
+        "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý do nhưng phải báo trước ít nhất 15 ngày, trừ các trường hợp sau thì không phải báo trước:",
+        "7.2.4.6. Chủ tịch Hội đồng quản trị hoặc người triệu tập họp Hội đồng quản trị phải gửi thông báo mời họp chậm nhất là 03 ngày làm việc trước ngày họp nếu Điều lệ công ty không có quy định khác. Thông báo mời họp phải xác định cụ thể thời gian và địa điểm họp, chương trình, các vấn đề thảo luận và quyết định. Kèm theo thông báo mời họp phải có tài liệu sử dụng tại cuộc họp và phiếu biểu quyết của thành viên.\nThông báo mời họp Hội đồng quản trị có thể gửi bằng giấy mời, điện thoại, fax, phương tiện điện tử hoặc phương thức khác do Điều lệ công ty quy định và bảo đảm đến được địa chỉ liên lạc của từng thành viên Hội đồng quản trị được đăng ký tại công ty.\n7.2.4.7. Chủ tịch Hội đồng quản trị hoặc người triệu tập gửi thông báo mời họp và các tài liệu kèm theo đến các Kiểm soát viên như đối với các thành viên Hội đồng quản trị.\nKiểm soát viên có quyền dự các cuộc họp Hội đồng quản trị; có quyền thảo luận nhưng không được biểu quyết."
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.66,
+        "faithfulness_reasoning": "Câu trả lời chính xác về thời hạn 15 ngày và 45 ngày dựa trên context, nhưng bịa đặt thông tin về 'Điều 13 Luật An ninh mạng' vốn không xuất hiện trong tài liệu cung cấp.",
+        "answer_relevancy": 0.9,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp các mốc thời gian cụ thể dựa trên tài liệu. Tuy nhiên, việc trích dẫn 'Điều 13 Luật An ninh mạng' có vẻ không chính xác về mặt ngữ cảnh pháp lý lao động, nhưng vẫn giải quyết đúng trọng tâm câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_03",
+      "category": "elliptical_short",
+      "target_question": "Phải thông báo trước bao lâu?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Để trả lời câu hỏi này chính xác, cần xem xét tài liệu tham khảo cụ thể. Tuy nhiên, từ tài liệu 3 (Mẫu điều lệ công ty), có một phần mô tả về việc thông báo mời họp Hội đồng quản trị:\n\n\"7.2.4.6. Chủ tịch Hội đồng quản trị hoặc người triệu tập họp Hội đồng quản trị phải gửi thông báo mời họp chậm nhất là 03 ngày làm việc trước ngày họp nếu Điều lệ công ty không có quy định khác.\"\n\nTài liệu này chỉ ra rằng, trong trường hợp Điều lệ công ty không có quy định khác, thì chủ tịch Hội đồng quản trị hoặc người triệu tập cần thông báo trước ít nhất 3 ngày làm việc. \n\nTuy nhiên, tài liệu này không cung cấp thông tin về thời gian thông báo cho bên thứ ba như Kiểm soát viên. Đối với Kiểm soát viên, tài liệu chỉ nói rằng họ có quyền dự các cuộc họp và thảo luận nhưng không được biểu quyết.\n\nVì vậy, để trả lời câu hỏi chính xác nhất, cần xem xét thêm thông tin từ các tài liệu tham khảo khác hoặc tài liệu cụ thể liên quan đến vấn đề kiểm tra an ninh mạng.",
+      "top_chunk_texts": [
+        "16 c) Do thiên tai, hỏa hoạn, dịch bệnh nguy hiểm, địch họa hoặc di dời, thu hẹp sản xuất, kinh doanh theo yêu cầu của cơ quan nhà nước có thẩm quyền mà người sử dụng lao động đã tìm mọi biện pháp khắc phục nhưng vẫn buộc phải giảm chỗ làm việc; d) Người lao động không có mặt tại nơi làm việc sau thời hạn quy định tại Điều 31 của Bộ luật này; đ) Người lao động đủ tuổi nghỉ hưu theo quy định tại Điều 169 của Bộ luật này, trừ trường hợp có thỏa thuận khác; e) Người lao động tự ý bỏ việc mà không có lý do chính đáng từ 05 ngày làm việc liên tục trở lên; g) Người lao động cung cấp không trung thực thông tin theo quy định tại khoản 2 Điều 16 của Bộ luật này khi giao kết hợp đồng lao động làm ảnh hưởng đến việc tuyển dụng người lao động. 2. Khi đơn phương chấm dứt hợp đồng lao động trong trường hợp quy định tại các điểm a, b, c, đ và g khoản 1 Điều này, người sử dụng lao động phải báo trước cho người lao động như sau: a) Ít nhất 45 ngày đối với hợp đồng lao động không xác định thời hạn; b)",
+        "d) Trong quá trình thực hiện hợp đồng lao động, mỗi bên có quyền đơn phương chấm dứt hợp đồng lao động mà không cần lý do nhưng phải báo trước ít nhất 15 ngày, trừ các trường hợp sau thì không phải báo trước:",
+        "7.2.4.6. Chủ tịch Hội đồng quản trị hoặc người triệu tập họp Hội đồng quản trị phải gửi thông báo mời họp chậm nhất là 03 ngày làm việc trước ngày họp nếu Điều lệ công ty không có quy định khác. Thông báo mời họp phải xác định cụ thể thời gian và địa điểm họp, chương trình, các vấn đề thảo luận và quyết định. Kèm theo thông báo mời họp phải có tài liệu sử dụng tại cuộc họp và phiếu biểu quyết của thành viên.\nThông báo mời họp Hội đồng quản trị có thể gửi bằng giấy mời, điện thoại, fax, phương tiện điện tử hoặc phương thức khác do Điều lệ công ty quy định và bảo đảm đến được địa chỉ liên lạc của từng thành viên Hội đồng quản trị được đăng ký tại công ty.\n7.2.4.7. Chủ tịch Hội đồng quản trị hoặc người triệu tập gửi thông báo mời họp và các tài liệu kèm theo đến các Kiểm soát viên như đối với các thành viên Hội đồng quản trị.\nKiểm soát viên có quyền dự các cuộc họp Hội đồng quản trị; có quyền thảo luận nhưng không được biểu quyết."
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.8,
+        "faithfulness_reasoning": "Câu trả lời trích dẫn chính xác quy định về thông báo họp HĐQT từ context, nhưng việc đề cập đến 'kiểm tra an ninh mạng' ở cuối là thông tin không có trong context.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Câu trả lời đã cung cấp thông tin cụ thể về thời hạn thông báo họp Hội đồng quản trị (3 ngày làm việc) và giải thích rõ ràng về phạm vi áp dụng cũng như các hạn chế của tài liệu hiện có.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_04",
+      "category": "pronoun_reference",
+      "target_question": "Ngoài điều kiện đó, còn cần gì nữa?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu tham khảo mà tôi có, không có thông tin chi tiết về các trường hợp cụ thể ngoài việc công nhận chữ ký điện tử nước ngoài hoặc giấy tờ liên quan đến việc sinh con dưới 32 tuần tuổi. Để có thông tin chính xác và đầy đủ nhất, cần xem xét thêm tài liệu khác hoặc nguồn tham khảo mới hơn.",
+      "top_chunk_texts": [
+        "tuần tuổi thì cần thêm bản chính hoặc bản sao văn bản của cơ sở khám bệnh, chữa bệnh thể hiện thông tin về việc sinh con phải phẫu thuật hoặc sinh con dưới 32 tuần tuổi; b) Bản sao bản thỏa thuận về mang thai hộ vì mục đích nhân đạo theo quy định tại Điều 96 của Luật Hôn nhân và gia đình. 8. Trường hợp các giấy tờ quy định tại các khoản 1, 2, 3, 4, 5, 6 và 7 Điều này hoặc các giấy tờ có nội dung tương tự do cơ quan, tổ chức, cá nhân có thẩm quyền của nước ngoài cấp thì phải đáp ứng được các yêu cầu sau đây: a) Có bản dịch tiếng Việt được công chứng hoặc chứng thực theo quy định của pháp luật về công chứng, chứng thực; b) Được hợp pháp hóa lãnh sự, trừ trường hợp điều ước quốc tế mà nước Cộng hòa xã hội chủ nghĩa Việt Nam là thành viên có quy định khác. 9. Bộ trưởng Bộ Y tế quy định mẫu, trình tự, thẩm quyền cấp các giấy tờ trong hồ sơ quy định tại các điểm a, c và d khoản 1 Điều này do các cơ sở khám bệnh,",
+        "CÔNG BÁO/Số 987 + 988/Ngày 25-8-2024 59 a) Hộ chiếu do nước ngoài cấp; b) Thị thực của cơ quan nước ngoài có thẩm quyền cấp có xác nhận việc cho phép nhập cảnh để định cư ở nước ngoài; c) Thẻ thường trú dài hạn ở nước ngoài của cơ quan nước ngoài có thẩm quyền cấp; d) Giấy tờ hợp pháp khác thể hiện việc định cư ở nước ngoài theo quy định của Chính phủ. 3. Trường hợp quy định tại điểm c khoản 1 và điểm b khoản 2 Điều 70 của Luật này, ngoài hồ sơ quy định tại khoản 1 Điều này thì có thêm bản tóm tắt hồ sơ bệnh án hoặc bản chính hoặc bản sao giấy ra viện. 4. Trường hợp quy định tại điểm d khoản 1 và điểm c khoản 2 Điều 70 của Luật này, ngoài hồ sơ quy định tại khoản 1 Điều này thì có thêm biên bản giám định mức suy giảm khả năng lao động của Hội đồng giám định y khoa hoặc bản sao giấy xác nhận mức độ khuyết tật đặc biệt nặng. Điều 79. Giải quyết hưởng lương hưu, hưởng bảo hiểm xã hội một lần 1. Trong thời hạn 20 ngày trước thời điểm người lao động đủ điều kiện hưởng lương hưu, người sử",
+        "18 CÔNG BÁO/Số 867 + 868/Ngày 30-7-2023 2. Điều kiện công nhận chữ ký điện tử nước ngoài, chứng thư chữ ký điện tử nước ngoài tại Việt Nam bao gồm: a) Chữ ký điện tử nước ngoài, chứng thư chữ ký điện tử nước ngoài phải phù hợp với tiêu chuẩn, quy chuẩn kỹ thuật về chữ ký điện tử, chứng thư chữ ký điện tử theo quy định của pháp luật Việt Nam hoặc tiêu chuẩn quốc tế đã được thừa nhận hoặc điều ước quốc tế mà nước Cộng hòa xã hội chủ nghĩa Việt Nam là thành viên; b) Chứng thư chữ ký điện tử nước ngoài hình thành dựa trên thông tin định danh đầy đủ đã được xác thực của tổ chức, cá nhân nước ngoài. 3. Đối tượng sử dụng chữ ký điện tử nước ngoài, chứng thư chữ ký điện tử nước ngoài được công nhận theo quy định tại khoản 2 Điều này là tổ chức, cá nhân nước ngoài; tổ chức, cá nhân Việt Nam có nhu cầu giao dịch điện tử với tổ chức, cá nhân nước ngoài mà chữ ký điện tử, chứng thư chữ ký điện tử của tổ chức cung cấp dịch vụ trong nước chưa được công nhận tại nước đó. 4. Bộ trưởng Bộ Thông tin và"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.8,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời là một lời từ chối hợp lệ vì CONTEXT không cung cấp đủ thông tin để trả lời câu hỏi 'Ngoài điều kiện đó, còn cần gì nữa?' một cách bao quát, do đó việc từ chối là trung thực.",
+        "answer_relevancy": 0.9,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề bằng cách thừa nhận sự thiếu hụt thông tin trong tài liệu hiện có và đưa ra hướng dẫn cụ thể để tìm kiếm thêm, thay vì đưa ra thông tin sai lệch.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_04",
+      "category": "pronoun_reference",
+      "target_question": "Ngoài điều kiện đó, còn cần gì nữa?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu tham khảo mà tôi có, không có thông tin chi tiết về các yêu cầu cụ thể hơn ngoài những giấy tờ đã được nêu trong các điểm a, c và d khoản 1 Điều 70 của Luật này. Những yêu cầu này bao gồm bản tóm tắt hồ sơ bệnh án hoặc bản chính/bản sao giấy ra viện nếu người lao động cần hưởng lương hưu do lý do sức khỏe; hoặc biên bản giám định mức suy giảm khả năng lao động của Hội đồng giám định y khoa, hoặc bản sao giấy xác nhận mức độ khuyết tật đặc biệt nặng nếu người lao động cần hưởng bảo hiểm xã hội một lần vì lý do khuyết tật.",
+      "top_chunk_texts": [
+        "tuần tuổi thì cần thêm bản chính hoặc bản sao văn bản của cơ sở khám bệnh, chữa bệnh thể hiện thông tin về việc sinh con phải phẫu thuật hoặc sinh con dưới 32 tuần tuổi; b) Bản sao bản thỏa thuận về mang thai hộ vì mục đích nhân đạo theo quy định tại Điều 96 của Luật Hôn nhân và gia đình. 8. Trường hợp các giấy tờ quy định tại các khoản 1, 2, 3, 4, 5, 6 và 7 Điều này hoặc các giấy tờ có nội dung tương tự do cơ quan, tổ chức, cá nhân có thẩm quyền của nước ngoài cấp thì phải đáp ứng được các yêu cầu sau đây: a) Có bản dịch tiếng Việt được công chứng hoặc chứng thực theo quy định của pháp luật về công chứng, chứng thực; b) Được hợp pháp hóa lãnh sự, trừ trường hợp điều ước quốc tế mà nước Cộng hòa xã hội chủ nghĩa Việt Nam là thành viên có quy định khác. 9. Bộ trưởng Bộ Y tế quy định mẫu, trình tự, thẩm quyền cấp các giấy tờ trong hồ sơ quy định tại các điểm a, c và d khoản 1 Điều này do các cơ sở khám bệnh,",
+        "CÔNG BÁO/Số 987 + 988/Ngày 25-8-2024 59 a) Hộ chiếu do nước ngoài cấp; b) Thị thực của cơ quan nước ngoài có thẩm quyền cấp có xác nhận việc cho phép nhập cảnh để định cư ở nước ngoài; c) Thẻ thường trú dài hạn ở nước ngoài của cơ quan nước ngoài có thẩm quyền cấp; d) Giấy tờ hợp pháp khác thể hiện việc định cư ở nước ngoài theo quy định của Chính phủ. 3. Trường hợp quy định tại điểm c khoản 1 và điểm b khoản 2 Điều 70 của Luật này, ngoài hồ sơ quy định tại khoản 1 Điều này thì có thêm bản tóm tắt hồ sơ bệnh án hoặc bản chính hoặc bản sao giấy ra viện. 4. Trường hợp quy định tại điểm d khoản 1 và điểm c khoản 2 Điều 70 của Luật này, ngoài hồ sơ quy định tại khoản 1 Điều này thì có thêm biên bản giám định mức suy giảm khả năng lao động của Hội đồng giám định y khoa hoặc bản sao giấy xác nhận mức độ khuyết tật đặc biệt nặng. Điều 79. Giải quyết hưởng lương hưu, hưởng bảo hiểm xã hội một lần 1. Trong thời hạn 20 ngày trước thời điểm người lao động đủ điều kiện hưởng lương hưu, người sử",
+        "18 CÔNG BÁO/Số 867 + 868/Ngày 30-7-2023 2. Điều kiện công nhận chữ ký điện tử nước ngoài, chứng thư chữ ký điện tử nước ngoài tại Việt Nam bao gồm: a) Chữ ký điện tử nước ngoài, chứng thư chữ ký điện tử nước ngoài phải phù hợp với tiêu chuẩn, quy chuẩn kỹ thuật về chữ ký điện tử, chứng thư chữ ký điện tử theo quy định của pháp luật Việt Nam hoặc tiêu chuẩn quốc tế đã được thừa nhận hoặc điều ước quốc tế mà nước Cộng hòa xã hội chủ nghĩa Việt Nam là thành viên; b) Chứng thư chữ ký điện tử nước ngoài hình thành dựa trên thông tin định danh đầy đủ đã được xác thực của tổ chức, cá nhân nước ngoài. 3. Đối tượng sử dụng chữ ký điện tử nước ngoài, chứng thư chữ ký điện tử nước ngoài được công nhận theo quy định tại khoản 2 Điều này là tổ chức, cá nhân nước ngoài; tổ chức, cá nhân Việt Nam có nhu cầu giao dịch điện tử với tổ chức, cá nhân nước ngoài mà chữ ký điện tử, chứng thư chữ ký điện tử của tổ chức cung cấp dịch vụ trong nước chưa được công nhận tại nước đó. 4. Bộ trưởng Bộ Thông tin và"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.8,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời suy diễn sai mục đích của các giấy tờ (bệnh án, giám định y khoa) khi gắn chúng trực tiếp với việc hưởng lương hưu hoặc bảo hiểm xã hội một lần mà không có căn cứ trong ngữ cảnh.",
+        "answer_relevancy": 0.9,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác nhận không có thêm thông tin ngoài các điều khoản đã nêu và liệt kê cụ thể các giấy tờ liên quan để làm rõ ngữ cảnh.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_05",
+      "category": "pronoun_reference",
+      "target_question": "Văn bản đó cần đáp ứng điều kiện gì để có giá trị?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Văn bản đó cần đáp ứng các điều kiện sau để có giá trị:\n\n1. Thông tin trong thông điệp dữ liệu được bảo đảm toàn vẹn kể từ khi được khởi tạo lần đầu tiên dưới dạng một thông điệp dữ liệu hoàn chỉnh.\n2. Thông tin trong thông điệp dữ liệu có thể truy cập và sử dụng được dưới dạng hoàn chỉnh.\n\nĐiều này dựa trên các quy định tại Điều 7, Điều 9 và Điều 11 của Tài liệu 2 (Trang 4), Tài liệu 3 (Trang 5) từ tài liệu \"Luật Bảo hiểm xã hội 2024\".",
+      "top_chunk_texts": [
+        "8 CÔNG BÁO/Số 867 + 868/Ngày 30-7-2023 2. Trường hợp pháp luật yêu cầu văn bản phải được công chứng, chứng thực thì thông điệp dữ liệu được xem là đáp ứng yêu cầu nếu được công chứng theo quy định của pháp luật về công chứng; chứng thực theo quy định của Luật này và pháp luật về chứng thực. Điều 10. Thông điệp dữ liệu có giá trị như bản gốc Thông điệp dữ liệu được sử dụng và có giá trị như bản gốc khi đáp ứng đủ các yêu cầu sau đây: 1. Thông tin trong thông điệp dữ liệu được bảo đảm toàn vẹn kể từ khi được khởi tạo lần đầu tiên dưới dạng một thông điệp dữ liệu hoàn chỉnh. Thông tin trong thông điệp dữ liệu được xem là toàn vẹn khi thông tin đó chưa bị thay đổi, trừ những thay đổi về hình thức phát sinh trong quá trình gửi, lưu trữ hoặc hiển thị thông điệp dữ liệu; 2. Thông tin trong thông điệp dữ liệu có thể truy cập và sử dụng được dưới dạng hoàn chỉnh. Điều 11. Thông điệp dữ liệu có giá trị dùng làm chứng cứ 1. Thông điệp dữ liệu được dùng làm chứng cứ theo quy định của Luật này và",
+        "Mục 1 GIÁ TRỊ PHÁP LÝ CỦA THÔNG ĐIỆP DỮ LIỆU Điều 7. Hình thức thể hiện của thông điệp dữ liệu 1. Thông điệp dữ liệu được thể hiện dưới hình thức văn bản điện tử, tài liệu điện tử, chứng thư điện tử, chứng từ điện tử, hợp đồng điện tử, thư điện tử, điện tín, điện báo, fax và hình thức trao đổi dữ liệu điện tử khác theo quy định của pháp luật. 2. Thông điệp dữ liệu được tạo ra, phát sinh trong quá trình giao dịch hoặc được chuyển đổi từ văn bản giấy. Điều 8. Giá trị pháp lý của thông điệp dữ liệu Thông tin trong thông điệp dữ liệu không bị phủ nhận giá trị pháp lý chỉ vì thông tin đó được thể hiện dưới dạng thông điệp dữ liệu. Điều 9. Thông điệp dữ liệu có giá trị như văn bản 1. Trường hợp pháp luật yêu cầu thông tin phải được thể hiện bằng văn bản thì thông điệp dữ liệu được xem là đáp ứng yêu cầu nếu thông tin trong thông điệp dữ liệu đó có thể truy cập và sử dụng được để tham chiếu.",
+        "điệp dữ liệu có thể truy cập và sử dụng được dưới dạng hoàn chỉnh. Điều 11. Thông điệp dữ liệu có giá trị dùng làm chứng cứ 1. Thông điệp dữ liệu được dùng làm chứng cứ theo quy định của Luật này và pháp luật về tố tụng. 2. Giá trị dùng làm chứng cứ của thông điệp dữ liệu được xác định căn cứ vào độ tin cậy của cách thức khởi tạo, gửi, nhận hoặc lưu trữ thông điệp dữ liệu; cách thức bảo đảm và duy trì tính toàn vẹn của thông điệp dữ liệu; cách thức xác định người khởi tạo, gửi, nhận thông điệp dữ liệu và các yếu tố phù hợp khác. Điều 12. Chuyển đổi hình thức giữa văn bản giấy và thông điệp dữ liệu 1. Thông điệp dữ liệu được chuyển đổi từ văn bản giấy phải đáp ứng đủ các yêu cầu sau đây: a) Thông tin trong thông điệp dữ liệu được bảo đảm toàn vẹn như văn bản giấy; b) Thông tin trong thông điệp dữ liệu có thể truy cập và sử dụng được để tham chiếu; c) Có ký hiệu riêng xác nhận đã được chuyển đổi từ văn bản giấy sang thông điệp dữ liệu và thông tin của cơ quan, tổ chức, cá nhân thực hiện"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời nêu đúng 2 điều kiện để thông điệp dữ liệu có giá trị như bản gốc (Điều 10), nhưng lại trích dẫn sai nguồn gốc văn bản là 'Luật Bảo hiểm xã hội 2024' trong khi context không hề đề cập đến tên luật này.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê đầy đủ các điều kiện cần thiết và trích dẫn nguồn tài liệu cụ thể, đáp ứng chính xác yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_05",
+      "category": "pronoun_reference",
+      "target_question": "Văn bản đó cần đáp ứng điều kiện gì để có giá trị?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Văn bản đó cần đáp ứng các điều kiện sau để có giá trị:\n\n1. Thông tin trong thông điệp dữ liệu được bảo đảm toàn vẹn kể từ khi được khởi tạo lần đầu tiên dưới dạng một thông điệp dữ liệu hoàn chỉnh.\n2. Thông tin trong thông điệp dữ liệu có thể truy cập và sử dụng được dưới dạng hoàn chỉnh.\n3. Trường hợp pháp luật yêu cầu thông tin phải được thể hiện bằng văn bản, thì thông điệp dữ liệu được xem là đáp ứng yêu cầu nếu thông tin trong thông điệp dữ liệu đó có thể truy cập và sử dụng được để tham chiếu.\n\nĐiều này dựa trên các quy định từ tài liệu tham khảo như Điều 7 (hình thức thể hiện của thông điệp dữ liệu), Điều 8 (giá trị pháp lý của thông điệp dữ liệu), và Điều 11 (giá trị dùng làm chứng cứ).",
+      "top_chunk_texts": [
+        "8 CÔNG BÁO/Số 867 + 868/Ngày 30-7-2023 2. Trường hợp pháp luật yêu cầu văn bản phải được công chứng, chứng thực thì thông điệp dữ liệu được xem là đáp ứng yêu cầu nếu được công chứng theo quy định của pháp luật về công chứng; chứng thực theo quy định của Luật này và pháp luật về chứng thực. Điều 10. Thông điệp dữ liệu có giá trị như bản gốc Thông điệp dữ liệu được sử dụng và có giá trị như bản gốc khi đáp ứng đủ các yêu cầu sau đây: 1. Thông tin trong thông điệp dữ liệu được bảo đảm toàn vẹn kể từ khi được khởi tạo lần đầu tiên dưới dạng một thông điệp dữ liệu hoàn chỉnh. Thông tin trong thông điệp dữ liệu được xem là toàn vẹn khi thông tin đó chưa bị thay đổi, trừ những thay đổi về hình thức phát sinh trong quá trình gửi, lưu trữ hoặc hiển thị thông điệp dữ liệu; 2. Thông tin trong thông điệp dữ liệu có thể truy cập và sử dụng được dưới dạng hoàn chỉnh. Điều 11. Thông điệp dữ liệu có giá trị dùng làm chứng cứ 1. Thông điệp dữ liệu được dùng làm chứng cứ theo quy định của Luật này và",
+        "Mục 1 GIÁ TRỊ PHÁP LÝ CỦA THÔNG ĐIỆP DỮ LIỆU Điều 7. Hình thức thể hiện của thông điệp dữ liệu 1. Thông điệp dữ liệu được thể hiện dưới hình thức văn bản điện tử, tài liệu điện tử, chứng thư điện tử, chứng từ điện tử, hợp đồng điện tử, thư điện tử, điện tín, điện báo, fax và hình thức trao đổi dữ liệu điện tử khác theo quy định của pháp luật. 2. Thông điệp dữ liệu được tạo ra, phát sinh trong quá trình giao dịch hoặc được chuyển đổi từ văn bản giấy. Điều 8. Giá trị pháp lý của thông điệp dữ liệu Thông tin trong thông điệp dữ liệu không bị phủ nhận giá trị pháp lý chỉ vì thông tin đó được thể hiện dưới dạng thông điệp dữ liệu. Điều 9. Thông điệp dữ liệu có giá trị như văn bản 1. Trường hợp pháp luật yêu cầu thông tin phải được thể hiện bằng văn bản thì thông điệp dữ liệu được xem là đáp ứng yêu cầu nếu thông tin trong thông điệp dữ liệu đó có thể truy cập và sử dụng được để tham chiếu.",
+        "điệp dữ liệu có thể truy cập và sử dụng được dưới dạng hoàn chỉnh. Điều 11. Thông điệp dữ liệu có giá trị dùng làm chứng cứ 1. Thông điệp dữ liệu được dùng làm chứng cứ theo quy định của Luật này và pháp luật về tố tụng. 2. Giá trị dùng làm chứng cứ của thông điệp dữ liệu được xác định căn cứ vào độ tin cậy của cách thức khởi tạo, gửi, nhận hoặc lưu trữ thông điệp dữ liệu; cách thức bảo đảm và duy trì tính toàn vẹn của thông điệp dữ liệu; cách thức xác định người khởi tạo, gửi, nhận thông điệp dữ liệu và các yếu tố phù hợp khác. Điều 12. Chuyển đổi hình thức giữa văn bản giấy và thông điệp dữ liệu 1. Thông điệp dữ liệu được chuyển đổi từ văn bản giấy phải đáp ứng đủ các yêu cầu sau đây: a) Thông tin trong thông điệp dữ liệu được bảo đảm toàn vẹn như văn bản giấy; b) Thông tin trong thông điệp dữ liệu có thể truy cập và sử dụng được để tham chiếu; c) Có ký hiệu riêng xác nhận đã được chuyển đổi từ văn bản giấy sang thông điệp dữ liệu và thông tin của cơ quan, tổ chức, cá nhân thực hiện"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.75,
+        "faithfulness_reasoning": "Các điều kiện nêu trong câu trả lời được hỗ trợ bởi Điều 10 và Điều 9 của văn bản, tuy nhiên phần giải thích về nguồn gốc (Điều 7, 8, 11) không liên quan trực tiếp đến các điều kiện về giá trị như bản gốc đã nêu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê đầy đủ và chính xác các điều kiện để một thông điệp dữ liệu có giá trị pháp lý theo quy định pháp luật.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_06",
+      "category": "elliptical_short",
+      "target_question": "Có ngoại lệ nào không?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu tham khảo cung cấp, không có thông tin cụ thể về ngoại lệ liên quan đến độ tuổi lao động tối thiểu. Để có thông tin chính xác về vấn đề này, cần tra cứu thêm các tài liệu liên quan đến Bộ luật Lao động hoặc văn bản pháp lý khác có liên quan.",
+      "top_chunk_texts": [
+        "Chương II\nVỐN ĐIỀU LỆ, QUYỀN VÀ NGHĨA VỤ CỦA THÀNH VIÊN\nĐiều 6. Vốn điều lệ, phần vốn góp của thành viên công ty\n1. Vốn điều lệ của công ty là: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng), trong đó bao gồm:\n- Tiền Việt Nam: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng)\n- Ngoại tệ tự do chuyển đổi: ... ... ...\n- Vàng: ... ... ...\n- Tài sản khác: ... ... ...\nVốn điều lệ có thể tăng hoặc giảm do yêu cầu tình hình hoạt động của Công ty và do quyết định của Hội đồng thành viên.\n2. Phần vốn góp, giá trị phần vốn góp của các thành viên, thời hạn góp vốn:\nStt | Tên thành viên | Vốn góp | Vốn góp | Vốn góp | Thời hạn góp vốn | Ghi chú\nStt | Tên thành viên | Phần vốn góp (bằng số; VND và giá trị tương đương theo đơn vị tiền nước ngoài: bằng số, loại ngoại tệ, nếu có) | Tỷ lệ (%) | Loại tài sản, số lượng, giá trị tài sản góp vốn | Thời hạn góp vốn | Ghi chú\n | | | | | | \n | | | | | |",
+        "vũ lực, đe dọa dùng vũ lực hoặc các thủ đoạn khác để ép buộc người lao động phải làm việc trái ý muốn của họ. 8. Phân biệt đối xử trong lao động là hành vi phân biệt, loại trừ hoặc ưu tiên dựa trên chủng tộc, màu da, nguồn gốc quốc gia hoặc nguồn gốc xã hội, dân tộc, giới tính, độ tuổi, tình trạng thai sản, tình trạng hôn nhân, tôn giáo, tín ngưỡng, chính kiến, khuyết tật, trách nhiệm gia đình hoặc trên cơ sở tình trạng nhiễm HIV hoặc vì lý do thành lập, gia nhập và hoạt động công đoàn, tổ chức của người lao động tại doanh nghiệp có tác động làm ảnh hưởng đến bình đẳng về cơ hội việc làm hoặc nghề nghiệp. Việc phân biệt, loại trừ hoặc ưu tiên xuất phát từ yêu cầu đặc thù của công việc và các hành vi duy trì, bảo vệ việc làm cho người lao động dễ bị tổn thương thì không bị xem là phân biệt đối xử. 9. Quấy rối tình dục tại nơi làm việc là hành vi có tính chất tình dục của bất kỳ người nào đối với người khác tại nơi làm việc mà không được người đó mong",
+        "Chương II\nVỐN VÀ CHỦ SỞ HỮU CÔNG TY\nĐiều 6. Vốn điều lệ, chủ sở hữu công ty\n1. Vốn điều lệ của công ty là: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng), trong đó bao gồm:\n- Tiền Việt Nam: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng)\n- Ngoại tệ tự do chuyển đổi: ... ... ...\n- Vàng: ... ... ...\n- Tài sản khác: ... ... ...\n2. Thông tin về chủ sở hữu công ty:\nTên tổ chức : ... ... ...\nSố Giấy chứng nhận đăng ký doanh nghiệp/Quyết định thành lập: ... ... ...\nNgày cấp: ... ... ... Cơ quan cấp: ... ... ...\nĐịa chỉ trụ sở chính: ... ... ...\nNgười đại diện theo pháp luật: ... ... ...\nChức danh: ... ... ..."
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời là một lời từ chối hợp lệ vì CONTEXT không chứa thông tin về độ tuổi lao động tối thiểu hay các ngoại lệ liên quan, do đó câu trả lời hoàn toàn trung thực.",
+        "answer_relevancy": 0.9,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác nhận không tìm thấy thông tin trong tài liệu và đưa ra hướng dẫn tra cứu bổ sung phù hợp.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_06",
+      "category": "elliptical_short",
+      "target_question": "Có ngoại lệ nào không?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu tham khảo cung cấp, không có thông tin cụ thể về độ tuổi lao động tối thiểu trong Bộ luật Lao động. Tài liệu chỉ đề cập đến các quy định liên quan đến quyền và nghĩa vụ của thành viên công ty, vốn điều lệ, phân biệt đối xử trong lao động, và quấy rối tình dục tại nơi làm việc. Không có thông tin nào liên quan đến độ tuổi lao động tối thiểu được cung cấp.",
+      "top_chunk_texts": [
+        "Chương II\nVỐN ĐIỀU LỆ, QUYỀN VÀ NGHĨA VỤ CỦA THÀNH VIÊN\nĐiều 6. Vốn điều lệ, phần vốn góp của thành viên công ty\n1. Vốn điều lệ của công ty là: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng), trong đó bao gồm:\n- Tiền Việt Nam: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng)\n- Ngoại tệ tự do chuyển đổi: ... ... ...\n- Vàng: ... ... ...\n- Tài sản khác: ... ... ...\nVốn điều lệ có thể tăng hoặc giảm do yêu cầu tình hình hoạt động của Công ty và do quyết định của Hội đồng thành viên.\n2. Phần vốn góp, giá trị phần vốn góp của các thành viên, thời hạn góp vốn:\nStt | Tên thành viên | Vốn góp | Vốn góp | Vốn góp | Thời hạn góp vốn | Ghi chú\nStt | Tên thành viên | Phần vốn góp (bằng số; VND và giá trị tương đương theo đơn vị tiền nước ngoài: bằng số, loại ngoại tệ, nếu có) | Tỷ lệ (%) | Loại tài sản, số lượng, giá trị tài sản góp vốn | Thời hạn góp vốn | Ghi chú\n | | | | | | \n | | | | | |",
+        "vũ lực, đe dọa dùng vũ lực hoặc các thủ đoạn khác để ép buộc người lao động phải làm việc trái ý muốn của họ. 8. Phân biệt đối xử trong lao động là hành vi phân biệt, loại trừ hoặc ưu tiên dựa trên chủng tộc, màu da, nguồn gốc quốc gia hoặc nguồn gốc xã hội, dân tộc, giới tính, độ tuổi, tình trạng thai sản, tình trạng hôn nhân, tôn giáo, tín ngưỡng, chính kiến, khuyết tật, trách nhiệm gia đình hoặc trên cơ sở tình trạng nhiễm HIV hoặc vì lý do thành lập, gia nhập và hoạt động công đoàn, tổ chức của người lao động tại doanh nghiệp có tác động làm ảnh hưởng đến bình đẳng về cơ hội việc làm hoặc nghề nghiệp. Việc phân biệt, loại trừ hoặc ưu tiên xuất phát từ yêu cầu đặc thù của công việc và các hành vi duy trì, bảo vệ việc làm cho người lao động dễ bị tổn thương thì không bị xem là phân biệt đối xử. 9. Quấy rối tình dục tại nơi làm việc là hành vi có tính chất tình dục của bất kỳ người nào đối với người khác tại nơi làm việc mà không được người đó mong",
+        "Chương II\nVỐN VÀ CHỦ SỞ HỮU CÔNG TY\nĐiều 6. Vốn điều lệ, chủ sở hữu công ty\n1. Vốn điều lệ của công ty là: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng), trong đó bao gồm:\n- Tiền Việt Nam: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng)\n- Ngoại tệ tự do chuyển đổi: ... ... ...\n- Vàng: ... ... ...\n- Tài sản khác: ... ... ...\n2. Thông tin về chủ sở hữu công ty:\nTên tổ chức : ... ... ...\nSố Giấy chứng nhận đăng ký doanh nghiệp/Quyết định thành lập: ... ... ...\nNgày cấp: ... ... ... Cơ quan cấp: ... ... ...\nĐịa chỉ trụ sở chính: ... ... ...\nNgười đại diện theo pháp luật: ... ... ...\nChức danh: ... ... ..."
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời là một lời từ chối hợp lệ vì CONTEXT không chứa thông tin về độ tuổi lao động tối thiểu, và các nhận định về nội dung có trong tài liệu đều chính xác.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đã xác nhận rõ ràng rằng tài liệu không chứa thông tin về độ tuổi lao động, phản hồi trực tiếp vào câu hỏi của người dùng một cách trung thực dựa trên ngữ cảnh được cung cấp.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_07",
+      "category": "pronoun_reference",
+      "target_question": "Những trường hợp ngoại lệ đó là gì?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu tham khảo, những trường hợp ngoại lệ khi hai bên có thể giao kết hợp đồng lao động bằng lời nói là:\n\n- Dây chuyền sản xuất.\n- Trường hợp khác do Chính phủ quy định. \n\nTuy nhiên, cần lưu ý rằng thông tin này chỉ được nêu ở Tài liệu 1 (luat-so-125.pdf trang 42), và không có thêm chi tiết về các trường hợp ngoại lệ cụ thể.",
+      "top_chunk_texts": [
+        "dây chuyền sản xuất; đ) Trường hợp khác do Chính phủ quy định. 4. Khi tổ chức làm thêm giờ theo quy định tại khoản 3 Điều này, người sử dụng lao động phải thông báo bằng văn bản cho cơ quan chuyên môn về lao động thuộc Ủy ban nhân dân cấp tỉnh. 5. Chính phủ quy định chi tiết Điều này. Điều 108. Làm thêm giờ trong trường hợp đặc biệt Người sử dụng lao động có quyền yêu cầu người lao động làm thêm giờ vào bất kỳ ngày nào mà không bị giới hạn về số giờ làm thêm theo quy định tại Điều 107 của Bộ luật này và người lao động không được từ chối trong trường hợp sau đây: 1. Thực hiện lệnh động viên, huy động bảo đảm nhiệm vụ quốc phòng, an ninh theo quy định của pháp luật; 2. Thực hiện các công việc nhằm bảo vệ tính mạng con người, tài sản của cơ quan, tổ chức, cá nhân trong phòng ngừa, khắc phục hậu quả thiên tai, hỏa hoạn, dịch bệnh nguy hiểm và thảm họa, trừ trường hợp có nguy cơ ảnh hưởng đến tính mạng, sức khỏe của người lao động theo quy định của pháp luật về an toàn, vệ sinh lao động.",
+        "Chương II\nVỐN ĐIỀU LỆ, QUYỀN VÀ NGHĨA VỤ CỦA THÀNH VIÊN\nĐiều 6. Vốn điều lệ, phần vốn góp của thành viên công ty\n1. Vốn điều lệ của công ty là: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng), trong đó bao gồm:\n- Tiền Việt Nam: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng)\n- Ngoại tệ tự do chuyển đổi: ... ... ...\n- Vàng: ... ... ...\n- Tài sản khác: ... ... ...\nVốn điều lệ có thể tăng hoặc giảm do yêu cầu tình hình hoạt động của Công ty và do quyết định của Hội đồng thành viên.\n2. Phần vốn góp, giá trị phần vốn góp của các thành viên, thời hạn góp vốn:\nStt | Tên thành viên | Vốn góp | Vốn góp | Vốn góp | Thời hạn góp vốn | Ghi chú\nStt | Tên thành viên | Phần vốn góp (bằng số; VND và giá trị tương đương theo đơn vị tiền nước ngoài: bằng số, loại ngoại tệ, nếu có) | Tỷ lệ (%) | Loại tài sản, số lượng, giá trị tài sản góp vốn | Thời hạn góp vốn | Ghi chú\n | | | | | | \n | | | | | |",
+        "vũ lực, đe dọa dùng vũ lực hoặc các thủ đoạn khác để ép buộc người lao động phải làm việc trái ý muốn của họ. 8. Phân biệt đối xử trong lao động là hành vi phân biệt, loại trừ hoặc ưu tiên dựa trên chủng tộc, màu da, nguồn gốc quốc gia hoặc nguồn gốc xã hội, dân tộc, giới tính, độ tuổi, tình trạng thai sản, tình trạng hôn nhân, tôn giáo, tín ngưỡng, chính kiến, khuyết tật, trách nhiệm gia đình hoặc trên cơ sở tình trạng nhiễm HIV hoặc vì lý do thành lập, gia nhập và hoạt động công đoàn, tổ chức của người lao động tại doanh nghiệp có tác động làm ảnh hưởng đến bình đẳng về cơ hội việc làm hoặc nghề nghiệp. Việc phân biệt, loại trừ hoặc ưu tiên xuất phát từ yêu cầu đặc thù của công việc và các hành vi duy trì, bảo vệ việc làm cho người lao động dễ bị tổn thương thì không bị xem là phân biệt đối xử. 9. Quấy rối tình dục tại nơi làm việc là hành vi có tính chất tình dục của bất kỳ người nào đối với người khác tại nơi làm việc mà không được người đó mong"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.0,
+        "faithfulness_reasoning": "Câu trả lời bịa đặt thông tin về 'hợp đồng lao động bằng lời nói' vốn không hề tồn tại trong ngữ cảnh được cung cấp, đồng thời gán ghép sai lệch các mục từ ngữ cảnh (dây chuyền sản xuất, trường hợp khác) vào nội dung này.",
+        "answer_relevancy": 0.9,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê đúng các trường hợp ngoại lệ được hỏi và có trích dẫn nguồn cụ thể, giúp người dùng dễ dàng kiểm chứng.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_07",
+      "category": "pronoun_reference",
+      "target_question": "Những trường hợp ngoại lệ đó là gì?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu tham khảo, những trường hợp ngoại lệ khi hai bên có thể giao kết hợp đồng lao động bằng lời nói là:\n\n- Trường hợp dây chuyền sản xuất.\n- Trường hợp khác do Chính phủ quy định. \n\nTuy nhiên, cần lưu ý rằng thông tin này chỉ được nêu ở tài liệu 1 và không được xác nhận trong các tài liệu còn lại.",
+      "top_chunk_texts": [
+        "dây chuyền sản xuất; đ) Trường hợp khác do Chính phủ quy định. 4. Khi tổ chức làm thêm giờ theo quy định tại khoản 3 Điều này, người sử dụng lao động phải thông báo bằng văn bản cho cơ quan chuyên môn về lao động thuộc Ủy ban nhân dân cấp tỉnh. 5. Chính phủ quy định chi tiết Điều này. Điều 108. Làm thêm giờ trong trường hợp đặc biệt Người sử dụng lao động có quyền yêu cầu người lao động làm thêm giờ vào bất kỳ ngày nào mà không bị giới hạn về số giờ làm thêm theo quy định tại Điều 107 của Bộ luật này và người lao động không được từ chối trong trường hợp sau đây: 1. Thực hiện lệnh động viên, huy động bảo đảm nhiệm vụ quốc phòng, an ninh theo quy định của pháp luật; 2. Thực hiện các công việc nhằm bảo vệ tính mạng con người, tài sản của cơ quan, tổ chức, cá nhân trong phòng ngừa, khắc phục hậu quả thiên tai, hỏa hoạn, dịch bệnh nguy hiểm và thảm họa, trừ trường hợp có nguy cơ ảnh hưởng đến tính mạng, sức khỏe của người lao động theo quy định của pháp luật về an toàn, vệ sinh lao động.",
+        "Chương II\nVỐN ĐIỀU LỆ, QUYỀN VÀ NGHĨA VỤ CỦA THÀNH VIÊN\nĐiều 6. Vốn điều lệ, phần vốn góp của thành viên công ty\n1. Vốn điều lệ của công ty là: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng), trong đó bao gồm:\n- Tiền Việt Nam: ... ... ... đồng (Ghi bằng chữ: ... ... ... đồng)\n- Ngoại tệ tự do chuyển đổi: ... ... ...\n- Vàng: ... ... ...\n- Tài sản khác: ... ... ...\nVốn điều lệ có thể tăng hoặc giảm do yêu cầu tình hình hoạt động của Công ty và do quyết định của Hội đồng thành viên.\n2. Phần vốn góp, giá trị phần vốn góp của các thành viên, thời hạn góp vốn:\nStt | Tên thành viên | Vốn góp | Vốn góp | Vốn góp | Thời hạn góp vốn | Ghi chú\nStt | Tên thành viên | Phần vốn góp (bằng số; VND và giá trị tương đương theo đơn vị tiền nước ngoài: bằng số, loại ngoại tệ, nếu có) | Tỷ lệ (%) | Loại tài sản, số lượng, giá trị tài sản góp vốn | Thời hạn góp vốn | Ghi chú\n | | | | | | \n | | | | | |",
+        "vũ lực, đe dọa dùng vũ lực hoặc các thủ đoạn khác để ép buộc người lao động phải làm việc trái ý muốn của họ. 8. Phân biệt đối xử trong lao động là hành vi phân biệt, loại trừ hoặc ưu tiên dựa trên chủng tộc, màu da, nguồn gốc quốc gia hoặc nguồn gốc xã hội, dân tộc, giới tính, độ tuổi, tình trạng thai sản, tình trạng hôn nhân, tôn giáo, tín ngưỡng, chính kiến, khuyết tật, trách nhiệm gia đình hoặc trên cơ sở tình trạng nhiễm HIV hoặc vì lý do thành lập, gia nhập và hoạt động công đoàn, tổ chức của người lao động tại doanh nghiệp có tác động làm ảnh hưởng đến bình đẳng về cơ hội việc làm hoặc nghề nghiệp. Việc phân biệt, loại trừ hoặc ưu tiên xuất phát từ yêu cầu đặc thù của công việc và các hành vi duy trì, bảo vệ việc làm cho người lao động dễ bị tổn thương thì không bị xem là phân biệt đối xử. 9. Quấy rối tình dục tại nơi làm việc là hành vi có tính chất tình dục của bất kỳ người nào đối với người khác tại nơi làm việc mà không được người đó mong"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.0,
+        "faithfulness_reasoning": "Câu trả lời bịa đặt thông tin về việc giao kết hợp đồng lao động bằng lời nói, trong khi CONTEXT chỉ đề cập đến các trường hợp làm thêm giờ đặc biệt.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê chính xác các trường hợp ngoại lệ được hỏi và có thái độ trung thực về nguồn thông tin.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_08",
+      "category": "pronoun_reference",
+      "target_question": "Nó có bảo đảm được tính bí mật của thông điệp dữ liệu hay không?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu tham khảo, thông điệp dữ liệu được bảo đảm toàn vẹn như văn bản giấy (Tài liệu 1, Điều 12.1.a). Tuy nhiên, tài liệu này không đề cập trực tiếp đến việc bảo đảm tính bí mật của thông điệp dữ liệu. Để xác định rõ hơn về vấn đề này, cần tham khảo thêm các điều khoản khác trong tài liệu hoặc luật liên quan.",
+      "top_chunk_texts": [
+        "điệp dữ liệu có thể truy cập và sử dụng được dưới dạng hoàn chỉnh. Điều 11. Thông điệp dữ liệu có giá trị dùng làm chứng cứ 1. Thông điệp dữ liệu được dùng làm chứng cứ theo quy định của Luật này và pháp luật về tố tụng. 2. Giá trị dùng làm chứng cứ của thông điệp dữ liệu được xác định căn cứ vào độ tin cậy của cách thức khởi tạo, gửi, nhận hoặc lưu trữ thông điệp dữ liệu; cách thức bảo đảm và duy trì tính toàn vẹn của thông điệp dữ liệu; cách thức xác định người khởi tạo, gửi, nhận thông điệp dữ liệu và các yếu tố phù hợp khác. Điều 12. Chuyển đổi hình thức giữa văn bản giấy và thông điệp dữ liệu 1. Thông điệp dữ liệu được chuyển đổi từ văn bản giấy phải đáp ứng đủ các yêu cầu sau đây: a) Thông tin trong thông điệp dữ liệu được bảo đảm toàn vẹn như văn bản giấy; b) Thông tin trong thông điệp dữ liệu có thể truy cập và sử dụng được để tham chiếu; c) Có ký hiệu riêng xác nhận đã được chuyển đổi từ văn bản giấy sang thông điệp dữ liệu và thông tin của cơ quan, tổ chức, cá nhân thực hiện",
+        "cung cấp dịch vụ chứng thực chữ ký số cung cấp để xác thực chủ thể ký số trên thông điệp dữ liệu, bảo đảm tính chống chối bỏ của chủ thể ký với thông điệp dữ liệu và bảo đảm tính toàn vẹn của thông điệp dữ liệu được ký. 15. Dấu thời gian là dữ liệu điện tử gắn với thông điệp dữ liệu cho phép xác định thời gian của thông điệp dữ liệu đó tồn tại ở một thời điểm cụ thể. 16. Hợp đồng điện tử là hợp đồng được thiết lập dưới dạng thông điệp dữ liệu.",
+        "8 CÔNG BÁO/Số 867 + 868/Ngày 30-7-2023 2. Trường hợp pháp luật yêu cầu văn bản phải được công chứng, chứng thực thì thông điệp dữ liệu được xem là đáp ứng yêu cầu nếu được công chứng theo quy định của pháp luật về công chứng; chứng thực theo quy định của Luật này và pháp luật về chứng thực. Điều 10. Thông điệp dữ liệu có giá trị như bản gốc Thông điệp dữ liệu được sử dụng và có giá trị như bản gốc khi đáp ứng đủ các yêu cầu sau đây: 1. Thông tin trong thông điệp dữ liệu được bảo đảm toàn vẹn kể từ khi được khởi tạo lần đầu tiên dưới dạng một thông điệp dữ liệu hoàn chỉnh. Thông tin trong thông điệp dữ liệu được xem là toàn vẹn khi thông tin đó chưa bị thay đổi, trừ những thay đổi về hình thức phát sinh trong quá trình gửi, lưu trữ hoặc hiển thị thông điệp dữ liệu; 2. Thông tin trong thông điệp dữ liệu có thể truy cập và sử dụng được dưới dạng hoàn chỉnh. Điều 11. Thông điệp dữ liệu có giá trị dùng làm chứng cứ 1. Thông điệp dữ liệu được dùng làm chứng cứ theo quy định của Luật này và"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời đã trích dẫn chính xác thông tin về tính toàn vẹn từ ngữ cảnh và thừa nhận rằng tài liệu không đề cập đến tính bí mật, đây là một phản hồi trung thực dựa trên dữ liệu được cung cấp.",
+        "answer_relevancy": 0.9,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác nhận tài liệu không đề cập đến tính bí mật và đưa ra hướng xử lý phù hợp thay vì trả lời sai lệch.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_08",
+      "category": "pronoun_reference",
+      "target_question": "Nó có bảo đảm được tính bí mật của thông điệp dữ liệu hay không?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu tham khảo, nó không trực tiếp bảo đảm tính bí mật của thông điệp dữ liệu. Tài liệu chỉ đề cập đến việc thông điệp dữ liệu phải đáp ứng các yêu cầu về độ tin cậy của cách thức khởi tạo, gửi, nhận hoặc lưu trữ thông điệp dữ liệu; cách thức bảo đảm và duy trì tính toàn vẹn của thông điệp dữ liệu; và ký hiệu xác nhận đã được chuyển đổi từ văn bản giấy sang thông điệp dữ liệu. Tài liệu không đề cập trực tiếp đến việc bảo đảm tính bí mật của thông điệp dữ liệu.",
+      "top_chunk_texts": [
+        "điệp dữ liệu có thể truy cập và sử dụng được dưới dạng hoàn chỉnh. Điều 11. Thông điệp dữ liệu có giá trị dùng làm chứng cứ 1. Thông điệp dữ liệu được dùng làm chứng cứ theo quy định của Luật này và pháp luật về tố tụng. 2. Giá trị dùng làm chứng cứ của thông điệp dữ liệu được xác định căn cứ vào độ tin cậy của cách thức khởi tạo, gửi, nhận hoặc lưu trữ thông điệp dữ liệu; cách thức bảo đảm và duy trì tính toàn vẹn của thông điệp dữ liệu; cách thức xác định người khởi tạo, gửi, nhận thông điệp dữ liệu và các yếu tố phù hợp khác. Điều 12. Chuyển đổi hình thức giữa văn bản giấy và thông điệp dữ liệu 1. Thông điệp dữ liệu được chuyển đổi từ văn bản giấy phải đáp ứng đủ các yêu cầu sau đây: a) Thông tin trong thông điệp dữ liệu được bảo đảm toàn vẹn như văn bản giấy; b) Thông tin trong thông điệp dữ liệu có thể truy cập và sử dụng được để tham chiếu; c) Có ký hiệu riêng xác nhận đã được chuyển đổi từ văn bản giấy sang thông điệp dữ liệu và thông tin của cơ quan, tổ chức, cá nhân thực hiện",
+        "cung cấp dịch vụ chứng thực chữ ký số cung cấp để xác thực chủ thể ký số trên thông điệp dữ liệu, bảo đảm tính chống chối bỏ của chủ thể ký với thông điệp dữ liệu và bảo đảm tính toàn vẹn của thông điệp dữ liệu được ký. 15. Dấu thời gian là dữ liệu điện tử gắn với thông điệp dữ liệu cho phép xác định thời gian của thông điệp dữ liệu đó tồn tại ở một thời điểm cụ thể. 16. Hợp đồng điện tử là hợp đồng được thiết lập dưới dạng thông điệp dữ liệu.",
+        "8 CÔNG BÁO/Số 867 + 868/Ngày 30-7-2023 2. Trường hợp pháp luật yêu cầu văn bản phải được công chứng, chứng thực thì thông điệp dữ liệu được xem là đáp ứng yêu cầu nếu được công chứng theo quy định của pháp luật về công chứng; chứng thực theo quy định của Luật này và pháp luật về chứng thực. Điều 10. Thông điệp dữ liệu có giá trị như bản gốc Thông điệp dữ liệu được sử dụng và có giá trị như bản gốc khi đáp ứng đủ các yêu cầu sau đây: 1. Thông tin trong thông điệp dữ liệu được bảo đảm toàn vẹn kể từ khi được khởi tạo lần đầu tiên dưới dạng một thông điệp dữ liệu hoàn chỉnh. Thông tin trong thông điệp dữ liệu được xem là toàn vẹn khi thông tin đó chưa bị thay đổi, trừ những thay đổi về hình thức phát sinh trong quá trình gửi, lưu trữ hoặc hiển thị thông điệp dữ liệu; 2. Thông tin trong thông điệp dữ liệu có thể truy cập và sử dụng được dưới dạng hoàn chỉnh. Điều 11. Thông điệp dữ liệu có giá trị dùng làm chứng cứ 1. Thông điệp dữ liệu được dùng làm chứng cứ theo quy định của Luật này và"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời đã phân tích chính xác rằng các tài liệu được cung cấp không đề cập đến tính bí mật của thông điệp dữ liệu, đồng thời liệt kê đúng các nội dung có trong ngữ cảnh.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác nhận rõ ràng rằng tài liệu không đề cập đến tính bí mật và giải thích cụ thể những gì tài liệu thực sự bao hàm, đáp ứng chính xác yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_09",
+      "category": "pronoun_reference",
+      "target_question": "Tiền lương để tính khoản đó được xác định như thế nào?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Tiền lương để tính tiền lương làm thêm giờ vào ban đêm được xác định theo điểm a khoản 1 Điều 55 của Nghị định 145/2020/NĐ-CP. Theo đó, tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường được xác định bằng cách chia tiền lương thực trả của công việc đang làm trong tháng hoặc tuần cho tổng số giờ thực tế làm việc tương ứng trong tháng hoặc tuần (không quá số ngày làm việc bình thường trong tháng và số giờ làm việc bình thường).",
+      "top_chunk_texts": [
+        "Trong đó:\na) Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường được xác định theo điểm a khoản 1 Điều 55 Nghị định này;\nb) Tiền lương giờ vào ban ngày của ngày làm việc bình thường hoặc của ngày nghỉ hằng tuần hoặc của ngày nghỉ lễ, tết, ngày nghỉ có hưởng lương được xác định như sau:\nb1) Tiền lương giờ vào ban ngày của ngày làm việc bình thường, được tính ít nhất bằng 100% so với tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường đối với trường hợp người lao động không làm thêm giờ vào ban ngày của ngày đó (trước khi làm thêm giờ vào ban đêm); ít nhất bằng 150% so với tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường đối với trường hợp người lao động có làm thêm giờ vào ban ngày của ngày đó (trước khi làm thêm giờ vào ban đêm);\nb2) Tiền lương giờ vào ban ngày của ngày nghỉ hằng tuần, được tính ít nhất bằng 200% so với tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường;",
+        "a) Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường, được xác định bằng tiền lương thực trả của công việc đang làm của tháng hoặc tuần hoặc ngày mà người lao động làm thêm giờ (không bao gồm tiền lương làm thêm giờ, tiền lương trả thêm khi làm việc vào ban đêm, tiền lương của ngày nghỉ lễ, tết, ngày nghỉ có hưởng lương theo quy định của Bộ luật Lao động; tiền thưởng theo quy định tại Điều 104 của Bộ luật Lao động, tiền thưởng sáng kiến; tiền ăn giữa ca, các khoản hỗ trợ xăng xe, điện thoại, đi lại, tiền nhà ở, tiền giữ trẻ, nuôi con nhỏ; hỗ trợ khi có thân nhân bị chết, người lao động có người thân kết hôn, sinh nhật của người lao động, bệnh nghề nghiệp và các khoản hỗ trợ, trợ cấp khác không liên quan đến thực hiện công việc hoặc chức danh trong hợp đồng lao động) chia cho tổng số giờ thực tế làm việc tương ứng trong tháng hoặc tuần hoặc ngày người lao động làm thêm giờ (không quá số ngày làm việc bình thường trong tháng và số giờ làm việc bình thường",
+        "Điều 57. Tiền lương làm thêm giờ vào ban đêm\nNgười lao động làm thêm giờ vào ban đêm theo khoản 3 Điều 98 của Bộ luật Lao động, được hưởng tiền lương tính theo công thức sau:\n1. Đối với người lao động hưởng lương theo thời gian, tiền lương làm thêm giờ vào ban đêm được tính như sau:\nTiền lương làm thêm giờ vào ban đêm | = | Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường | x | Mức ít nhất 150% hoặc 200% hoặc 300% | + | Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường | x | Mức ít nhất 30% | + | 20% | x | Tiền lương giờ vào ban ngày của ngày làm việc bình thường hoặc của ngày nghỉ hằng tuần hoặc của ngày nghỉ lễ, tết, ngày nghỉ có hưởng lương | x | Số giờ làm thêm vào ban đêm\nTrong đó:\na) Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường được xác định theo điểm a khoản 1 Điều 55 Nghị định này;"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.66,
+        "faithfulness_reasoning": "Câu trả lời xác định đúng cách tính tiền lương giờ thực trả dựa trên context, nhưng việc tự ý bổ sung tên văn bản 'Nghị định 145/2020/NĐ-CP' là thông tin không có trong context được cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, trích dẫn đúng căn cứ pháp lý và giải thích rõ công thức xác định tiền lương giờ thực trả để tính lương làm thêm giờ.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_09",
+      "category": "pronoun_reference",
+      "target_question": "Tiền lương để tính khoản đó được xác định như thế nào?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Tiền lương để tính tiền lương làm thêm giờ vào ban đêm được xác định theo điểm a khoản 1 Điều 55 của Nghị định này, tức là bằng tiền lương thực trả của công việc đang làm của tháng hoặc tuần hoặc ngày mà người lao động làm thêm giờ.",
+      "top_chunk_texts": [
+        "Trong đó:\na) Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường được xác định theo điểm a khoản 1 Điều 55 Nghị định này;\nb) Tiền lương giờ vào ban ngày của ngày làm việc bình thường hoặc của ngày nghỉ hằng tuần hoặc của ngày nghỉ lễ, tết, ngày nghỉ có hưởng lương được xác định như sau:\nb1) Tiền lương giờ vào ban ngày của ngày làm việc bình thường, được tính ít nhất bằng 100% so với tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường đối với trường hợp người lao động không làm thêm giờ vào ban ngày của ngày đó (trước khi làm thêm giờ vào ban đêm); ít nhất bằng 150% so với tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường đối với trường hợp người lao động có làm thêm giờ vào ban ngày của ngày đó (trước khi làm thêm giờ vào ban đêm);\nb2) Tiền lương giờ vào ban ngày của ngày nghỉ hằng tuần, được tính ít nhất bằng 200% so với tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường;",
+        "a) Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường, được xác định bằng tiền lương thực trả của công việc đang làm của tháng hoặc tuần hoặc ngày mà người lao động làm thêm giờ (không bao gồm tiền lương làm thêm giờ, tiền lương trả thêm khi làm việc vào ban đêm, tiền lương của ngày nghỉ lễ, tết, ngày nghỉ có hưởng lương theo quy định của Bộ luật Lao động; tiền thưởng theo quy định tại Điều 104 của Bộ luật Lao động, tiền thưởng sáng kiến; tiền ăn giữa ca, các khoản hỗ trợ xăng xe, điện thoại, đi lại, tiền nhà ở, tiền giữ trẻ, nuôi con nhỏ; hỗ trợ khi có thân nhân bị chết, người lao động có người thân kết hôn, sinh nhật của người lao động, bệnh nghề nghiệp và các khoản hỗ trợ, trợ cấp khác không liên quan đến thực hiện công việc hoặc chức danh trong hợp đồng lao động) chia cho tổng số giờ thực tế làm việc tương ứng trong tháng hoặc tuần hoặc ngày người lao động làm thêm giờ (không quá số ngày làm việc bình thường trong tháng và số giờ làm việc bình thường",
+        "Điều 57. Tiền lương làm thêm giờ vào ban đêm\nNgười lao động làm thêm giờ vào ban đêm theo khoản 3 Điều 98 của Bộ luật Lao động, được hưởng tiền lương tính theo công thức sau:\n1. Đối với người lao động hưởng lương theo thời gian, tiền lương làm thêm giờ vào ban đêm được tính như sau:\nTiền lương làm thêm giờ vào ban đêm | = | Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường | x | Mức ít nhất 150% hoặc 200% hoặc 300% | + | Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường | x | Mức ít nhất 30% | + | 20% | x | Tiền lương giờ vào ban ngày của ngày làm việc bình thường hoặc của ngày nghỉ hằng tuần hoặc của ngày nghỉ lễ, tết, ngày nghỉ có hưởng lương | x | Số giờ làm thêm vào ban đêm\nTrong đó:\na) Tiền lương giờ thực trả của công việc đang làm vào ngày làm việc bình thường được xác định theo điểm a khoản 1 Điều 55 Nghị định này;"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác thông tin được nêu tại Điều 57 và phần giải thích về tiền lương giờ thực trả trong context, không có thông tin bịa đặt.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định rõ căn cứ pháp lý và cách tính tiền lương làm thêm giờ một cách chính xác, đầy đủ theo yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_10",
+      "category": "pronoun_reference",
+      "target_question": "Nếu không làm được việc đó thì xử lý ra sao?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Nếu người lao động vi phạm quy định của Bộ luật Lao động và không thực hiện thỏa thuận trong biên bản hòa giải thành, hoặc hòa giải viên lao động không tiến hành hòa giải, một trong các bên không thực hiện thỏa thuận trong biên bản hòa giải thành, thì theo Điều 197 của Bộ luật này, các bên tranh chấp có quyền yêu cầu Hội đồng trọng tài lao động giải quyết tranh chấp. \n\nĐiều 197 quy định rằng: \"Trong trường hợp hòa giải không thành hoặc hết thời hạn hòa giải quy định tại khoản 2 Điều 188 của Bộ luật này mà hòa giải viên lao động không tiến hành hòa giải hoặc một trong các bên không thực hiện thỏa thuận trong biên bản hòa giải thành, trên cơ sở đồng thuận, các bên tranh chấp có quyền yêu cầu Hội đồng trọng tài lao động giải quyết tranh chấp.\"\n\nNếu người lao động vi phạm và không thực hiện yêu cầu này, họ có thể bị xử lý kỷ luật lao động theo quy định của pháp luật về lao động.",
+      "top_chunk_texts": [
+        "Thanh tra lao động có quyền thanh tra, điều tra nơi thuộc đối tượng, phạm vi thanh tra được giao theo quyết định thanh tra. Khi thanh tra đột xuất theo quyết định của người có thẩm quyền trong trường hợp khẩn cấp có nguy cơ đe dọa an toàn, tính mạng, sức khỏe, danh dự, nhân phẩm của người lao động tại nơi làm việc thì không cần báo trước. Điều 217. Xử lý vi phạm 1. Người nào có hành vi vi phạm quy định của Bộ luật này thì tùy theo tính chất, mức độ vi phạm mà bị xử lý kỷ luật, xử phạt vi phạm hành chính hoặc bị truy cứu trách nhiệm hình sự, nếu gây thiệt hại thì phải bồi thường theo quy định của pháp luật. 2. Khi đã có quyết định của Tòa án về cuộc đình công là bất hợp pháp thì người lao động đang tham gia đình công phải ngừng ngay đình công và trở lại làm việc; nếu người lao động không ngừng đình công, không trở lại làm việc thì tùy theo mức độ vi phạm có thể bị xử lý kỷ luật lao động theo quy định của pháp luật về lao động. Trong trường hợp cuộc đình công là bất hợp pháp mà gây",
+        "đóng vào quỹ bảo hiểm xã hội, quỹ bảo hiểm thất nghiệp. 2. Xử phạt vi phạm hành chính hoặc truy cứu trách nhiệm hình sự theo quy định của pháp luật. 3. Không xem xét trao tặng các danh hiệu thi đua, hình thức khen thưởng. 4. Chính phủ quy định chi tiết khoản 1 Điều này.",
+        "Bộ luật này mà hòa giải viên lao động không tiến hành hòa giải hoặc một trong các bên không thực hiện thỏa thuận trong biên bản hòa giải thành thì các bên tranh chấp có quyền lựa chọn một trong các phương thức sau để giải quyết tranh chấp: a) Yêu cầu Hội đồng trọng tài lao động giải quyết theo quy định tại Điều 197 của Bộ luật này; b) Tổ chức đại diện người lao động có quyền tiến hành thủ tục quy định tại các điều 200, 201 và 202 của Bộ luật này để đình công. Điều 197. Giải quyết tranh chấp lao động tập thể về lợi ích của Hội đồng trọng tài lao động 1. Trên cơ sở đồng thuận, các bên tranh chấp có quyền yêu cầu Hội đồng trọng tài lao động giải quyết tranh chấp trong trường hợp hòa giải không thành hoặc hết thời hạn hòa giải quy định tại khoản 2 Điều 188 của Bộ luật này mà hòa giải viên lao động không tiến hành hòa giải hoặc một trong các bên không thực hiện thỏa thuận trong biên bản hòa giải thành. 2. Trong thời hạn 07 ngày làm việc kể từ ngày nhận được yêu cầu giải quyết tranh chấp"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.66,
+        "faithfulness_reasoning": "Câu trả lời chứa thông tin chính xác về quyền yêu cầu Hội đồng trọng tài lao động từ context, nhưng việc kết luận người lao động vi phạm 'yêu cầu này' (yêu cầu giải quyết tranh chấp) dẫn đến kỷ luật lao động là suy diễn không có căn cứ trực tiếp trong context cung cấp.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Câu trả lời cung cấp giải pháp cụ thể dựa trên quy định pháp luật cho tình huống tranh chấp, tuy nhiên vẫn còn hơi lan man ở phần trích dẫn điều luật lặp lại và giả định về kỷ luật lao động chưa thực sự khớp hoàn toàn với ngữ cảnh câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_10",
+      "category": "pronoun_reference",
+      "target_question": "Nếu không làm được việc đó thì xử lý ra sao?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Nếu người lao động vi phạm quy định của Bộ luật Lao động và gây thiệt hại, họ có thể bị truy cứu trách nhiệm hình sự hoặc phải bồi thường theo quy định của pháp luật. Ngoài ra, nếu đã có quyết định của Tòa án về cuộc đình công là bất hợp pháp, người lao động đang tham gia đình công cần ngừng ngay việc đình công và trở lại làm việc. Nếu không thực hiện yêu cầu này, họ có thể bị xử lý kỷ luật lao động theo quy định của pháp luật về lao động.",
+      "top_chunk_texts": [
+        "Thanh tra lao động có quyền thanh tra, điều tra nơi thuộc đối tượng, phạm vi thanh tra được giao theo quyết định thanh tra. Khi thanh tra đột xuất theo quyết định của người có thẩm quyền trong trường hợp khẩn cấp có nguy cơ đe dọa an toàn, tính mạng, sức khỏe, danh dự, nhân phẩm của người lao động tại nơi làm việc thì không cần báo trước. Điều 217. Xử lý vi phạm 1. Người nào có hành vi vi phạm quy định của Bộ luật này thì tùy theo tính chất, mức độ vi phạm mà bị xử lý kỷ luật, xử phạt vi phạm hành chính hoặc bị truy cứu trách nhiệm hình sự, nếu gây thiệt hại thì phải bồi thường theo quy định của pháp luật. 2. Khi đã có quyết định của Tòa án về cuộc đình công là bất hợp pháp thì người lao động đang tham gia đình công phải ngừng ngay đình công và trở lại làm việc; nếu người lao động không ngừng đình công, không trở lại làm việc thì tùy theo mức độ vi phạm có thể bị xử lý kỷ luật lao động theo quy định của pháp luật về lao động. Trong trường hợp cuộc đình công là bất hợp pháp mà gây",
+        "đóng vào quỹ bảo hiểm xã hội, quỹ bảo hiểm thất nghiệp. 2. Xử phạt vi phạm hành chính hoặc truy cứu trách nhiệm hình sự theo quy định của pháp luật. 3. Không xem xét trao tặng các danh hiệu thi đua, hình thức khen thưởng. 4. Chính phủ quy định chi tiết khoản 1 Điều này.",
+        "Bộ luật này mà hòa giải viên lao động không tiến hành hòa giải hoặc một trong các bên không thực hiện thỏa thuận trong biên bản hòa giải thành thì các bên tranh chấp có quyền lựa chọn một trong các phương thức sau để giải quyết tranh chấp: a) Yêu cầu Hội đồng trọng tài lao động giải quyết theo quy định tại Điều 197 của Bộ luật này; b) Tổ chức đại diện người lao động có quyền tiến hành thủ tục quy định tại các điều 200, 201 và 202 của Bộ luật này để đình công. Điều 197. Giải quyết tranh chấp lao động tập thể về lợi ích của Hội đồng trọng tài lao động 1. Trên cơ sở đồng thuận, các bên tranh chấp có quyền yêu cầu Hội đồng trọng tài lao động giải quyết tranh chấp trong trường hợp hòa giải không thành hoặc hết thời hạn hòa giải quy định tại khoản 2 Điều 188 của Bộ luật này mà hòa giải viên lao động không tiến hành hòa giải hoặc một trong các bên không thực hiện thỏa thuận trong biên bản hòa giải thành. 2. Trong thời hạn 07 ngày làm việc kể từ ngày nhận được yêu cầu giải quyết tranh chấp"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các nhận định trong câu trả lời đều được hỗ trợ trực tiếp bởi nội dung trong CONTEXT (Điều 217 về xử lý vi phạm và quy định về đình công bất hợp pháp).",
+        "answer_relevancy": 0.3,
+        "answer_relevancy_reasoning": "Câu trả lời không xác định được 'việc đó' là gì và đưa ra các thông tin pháp lý chung chung không liên quan trực tiếp đến ngữ cảnh của câu hỏi, dẫn đến việc không giải quyết được vấn đề người dùng đang thắc mắc.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_11",
+      "category": "topic_continuation",
+      "target_question": "Còn lương khoán thì tính ra sao?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Lương khoán được trả cho người lao động hưởng lương khoán, căn cứ vào khối lượng, chất lượng công việc và thời gian phải hoàn thành. (Điều 4, Quy chế tiền lương - Tài liệu 1)",
+      "top_chunk_texts": [
+        "Điều 1. Lương chính\nLà mức lương trả cho người lao động làm hành chính trong điều kiện bình thường theo thời gian làm việc thực tế trong tháng. Mức lương này được xác định theo quy định tại Nghị định 90/2019/NĐ-CP về mức lương tối thiểu vùng.\nĐiều 2. Lương đóng bảo hiểm xã hội\nLà mức tiền lương và phụ cấp theo lương theo quy định tại Điều 4 Thông tư 47/2015/TT-BLĐTBXH hướng dẫn thực hiện về hợp đồng lao động, kỷ luật lao động, trách nhiệm vật chất.\nĐiều 3. Lương thử việc\nĐược hưởng bằng 85% lương mức lương chính thức của công việc đó.\nĐiều 4. Lương khoán\nLà mức lương dành cho cá nhân trực tiếp làm công việc có tính chất thời vụ, vụ việc, những công việc được giao trong khoảng thời gian nhất định, theo khối lượng công việc chi tiết qua hợp đồng khoán việc.\nĐiều 5. Cách tính lương\nSử dụng hình thức trả lương theo thời gian làm việc thực tế trong tháng bằng ngày công chấm chuẩn làm việc tháng.",
+        "b) Tiền lương theo sản phẩm được trả cho người lao động hưởng lương theo sản phẩm, căn cứ vào mức độ hoàn thành số lượng, chất lượng sản phẩm theo định mức lao động và đơn giá sản phẩm được giao.\nc) Tiền lương khoán được trả cho người lao động hưởng lương khoán, căn cứ vào khối lượng, chất lượng công việc và thời gian phải hoàn thành.\n2. Tiền lương của người lao động theo các hình thức trả lương quy định tại khoản 1 Điều này được trả bằng tiền mặt hoặc trả qua tài khoản cá nhân của người lao động được mở tại ngân hàng. Người sử dụng lao động phải trả các loại phí liên quan đến việc mở tài khoản và chuyển tiền lương khi chọn trả lương qua tài khoản cá nhân của người lao động.",
+        "được trả một tháng một lần hoặc nửa tháng một lần. Thời điểm trả lương do hai bên thỏa thuận và phải được ấn định vào một thời điểm có tính chu kỳ. 3. Người lao động hưởng lương theo sản phẩm, theo khoán được trả lương theo thỏa thuận của hai bên; nếu công việc phải làm trong nhiều tháng thì hằng tháng được tạm ứng tiền lương theo khối lượng công việc đã làm trong tháng. 4. Trường hợp vì lý do bất khả kháng mà người sử dụng lao động đã tìm mọi biện pháp khắc phục nhưng không thể trả lương đúng hạn thì không được chậm quá 30 ngày; nếu trả lương chậm từ 15 ngày trở lên thì người sử dụng lao động phải đền bù cho người lao động một khoản tiền ít nhất bằng số tiền lãi của số tiền trả chậm tính theo lãi suất huy động tiền gửi có kỳ hạn 01 tháng do ngân hàng nơi"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác thông tin về cách tính lương khoán dựa trên khối lượng, chất lượng và thời gian hoàn thành được quy định trong ngữ cảnh cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, giải thích rõ căn cứ tính lương khoán và có trích dẫn nguồn tài liệu cụ thể.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_11",
+      "category": "topic_continuation",
+      "target_question": "Còn lương khoán thì tính ra sao?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Lương khoán được trả cho người lao động làm công việc có tính chất thời vụ, vụ việc, những công việc được giao trong khoảng thời gian nhất định, theo khối lượng công việc chi tiết qua hợp đồng khoán việc. (Điều 4, Quy chế tiền lương).",
+      "top_chunk_texts": [
+        "Điều 1. Lương chính\nLà mức lương trả cho người lao động làm hành chính trong điều kiện bình thường theo thời gian làm việc thực tế trong tháng. Mức lương này được xác định theo quy định tại Nghị định 90/2019/NĐ-CP về mức lương tối thiểu vùng.\nĐiều 2. Lương đóng bảo hiểm xã hội\nLà mức tiền lương và phụ cấp theo lương theo quy định tại Điều 4 Thông tư 47/2015/TT-BLĐTBXH hướng dẫn thực hiện về hợp đồng lao động, kỷ luật lao động, trách nhiệm vật chất.\nĐiều 3. Lương thử việc\nĐược hưởng bằng 85% lương mức lương chính thức của công việc đó.\nĐiều 4. Lương khoán\nLà mức lương dành cho cá nhân trực tiếp làm công việc có tính chất thời vụ, vụ việc, những công việc được giao trong khoảng thời gian nhất định, theo khối lượng công việc chi tiết qua hợp đồng khoán việc.\nĐiều 5. Cách tính lương\nSử dụng hình thức trả lương theo thời gian làm việc thực tế trong tháng bằng ngày công chấm chuẩn làm việc tháng.",
+        "b) Tiền lương theo sản phẩm được trả cho người lao động hưởng lương theo sản phẩm, căn cứ vào mức độ hoàn thành số lượng, chất lượng sản phẩm theo định mức lao động và đơn giá sản phẩm được giao.\nc) Tiền lương khoán được trả cho người lao động hưởng lương khoán, căn cứ vào khối lượng, chất lượng công việc và thời gian phải hoàn thành.\n2. Tiền lương của người lao động theo các hình thức trả lương quy định tại khoản 1 Điều này được trả bằng tiền mặt hoặc trả qua tài khoản cá nhân của người lao động được mở tại ngân hàng. Người sử dụng lao động phải trả các loại phí liên quan đến việc mở tài khoản và chuyển tiền lương khi chọn trả lương qua tài khoản cá nhân của người lao động.",
+        "được trả một tháng một lần hoặc nửa tháng một lần. Thời điểm trả lương do hai bên thỏa thuận và phải được ấn định vào một thời điểm có tính chu kỳ. 3. Người lao động hưởng lương theo sản phẩm, theo khoán được trả lương theo thỏa thuận của hai bên; nếu công việc phải làm trong nhiều tháng thì hằng tháng được tạm ứng tiền lương theo khối lượng công việc đã làm trong tháng. 4. Trường hợp vì lý do bất khả kháng mà người sử dụng lao động đã tìm mọi biện pháp khắc phục nhưng không thể trả lương đúng hạn thì không được chậm quá 30 ngày; nếu trả lương chậm từ 15 ngày trở lên thì người sử dụng lao động phải đền bù cho người lao động một khoản tiền ít nhất bằng số tiền lãi của số tiền trả chậm tính theo lãi suất huy động tiền gửi có kỳ hạn 01 tháng do ngân hàng nơi"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời trích dẫn chính xác định nghĩa về lương khoán từ Điều 4 của CONTEXT, các thông tin đưa ra đều được hỗ trợ đầy đủ.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, giải thích rõ khái niệm lương khoán và trích dẫn nguồn quy định cụ thể, đáp ứng đúng yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_12",
+      "category": "elliptical_short",
+      "target_question": "Còn Kế toán trưởng thì bao nhiêu?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo quy chế tiền lương được nêu trong tài liệu tham khảo, mức phụ cấp trách nhiệm hàng tháng của chức danh Kế toán trưởng là 3.500.000 đồng/tháng.",
+      "top_chunk_texts": [
+        "Điều 7. Phụ cấp\n7.1 Chức danh: Giám đốc, Phó Giám đốc, Trưởng phòng kinh doanh, Kế toán trưởng được hưởng phụ cấp trách nhiệm theo các mức sau:\nChức danh | Giám đốc | Phó giám đốc | Kế toán trưởng | Trưởng phòng kinh doanh\nMức hưởng phụ cấp trách nhiệm | 5.500.000 đồng | 4.500.000 đồng | 3.500.000 đồng | 4.000.000 đồng\n7.2 Tất cả người lao động chính thức (ngoại trừ lao động thời vụ) ký hợp đồng lao động trên 03 tháng: được hưởng các loại phụ cấp sau:\nChức danh | Phụ cấp mỗi tháng | Phụ cấp mỗi tháng | Phụ cấp mỗi tháng\nChức danh | Ăn trưa | Điện thoại | Xăng xe\nGiám đốc | 830.000 đồng | 1.100.000 đồng | 650.000 đồng\nPhó giám đốc | 820.000 đồng | 900.000 đồng | 550.000 đồng\nKế toán trưởng | 810.000 đồng | 800.000 đồng | 450.000 đồng\nTrưởng phòng kinh doanh | 800.000 đồng | 900.000 đồng | 950.000 đồng\nNhân viên kế toán | 780.000 đồng | 600.000 đồng | 450.000 đồng\nNhân viên kinh doan | 780.000 đồng | 400.000 đồng | 450.000 đồng",
+        "Trưởng phòng kinh doanh | 800.000 đồng | 900.000 đồng | 950.000 đồng\nNhân viên kế toán | 780.000 đồng | 600.000 đồng | 450.000 đồng\nNhân viên kinh doan | 780.000 đồng | 400.000 đồng | 450.000 đồng\nNhân viên bán hàng | 780.000 đồng | 400.000 đồng | 450.000 đồng\nThủ quỹ | 780.000 đồng | 400.000 đồng | 450.000 đồng\nThủ kho | 780.000 đồng | 400.000 đồng | 450.000 đồng\nGhi chú:\nMức hưởng trên tính cho 01 tháng làm việc đầy đủ theo ngày công hành chính.\nMức hưởng cụ thể được ghi trong Hợp đồng lao động hoặc quyết định của hội đồng thành viên cho từng cá nhân.\nĐây là mức phụ cấp cao nhất mà người lao động được phân công làm việc theo các chức danh trên có thể nhận được.\n7.3 Người lao động ký hợp đồng lao động dưới 03 tháng (thời vụ, khoán, thử việc): được thỏa thuận các khoản phụ cấp cụ thể trong HĐLĐ.",
+        "Điều 20. Thưởng đạt doanh thu\nCuối mỗi năm dương lịch, phòng kinh doanh đạt doanh thu do Ban Giám đốc giao sẽ được hưởng phần trăm doanh thu tháng.\nTrên đây là nội dung quy định về tiền thưởng, tiền lương, phụ cấp, trợ cấp áp dụng cho cán bộ công nhân viên tại Công ty. Giao cho trưởng phòng hành chính nhân sự và Kế toán trưởng Công ty, triển khai thực hiện.\n | T.M Ban Giám đốc\nGiám đốc (ký tên và đóng dấu)\n \n \n.................................."
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác mức phụ cấp trách nhiệm của Kế toán trưởng là 3.500.000 đồng dựa trên bảng tại mục 7.1 của tài liệu cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp chính xác con số phụ cấp trách nhiệm cho chức danh Kế toán trưởng theo đúng yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_12",
+      "category": "elliptical_short",
+      "target_question": "Còn Kế toán trưởng thì bao nhiêu?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo quy chế tiền lương được mô tả trong tài liệu tham khảo, mức phụ cấp trách nhiệm hàng tháng của chức danh Kế toán trưởng là 3.500.000 đồng/tháng.",
+      "top_chunk_texts": [
+        "Điều 7. Phụ cấp\n7.1 Chức danh: Giám đốc, Phó Giám đốc, Trưởng phòng kinh doanh, Kế toán trưởng được hưởng phụ cấp trách nhiệm theo các mức sau:\nChức danh | Giám đốc | Phó giám đốc | Kế toán trưởng | Trưởng phòng kinh doanh\nMức hưởng phụ cấp trách nhiệm | 5.500.000 đồng | 4.500.000 đồng | 3.500.000 đồng | 4.000.000 đồng\n7.2 Tất cả người lao động chính thức (ngoại trừ lao động thời vụ) ký hợp đồng lao động trên 03 tháng: được hưởng các loại phụ cấp sau:\nChức danh | Phụ cấp mỗi tháng | Phụ cấp mỗi tháng | Phụ cấp mỗi tháng\nChức danh | Ăn trưa | Điện thoại | Xăng xe\nGiám đốc | 830.000 đồng | 1.100.000 đồng | 650.000 đồng\nPhó giám đốc | 820.000 đồng | 900.000 đồng | 550.000 đồng\nKế toán trưởng | 810.000 đồng | 800.000 đồng | 450.000 đồng\nTrưởng phòng kinh doanh | 800.000 đồng | 900.000 đồng | 950.000 đồng\nNhân viên kế toán | 780.000 đồng | 600.000 đồng | 450.000 đồng\nNhân viên kinh doan | 780.000 đồng | 400.000 đồng | 450.000 đồng",
+        "Trưởng phòng kinh doanh | 800.000 đồng | 900.000 đồng | 950.000 đồng\nNhân viên kế toán | 780.000 đồng | 600.000 đồng | 450.000 đồng\nNhân viên kinh doan | 780.000 đồng | 400.000 đồng | 450.000 đồng\nNhân viên bán hàng | 780.000 đồng | 400.000 đồng | 450.000 đồng\nThủ quỹ | 780.000 đồng | 400.000 đồng | 450.000 đồng\nThủ kho | 780.000 đồng | 400.000 đồng | 450.000 đồng\nGhi chú:\nMức hưởng trên tính cho 01 tháng làm việc đầy đủ theo ngày công hành chính.\nMức hưởng cụ thể được ghi trong Hợp đồng lao động hoặc quyết định của hội đồng thành viên cho từng cá nhân.\nĐây là mức phụ cấp cao nhất mà người lao động được phân công làm việc theo các chức danh trên có thể nhận được.\n7.3 Người lao động ký hợp đồng lao động dưới 03 tháng (thời vụ, khoán, thử việc): được thỏa thuận các khoản phụ cấp cụ thể trong HĐLĐ.",
+        "Điều 20. Thưởng đạt doanh thu\nCuối mỗi năm dương lịch, phòng kinh doanh đạt doanh thu do Ban Giám đốc giao sẽ được hưởng phần trăm doanh thu tháng.\nTrên đây là nội dung quy định về tiền thưởng, tiền lương, phụ cấp, trợ cấp áp dụng cho cán bộ công nhân viên tại Công ty. Giao cho trưởng phòng hành chính nhân sự và Kế toán trưởng Công ty, triển khai thực hiện.\n | T.M Ban Giám đốc\nGiám đốc (ký tên và đóng dấu)\n \n \n.................................."
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác mức phụ cấp trách nhiệm của Kế toán trưởng là 3.500.000 đồng dựa trên bảng dữ liệu tại Điều 7.1 của tài liệu cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp chính xác mức phụ cấp trách nhiệm cho chức danh Kế toán trưởng theo đúng yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_13",
+      "category": "topic_switch_control",
+      "target_question": "Theo Luật An ninh mạng, 'Không gian mạng quốc gia' được định nghĩa là gì?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo Luật An ninh mạng (Luật số 24/2018/QH14), không gian mạng quốc gia được định nghĩa như sau:\n\n- Không gian mạng quốc gia là không gian mạng do Chính phủ xác lập, quản lý và kiểm soát.\n\n- Cơ sở hạ tầng không gian mạng quốc gia bao gồm: Hệ thống cơ sở vật chất, kỹ thuật để tạo lập, truyền đưa, thu thập, xử lý, lưu trữ và trao đổi thông tin trên không gian mạng quốc gia.",
+      "top_chunk_texts": [
+        "xử lý hành vi xâm phạm an ninh mạng. 3. Không gian mạng là mạng lưới kết nối của cơ sở hạ tầng công nghệ thông tin, bao gồm mạng viễn thông, mạng Internet, mạng máy tính, hệ thống thông tin, hệ thống xử lý và điều khiển thông tin, cơ sở dữ liệu; là nơi con người thực hiện các hành vi xã hội không bị giới hạn bởi không gian và thời gian. 4. Không gian mạng quốc gia là không gian mạng do Chính phủ xác lập, quản lý và kiểm soát. 5 . Cơ sở hạ tầng không gian mạng quốc gia là hệ thống cơ sở vật chất, kỹ thuật để tạo lập, truyền đưa, thu thập, xử lý, lưu trữ và trao đổi thông tin trên không gian mạng quốc gia, bao gồm: Ký bởi: Cổng Thông tin điện tử Chính phủ Email: thongtinchinhphu@chinhphu.vn Cơ quan: Văn phòng Chính phủ Thời gian ký: 23.07.2018 10:07:09 +07:00",
+        "42 CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 QUỐC HỘI Luật số: 24/2018/QH14 CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM Độc lập - Tự do - Hạnh phúc LUẬT AN NINH MẠNG Căn cứ Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam; Quốc hội ban hành Luật An ninh mạng. Chương I NHỮNG QUY ĐỊNH CHUNG Điều 1. Phạm vi điều chỉnh Luật này quy định về hoạt động bảo vệ an ninh quốc gia và bảo đảm trật tự, an toàn xã hội trên không gian mạng; trách nhiệm của cơ quan, tổ chức, cá nhân có liên quan. Điều 2. Giải thích từ ngữ Trong Luật này, các từ ngữ dưới đây được hiểu như sau: 1. An ninh mạng là sự bảo đảm hoạt động trên không gian mạng không gây phương hại đến an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân. 2. Bảo vệ an ninh mạng là phòng ngừa, phát hiện, ngăn chặn, xử lý hành vi xâm phạm an ninh mạng. 3. Không gian mạng là mạng lưới kết nối của cơ sở hạ tầng công nghệ thông tin, bao gồm mạng viễn thông, mạng Internet, mạng máy tính, hệ thống thông tin, hệ thống",
+        "46 CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 i) Yêu cầu xóa bỏ, truy cập xóa bỏ thông tin trái pháp luật hoặc thông tin sai sự thật trên không gian mạng xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân; k) Thu thập dữ liệu điện tử liên quan đến hoạt động xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng; l) Phong tỏa, hạn chế hoạt động của hệ thống thông tin; đình chỉ, tạm đình chỉ hoặc yêu cầu ngừng hoạt động của hệ thống thông tin, thu hồi tên miền theo quy định của pháp luật; m) Khởi tố, điều tra, truy tố, xét xử theo quy định của Bộ luật Tố tụng hình sự; n) Biện pháp khác theo quy định của pháp luật về an ninh quốc gia, pháp luật về xử lý vi phạm hành chính. 2. Chính phủ quy định trình tự, thủ tục áp dụng biện pháp bảo vệ an ninh mạng, trừ biện pháp quy định tại điểm m và điểm n khoản 1 Điều này. Điều 6. Bảo vệ không gian mạng quốc gia Nhà nước áp"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các nhận định trong câu trả lời đều được trích xuất chính xác từ nội dung của CONTEXT (khoản 4 và khoản 5 Điều 2 Luật An ninh mạng).",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đã trích dẫn chính xác định nghĩa về 'Không gian mạng quốc gia' theo Luật An ninh mạng 2018, đi thẳng vào vấn đề và cung cấp thông tin đầy đủ.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_13",
+      "category": "topic_switch_control",
+      "target_question": "Theo Luật An ninh mạng, 'Không gian mạng quốc gia' được định nghĩa là gì?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo Luật An ninh mạng, không gian mạng quốc gia được định nghĩa là \"không gian mạng do Chính phủ xác lập, quản lý và kiểm soát\". Đây là giải thích từ ngữ trong Luật này.",
+      "top_chunk_texts": [
+        "xử lý hành vi xâm phạm an ninh mạng. 3. Không gian mạng là mạng lưới kết nối của cơ sở hạ tầng công nghệ thông tin, bao gồm mạng viễn thông, mạng Internet, mạng máy tính, hệ thống thông tin, hệ thống xử lý và điều khiển thông tin, cơ sở dữ liệu; là nơi con người thực hiện các hành vi xã hội không bị giới hạn bởi không gian và thời gian. 4. Không gian mạng quốc gia là không gian mạng do Chính phủ xác lập, quản lý và kiểm soát. 5 . Cơ sở hạ tầng không gian mạng quốc gia là hệ thống cơ sở vật chất, kỹ thuật để tạo lập, truyền đưa, thu thập, xử lý, lưu trữ và trao đổi thông tin trên không gian mạng quốc gia, bao gồm: Ký bởi: Cổng Thông tin điện tử Chính phủ Email: thongtinchinhphu@chinhphu.vn Cơ quan: Văn phòng Chính phủ Thời gian ký: 23.07.2018 10:07:09 +07:00",
+        "42 CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 QUỐC HỘI Luật số: 24/2018/QH14 CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM Độc lập - Tự do - Hạnh phúc LUẬT AN NINH MẠNG Căn cứ Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam; Quốc hội ban hành Luật An ninh mạng. Chương I NHỮNG QUY ĐỊNH CHUNG Điều 1. Phạm vi điều chỉnh Luật này quy định về hoạt động bảo vệ an ninh quốc gia và bảo đảm trật tự, an toàn xã hội trên không gian mạng; trách nhiệm của cơ quan, tổ chức, cá nhân có liên quan. Điều 2. Giải thích từ ngữ Trong Luật này, các từ ngữ dưới đây được hiểu như sau: 1. An ninh mạng là sự bảo đảm hoạt động trên không gian mạng không gây phương hại đến an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân. 2. Bảo vệ an ninh mạng là phòng ngừa, phát hiện, ngăn chặn, xử lý hành vi xâm phạm an ninh mạng. 3. Không gian mạng là mạng lưới kết nối của cơ sở hạ tầng công nghệ thông tin, bao gồm mạng viễn thông, mạng Internet, mạng máy tính, hệ thống thông tin, hệ thống",
+        "46 CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 i) Yêu cầu xóa bỏ, truy cập xóa bỏ thông tin trái pháp luật hoặc thông tin sai sự thật trên không gian mạng xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân; k) Thu thập dữ liệu điện tử liên quan đến hoạt động xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng; l) Phong tỏa, hạn chế hoạt động của hệ thống thông tin; đình chỉ, tạm đình chỉ hoặc yêu cầu ngừng hoạt động của hệ thống thông tin, thu hồi tên miền theo quy định của pháp luật; m) Khởi tố, điều tra, truy tố, xét xử theo quy định của Bộ luật Tố tụng hình sự; n) Biện pháp khác theo quy định của pháp luật về an ninh quốc gia, pháp luật về xử lý vi phạm hành chính. 2. Chính phủ quy định trình tự, thủ tục áp dụng biện pháp bảo vệ an ninh mạng, trừ biện pháp quy định tại điểm m và điểm n khoản 1 Điều này. Điều 6. Bảo vệ không gian mạng quốc gia Nhà nước áp"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời trích dẫn chính xác định nghĩa từ CONTEXT (khoản 4, Điều 2) và khẳng định đây là giải thích từ ngữ trong Luật, hoàn toàn phù hợp với nội dung tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời cung cấp chính xác định nghĩa về 'Không gian mạng quốc gia' theo Luật An ninh mạng, đi thẳng vào vấn đề và đúng với yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_14",
+      "category": "negative_control",
+      "target_question": "Mức lương tối thiểu vùng áp dụng cho năm 2026 theo Nghị định mới nhất là bao nhiêu?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu, mức lương tối thiểu vùng được quy định tại Nghị định số 90/2019/NĐ-CP ngày 15 tháng 11 năm 2019 của Chính phủ. Tuy nhiên, câu hỏi đề cập đến mức lương tối thiểu vùng áp dụng cho năm 2026 theo Nghị định mới nhất. Tài liệu không cung cấp thông tin cụ thể về mức lương tối thiểu vùng áp dụng từ ngày 01 tháng 01 năm 2026.\n\nĐể trả lời chính xác câu hỏi này, cần tham khảo thêm các tài liệu pháp luật hoặc văn bản quy phạm pháp luật khác có hiệu lực từ ngày 01 tháng 01 năm 2026.",
+      "top_chunk_texts": [
+        "số 0,7 trở lên trước ngày 01 tháng 01 năm 2021; c) Người lao động có tuổi thấp hơn tối đa 10 tuổi so với tuổi nghỉ hưu của người lao động quy định tại khoản 2 Điều 169 của Bộ luật Lao động và có đủ 15 năm làm công việc khai thác than trong hầm lò; 3 Điều 50 của Luật Công nghiệp công nghệ số số 71/2025/QH15, có hiệu lực kể từ ngày 01 tháng 01 năm 2026 quy định như sau: “ Điều 50. Hiệu lực thi hành 1. Luật này có hiệu lực thi hành từ ngày 01 tháng 01 năm 2026, trừ trường hợp quy định tại khoản 2 Điều này. 2. Các điều 11, 28 và 29 của Luật này có hiệu lực thi hành từ ngày 01 tháng 7 năm 2025. 3. Trường hợp có quy định khác nhau về cùng một vấn đề giữa Luật này với luật, nghị quyết khác của Quốc hội thì áp dụng quy định của Luật này. Trừ trường hợp văn bản quy phạm pháp luật khác có quy định cơ chế, chính sách ưu đãi hoặc thuận lợi hơn Luật này thì đối tượng được ưu đãi được áp dụng mức ưu đãi có lợi nhất. ”.",
+        "Điều 1. Lương chính\nLà mức lương trả cho người lao động làm hành chính trong điều kiện bình thường theo thời gian làm việc thực tế trong tháng. Mức lương này được xác định theo quy định tại Nghị định 90/2019/NĐ-CP về mức lương tối thiểu vùng.\nĐiều 2. Lương đóng bảo hiểm xã hội\nLà mức tiền lương và phụ cấp theo lương theo quy định tại Điều 4 Thông tư 47/2015/TT-BLĐTBXH hướng dẫn thực hiện về hợp đồng lao động, kỷ luật lao động, trách nhiệm vật chất.\nĐiều 3. Lương thử việc\nĐược hưởng bằng 85% lương mức lương chính thức của công việc đó.\nĐiều 4. Lương khoán\nLà mức lương dành cho cá nhân trực tiếp làm công việc có tính chất thời vụ, vụ việc, những công việc được giao trong khoảng thời gian nhất định, theo khối lượng công việc chi tiết qua hợp đồng khoán việc.\nĐiều 5. Cách tính lương\nSử dụng hình thức trả lương theo thời gian làm việc thực tế trong tháng bằng ngày công chấm chuẩn làm việc tháng.",
+        "Điều 96. Chế độ, điều kiện hoạt động của hòa giải viên lao động\n1. Hòa giải viên lao động được hưởng các chế độ:\na) Mỗi ngày thực tế thực hiện nhiệm vụ của hòa giải viên lao động do cơ quan có thẩm quyền cử được hưởng tiền bồi dưỡng mức 5% tiền lương tối thiểu tháng tính bình quân các vùng đối với người lao động làm việc theo hợp đồng lao động do Chính phủ quy định theo từng thời kỳ (từ ngày 01 tháng 01 năm 2021, mức lương tối thiểu vùng được quy định tại Nghị định số 90/2019/NĐ-CP ngày 15 tháng 11 năm 2019 của Chính phủ).\nỦy ban nhân dân cấp tỉnh có thể xem xét, trình Hội đồng nhân dân cùng cấp quyết định áp dụng mức bồi dưỡng cao hơn mức quy định tại điểm này phù hợp với khả năng ngân sách địa phương;\nb) Được cơ quan, đơn vị, tổ chức nơi đang công tác tạo điều kiện bố trí thời gian thích hợp để tham gia thực hiện nhiệm vụ của hòa giải viên lao động theo quy định;"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.0,
+        "faithfulness_reasoning": "Rule-based: model KHÔNG từ chối dù câu hỏi ngoài phạm vi tài liệu — coi là bịa đặt.",
+        "answer_relevancy": 0.0,
+        "answer_relevancy_reasoning": "Rule-based: model KHÔNG từ chối dù câu hỏi ngoài phạm vi tài liệu — coi là bịa đặt.",
+        "rule_override": true
+      }
+    },
+    {
+      "conversation_id": "mt_14",
+      "category": "negative_control",
+      "target_question": "Mức lương tối thiểu vùng áp dụng cho năm 2026 theo Nghị định mới nhất là bao nhiêu?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo tài liệu, mức lương tối thiểu vùng được quy định tại Nghị định số 90/2019/NĐ-CP ngày 15 tháng 11 năm 2019 của Chính phủ. Tuy nhiên, câu hỏi đề cập đến mức lương tối thiểu vùng áp dụng cho năm 2026 theo Nghị định mới nhất. Tài liệu không cung cấp thông tin cụ thể về mức lương tối thiểu vùng áp dụng từ ngày 01 tháng 01 năm 2026.\n\nĐể trả lời chính xác câu hỏi này, cần tham khảo thêm các tài liệu pháp luật hoặc văn bản quy phạm pháp luật khác có hiệu lực từ ngày 01 tháng 01 năm 2026.",
+      "top_chunk_texts": [
+        "số 0,7 trở lên trước ngày 01 tháng 01 năm 2021; c) Người lao động có tuổi thấp hơn tối đa 10 tuổi so với tuổi nghỉ hưu của người lao động quy định tại khoản 2 Điều 169 của Bộ luật Lao động và có đủ 15 năm làm công việc khai thác than trong hầm lò; 3 Điều 50 của Luật Công nghiệp công nghệ số số 71/2025/QH15, có hiệu lực kể từ ngày 01 tháng 01 năm 2026 quy định như sau: “ Điều 50. Hiệu lực thi hành 1. Luật này có hiệu lực thi hành từ ngày 01 tháng 01 năm 2026, trừ trường hợp quy định tại khoản 2 Điều này. 2. Các điều 11, 28 và 29 của Luật này có hiệu lực thi hành từ ngày 01 tháng 7 năm 2025. 3. Trường hợp có quy định khác nhau về cùng một vấn đề giữa Luật này với luật, nghị quyết khác của Quốc hội thì áp dụng quy định của Luật này. Trừ trường hợp văn bản quy phạm pháp luật khác có quy định cơ chế, chính sách ưu đãi hoặc thuận lợi hơn Luật này thì đối tượng được ưu đãi được áp dụng mức ưu đãi có lợi nhất. ”.",
+        "Điều 1. Lương chính\nLà mức lương trả cho người lao động làm hành chính trong điều kiện bình thường theo thời gian làm việc thực tế trong tháng. Mức lương này được xác định theo quy định tại Nghị định 90/2019/NĐ-CP về mức lương tối thiểu vùng.\nĐiều 2. Lương đóng bảo hiểm xã hội\nLà mức tiền lương và phụ cấp theo lương theo quy định tại Điều 4 Thông tư 47/2015/TT-BLĐTBXH hướng dẫn thực hiện về hợp đồng lao động, kỷ luật lao động, trách nhiệm vật chất.\nĐiều 3. Lương thử việc\nĐược hưởng bằng 85% lương mức lương chính thức của công việc đó.\nĐiều 4. Lương khoán\nLà mức lương dành cho cá nhân trực tiếp làm công việc có tính chất thời vụ, vụ việc, những công việc được giao trong khoảng thời gian nhất định, theo khối lượng công việc chi tiết qua hợp đồng khoán việc.\nĐiều 5. Cách tính lương\nSử dụng hình thức trả lương theo thời gian làm việc thực tế trong tháng bằng ngày công chấm chuẩn làm việc tháng.",
+        "Điều 96. Chế độ, điều kiện hoạt động của hòa giải viên lao động\n1. Hòa giải viên lao động được hưởng các chế độ:\na) Mỗi ngày thực tế thực hiện nhiệm vụ của hòa giải viên lao động do cơ quan có thẩm quyền cử được hưởng tiền bồi dưỡng mức 5% tiền lương tối thiểu tháng tính bình quân các vùng đối với người lao động làm việc theo hợp đồng lao động do Chính phủ quy định theo từng thời kỳ (từ ngày 01 tháng 01 năm 2021, mức lương tối thiểu vùng được quy định tại Nghị định số 90/2019/NĐ-CP ngày 15 tháng 11 năm 2019 của Chính phủ).\nỦy ban nhân dân cấp tỉnh có thể xem xét, trình Hội đồng nhân dân cùng cấp quyết định áp dụng mức bồi dưỡng cao hơn mức quy định tại điểm này phù hợp với khả năng ngân sách địa phương;\nb) Được cơ quan, đơn vị, tổ chức nơi đang công tác tạo điều kiện bố trí thời gian thích hợp để tham gia thực hiện nhiệm vụ của hòa giải viên lao động theo quy định;"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.0,
+        "faithfulness_reasoning": "Rule-based: model KHÔNG từ chối dù câu hỏi ngoài phạm vi tài liệu — coi là bịa đặt.",
+        "answer_relevancy": 0.0,
+        "answer_relevancy_reasoning": "Rule-based: model KHÔNG từ chối dù câu hỏi ngoài phạm vi tài liệu — coi là bịa đặt.",
+        "rule_override": true
+      }
+    },
+    {
+      "conversation_id": "mt_15",
+      "category": "self_contained_control",
+      "target_question": "Theo mẫu quy chế tiền lương, hạn trả lương hàng tháng là ngày nào?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo mẫu quy chế tiền lương được mô tả trong tài liệu, hạn trả lương hàng tháng sẽ là một tháng một lần atau nửa tháng một lần. Thời điểm trả lương do hai bên thỏa thuận và phải được ấn định vào một thời điểm có tính chu kỳ. Không xác định rõ ngày cụ thể nào trong tháng sẽ là ngày trả lương.",
+      "top_chunk_texts": [
+        "Điều 11. Hạn trả lương\nToàn thể nhân viên Công ty được chi trả tiền lương vào ngày cuối cùng của tháng.\nĐiều 12. Tiền lương làm thêm giờ\nCăn cứ theo cách tính quy đinh hiện hành của Bộ Luật lao động như sau:\n12.1 Làm thêm vào ngày thường\nTiền lương làm thêm giờ = Tiền lương (theo giờ) x 150% x Lượng giờ làm thêm\n12.2 Làm thêm vào ngày Chủ nhật\nTiền lương làm thêm giờ = Tiền lương (theo giờ) x 200% x Lượng giờ làm thêm\n12.3 Làm thêm vào ngày Lễ, Tết:\nTiền lương làm thêm giờ = Tiền lương (theo giờ) x 300% x Lượng giờ làm thêm",
+        "được trả một tháng một lần hoặc nửa tháng một lần. Thời điểm trả lương do hai bên thỏa thuận và phải được ấn định vào một thời điểm có tính chu kỳ. 3. Người lao động hưởng lương theo sản phẩm, theo khoán được trả lương theo thỏa thuận của hai bên; nếu công việc phải làm trong nhiều tháng thì hằng tháng được tạm ứng tiền lương theo khối lượng công việc đã làm trong tháng. 4. Trường hợp vì lý do bất khả kháng mà người sử dụng lao động đã tìm mọi biện pháp khắc phục nhưng không thể trả lương đúng hạn thì không được chậm quá 30 ngày; nếu trả lương chậm từ 15 ngày trở lên thì người sử dụng lao động phải đền bù cho người lao động một khoản tiền ít nhất bằng số tiền lãi của số tiền trả chậm tính theo lãi suất huy động tiền gửi có kỳ hạn 01 tháng do ngân hàng nơi",
+        "làm việc vào ban đêm, nội dung và số tiền bị khấu trừ (nếu có). Điều 96. Hình thức trả lương 1. Người sử dụng lao động và người lao động thỏa thuận về hình thức trả lương theo thời gian, sản phẩm hoặc khoán. 2. Lương được trả bằng tiền mặt hoặc trả qua tài khoản cá nhân của người lao động được mở tại ngân hàng. Trường hợp trả lương qua tài khoản cá nhân của người lao động được mở tại ngân hàng thì người sử dụng lao động phải trả các loại phí liên quan đến việc mở tài khoản và chuyển tiền lương. 3. Chính phủ quy định chi tiết Điều này. Điều 97. Kỳ hạn trả lương 1. Người lao động hưởng lương theo giờ, ngày, tuần thì được trả lương sau giờ, ngày, tuần làm việc hoặc được trả gộp do hai bên thỏa thuận nhưng không quá 15 ngày phải được trả gộp một lần. 2. Người lao động hưởng lương theo tháng được trả một tháng một lần hoặc nửa tháng một lần. Thời điểm trả lương do hai bên thỏa thuận và phải được ấn định vào một thời điểm có tính chu kỳ. 3. Người lao động hưởng lương theo sản phẩm, theo"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.2,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác thông tin từ Điều 11 (quy định ngày cuối tháng) và Điều 97 (quy định về thỏa thuận chu kỳ), đồng thời thừa nhận sự thiếu hụt thông tin cụ thể nếu xét trên tổng thể các đoạn văn bản được cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đã giải quyết đúng trọng tâm câu hỏi bằng cách làm rõ rằng không có ngày cụ thể được quy định trong mẫu quy chế mà phụ thuộc vào thỏa thuận của hai bên.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_15",
+      "category": "self_contained_control",
+      "target_question": "Theo mẫu quy chế tiền lương, hạn trả lương hàng tháng là ngày nào?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Theo mẫu quy chế tiền lương được mô tả trong tài liệu tham khảo, hạn trả lương hàng tháng là vào cuối cùng của tháng. Điều này được nêu rõ tại Điều 11 của Tài liệu 1 (Quy chế tiền lương).",
+      "top_chunk_texts": [
+        "Điều 11. Hạn trả lương\nToàn thể nhân viên Công ty được chi trả tiền lương vào ngày cuối cùng của tháng.\nĐiều 12. Tiền lương làm thêm giờ\nCăn cứ theo cách tính quy đinh hiện hành của Bộ Luật lao động như sau:\n12.1 Làm thêm vào ngày thường\nTiền lương làm thêm giờ = Tiền lương (theo giờ) x 150% x Lượng giờ làm thêm\n12.2 Làm thêm vào ngày Chủ nhật\nTiền lương làm thêm giờ = Tiền lương (theo giờ) x 200% x Lượng giờ làm thêm\n12.3 Làm thêm vào ngày Lễ, Tết:\nTiền lương làm thêm giờ = Tiền lương (theo giờ) x 300% x Lượng giờ làm thêm",
+        "được trả một tháng một lần hoặc nửa tháng một lần. Thời điểm trả lương do hai bên thỏa thuận và phải được ấn định vào một thời điểm có tính chu kỳ. 3. Người lao động hưởng lương theo sản phẩm, theo khoán được trả lương theo thỏa thuận của hai bên; nếu công việc phải làm trong nhiều tháng thì hằng tháng được tạm ứng tiền lương theo khối lượng công việc đã làm trong tháng. 4. Trường hợp vì lý do bất khả kháng mà người sử dụng lao động đã tìm mọi biện pháp khắc phục nhưng không thể trả lương đúng hạn thì không được chậm quá 30 ngày; nếu trả lương chậm từ 15 ngày trở lên thì người sử dụng lao động phải đền bù cho người lao động một khoản tiền ít nhất bằng số tiền lãi của số tiền trả chậm tính theo lãi suất huy động tiền gửi có kỳ hạn 01 tháng do ngân hàng nơi",
+        "làm việc vào ban đêm, nội dung và số tiền bị khấu trừ (nếu có). Điều 96. Hình thức trả lương 1. Người sử dụng lao động và người lao động thỏa thuận về hình thức trả lương theo thời gian, sản phẩm hoặc khoán. 2. Lương được trả bằng tiền mặt hoặc trả qua tài khoản cá nhân của người lao động được mở tại ngân hàng. Trường hợp trả lương qua tài khoản cá nhân của người lao động được mở tại ngân hàng thì người sử dụng lao động phải trả các loại phí liên quan đến việc mở tài khoản và chuyển tiền lương. 3. Chính phủ quy định chi tiết Điều này. Điều 97. Kỳ hạn trả lương 1. Người lao động hưởng lương theo giờ, ngày, tuần thì được trả lương sau giờ, ngày, tuần làm việc hoặc được trả gộp do hai bên thỏa thuận nhưng không quá 15 ngày phải được trả gộp một lần. 2. Người lao động hưởng lương theo tháng được trả một tháng một lần hoặc nửa tháng một lần. Thời điểm trả lương do hai bên thỏa thuận và phải được ấn định vào một thời điểm có tính chu kỳ. 3. Người lao động hưởng lương theo sản phẩm, theo"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.2,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác hạn trả lương là ngày cuối cùng của tháng dựa trên Điều 11 của CONTEXT, các thông tin đưa ra đều trung thực và được hỗ trợ bởi tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp chính xác thông tin về hạn trả lương theo quy định và trích dẫn nguồn cụ thể.",
+        "rule_override": false
+      }
+    }
+  ]
+}

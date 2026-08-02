@@ -1,0 +1,951 @@
+{
+  "summary": {
+    "total_questions": 46,
+    "by_category": {
+      "edge_case": {
+        "count": 11,
+        "faithfulness": 0.827,
+        "answer_relevancy": 0.6
+      },
+      "factual": {
+        "count": 25,
+        "faithfulness": 0.896,
+        "answer_relevancy": 0.68
+      },
+      "multi_hop": {
+        "count": 5,
+        "faithfulness": 0.76,
+        "answer_relevancy": 0.8
+      },
+      "negative": {
+        "count": 3,
+        "faithfulness": 0.833,
+        "answer_relevancy": 0.267
+      },
+      "summary": {
+        "count": 2,
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.8
+      }
+    },
+    "retrieval": {
+      "hit_rate": 0.932,
+      "mrr": 0.932,
+      "recall@3": 0.932,
+      "precision@3": 0.932,
+      "recall@5": 0.932,
+      "precision@5": 0.932,
+      "hit_rate_post_rerank@3": 0.932
+    },
+    "generation": {
+      "faithfulness": 0.854,
+      "answer_relevancy": 0.652
+    }
+  },
+  "details": [
+    {
+      "question": "MiddlewareApplication.start khởi động thành phần nào để lắng nghe dữ liệu MQTT từ cảm biến?",
+      "category": "factual",
+      "answer": "**Trả lời:**\n\nMiddlewareApplication.start khởi động thành phần **SensorMQTTListener**, một lớp lắng nghe dữ liệu MQTT từ cảm biến. Khi được kích hoạt, SensorMQTTListener sẽ bắt đầu thực hiện các bước sau:\n\n1. **Step 1**: MiddlewareApplication.start sẽ khởi động **SensorMQTTListener.start** trong file app/app.py.\n2. Sau đó, **SensorMQTTListener._on_connect** sẽ được gọi, nơi cảm biến sẽ đăng ký vào một topic (default là tele/+/SENSOR) với QoS (QoS = 0, nghĩa là có thể gửi và nhận dữ liệu ngay lập tức).\n3. Cuối cùng, **SensorMQTTListener._on_message** sẽ được gọi, nơi cảm biến sẽ xử lý các dữ liệu MQTT đã được gửi.\n\nVậy MiddlewareApplication.start là thành phần chính chịu trách nhiệm lắng nghe dữ liệu MQTT từ cảm biến.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "MiddlewareApplication.start là thành phần chính chịu trách nhiệm lắng nghe dữ liệu MQTT từ cảm biến.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "MiddlewareApplication.start là thành phần chính chịu trách nhiệm lắng nghe dữ liệu MQTT từ cảm biến."
+      }
+    },
+    {
+      "question": "SensorMQTTListener mặc định subscribe vào MQTT topic nào?",
+      "category": "factual",
+      "answer": "**Đánh giá thông tin**\n\nTừ tài liệu tham khảo, chúng ta có thể thấy rằng:\n\n- **MQTT Topic**: SensorMQTTListener được subscribe vào MQTT topic `tele/+/SENSOR`.\n- **Thời gian hoạt động**: Các bước trên diễn ra trong các phần mềm sau:\n  - Edge_computing/app/app.py\n  - edge_computing/modules/processing/sensor_listener.py\n  - cloud_connector/main.py\n\n**Đáp án**\n\nDựa vào thông tin trên, SensorMQTTListener được subscribe vào MQTT topic `tele/+/SENSOR`.\n\n**Lời giải**\n\nSensorMQTTListener mặc định subscribe vào MQTT topic `tele/+/SENSOR` để nhận các thông tin từ thiết bị sensor.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "SensorMQTTListener được subscribe vào MQTT topic `tele/+/SENSOR` để nhận các thông tin từ thiết bị sensor.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "SensorMQTTListener được subscribe vào MQTT topic `tele/+/SENSOR` để nhận các thông tin từ thiết bị sensor."
+      }
+    },
+    {
+      "question": "Điều gì xảy ra nếu payload MQTT bị lỗi JSON (malformed)?",
+      "category": "edge_case",
+      "answer": "**Nếu payload MQTT bị lỗi JSON (malformed), parser sẽ cố gắng phục hồi lần đầu tiên; nếu vẫn không hợp lệ, payload sẽ bị bỏ qua.**\n\n- Nếu **payload không bao gồm thông tin device_id**, **listener sẽ tự động lấy thông tin từ MQTT topic pattern tele/{device}/SENSOR**.\n- Nếu **phân tích pH và EC là ngoài các giới hạn thiết lập**, **telemetry sẽ được đánh giá là bất thường và được nâng cấp**.\n- Nếu **phân tích pH/EC nằm trong phạm vi nội bộ thiết lập**, **telemetry sẽ được ghi nhận với lý do cụ thể**.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Payload MQTT bị lỗi JSON (malformed); không bao gồm thông tin device_id, dẫn đến việc tự lấy thông tin từ MQTT topic pattern tele/{device}/SENSOR.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Payload MQTT bị lỗi JSON nên parser không thể phục hồi, dẫn đến telemetry bất thường"
+      }
+    },
+    {
+      "question": "Quy tắc hard anomaly cho pH và EC trong luồng Edge Sensor Telemetry là gì?",
+      "category": "factual",
+      "answer": "**Quy tắc Hard Anomaly cho pH và EC trong Luồng Edge Sensor Telemetry**\n\nTrong quy trình xử lý dữ liệu Edge Sensor Telemetry, có một quy tắc đặc biệt cần lưu ý khi xử lý dữ liệu về pH và EC. Quy tắc này được gọi là \"Hard Anomaly\" (Anomalia cứng).\n\n**Quy tắc Hard Anomaly cho pH:**\n\n- Nếu giá trị pH vượt quá 11.0 và EC không đạt mức tối thiểu (0.0), thì telemetry sẽ được xác định là **anomalous** và được lưu trữ trong **raw payload**.\n- Nếu giá trị pH cao hơn 7.5 và EC không đạt mức tối thiểu (800-1800 uS/cm), thì telemetry sẽ được xác định là **anomalous** và được lưu trữ trong **raw payload**.\n\n**Quy tắc Hard Anomaly cho EC:**\n\n- Nếu giá trị EC vượt quá 1800 uS/cm, thì telemetry sẽ được xác định là **anomalous** và được lưu trữ trong **raw payload**.\n- Nếu giá trị EC thấp hơn 800 uS/cm, thì telemetry sẽ được xác định là **anomalous** và được lưu trữ trong **raw payload**.\n\nQuy tắc này cho phép chúng ta xử lý các trường hợp đặc biệt về pH và EC một cách linh hoạt và chính xác.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Quy tắc Hard Anomaly cho pH và EC trong luồng Edge Sensor Telemetry là một quy trình xử lý dữ liệu hiệu quả để phát hiện các trường hợp đặc biệt về pH và EC.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Quy tắc Hard Anomaly cho pH và EC trong luồng Edge Sensor Telemetry là cần thiết để đảm bảo tính chính xác và linh hoạt của quy trình xử lý dữ liệu."
+      }
+    },
+    {
+      "question": "Khoảng giá trị bình thường (range) mặc định cho pH và EC là bao nhiêu?",
+      "category": "factual",
+      "answer": "**Khoảng giá trị bình thường (Range) cho pH và EC**\n\nTheo tài liệu tham khảo, khoảng giá trị bình thường (range) cho pH và EC được xác định như sau:\n\n* Khoảng giá trị bình thường cho pH: 5.5-7.5\n* Khoảng giá trị bình thường cho EC: 800-1800 uS/cm\n\nLưu ý rằng các khoảng giá trị này có thể thay đổi tùy thuộc vào thiết bị và hệ thống cụ thể được sử dụng.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Khoảng giá trị bình thường cho pH và EC là 5.5-7.5 và 800-1800 uS/cm",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề và cung cấp thông tin cụ thể về khoảng giá trị bình thường cho pH và EC."
+      }
+    },
+    {
+      "question": "Khi phát hiện anomaly, hệ thống lưu alert vào đâu?",
+      "category": "factual",
+      "answer": "**Lưu ý:** Tôi không tìm thấy thông tin này trong tài liệu.\n\n**Giải thích:**\n\nKhi phát hiện một sự cố (anomaly) trong hệ thống, hệ thống cần phải xử lý và lưu trữ thông tin về sự cố đó. Trong trường hợp này, hệ thống đang sử dụng một hệ thống lưu trữ dữ liệu tên là **Store-and-Forward Alert Queue**.\n\nHệ thống Alert Queue được thiết kế để lưu trữ các alert (lưu ý) từ các nguồn khác nhau, bao gồm cả những nguồn có thể không liên tục cập nhật thông tin. Khi phát hiện một sự cố, hệ thống sẽ gửi alert đến Alert Queue và sau đó sẽ xử lý và lưu trữ alert vào một bảng quản lý tên là **messages.db**.\n\nBảng quản lý này được thiết kế để lưu trữ các thông tin về alert, bao gồm cả thông tin về loại alert (alert), mục tiêu của alert (priority), thời gian hết hạn (ttl_seconds) và thông tin chi tiết về sự cố.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Không tìm thấy thông tin về lưu trữ dữ liệu khi phát hiện sự cố",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Hệ thống lưu alert vào messages.db"
+      }
+    },
+    {
+      "question": "Nếu ghi alert vào queue thất bại thì pipeline xử lý ra sao?",
+      "category": "edge_case",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu. Bạn có thể cung cấp thêm chi tiết hoặc cụ thể hóa câu hỏi để tôi có thể trả lời chính xác hơn.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.8,
+        "faithfulness_reasoning": "Anomaly detected in telemetry processing, but no clear indication of why anomaly occurred.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Câu trả lời không liên quan đến câu hỏi, đề cập đến một khía cạnh khác của vấn đề."
+      }
+    },
+    {
+      "question": "device_id được xác định như thế nào nếu payload thiếu trường này?",
+      "category": "factual",
+      "answer": "**Xác định Device ID từ Payload**\n\nNếu payload không có trường `device_id`, thì `device_id` sẽ được xác định từ MQTT topic pattern `tele/{device}/SENSOR`.\n\nVí dụ, nếu MQTT topic là `tele/123/Sensor`, thì `device_id` sẽ là 123.\n\nDưới đây là mã cụ thể trong tài liệu tham khảo để thực hiện điều này:\n```markdown\nRule: If payload does not include device_id, listener derives it from MQTT topic pattern tele/{device}/SENSOR.\n```\nVí dụ về sử dụng:\n```python\npayload = {\n    'temperature': 25,\n    'humidity': 60,\n    # Không có trường device_id\n}\n\n# Derive device_id từ MQTT topic pattern tele/123/Sensor\ndevice_id = payload.get('device_id', None)\nif device_id is not None:\n    print(f\"Device ID: {device_id}\")\nelse:\n    print(\"Không tìm thấy thông tin về device ID\")\n```\nTrong ví dụ trên, nếu không có trường `device_id` trong payload, thì mã sẽ tìm kiếm giá trị của `device_id` trong dictionary `payload`. Nếu không tìm thấy, thì nó sẽ báo lỗi.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": " device_id được xác định từ MQTT topic pattern tele/{device}/SENSOR",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Câu trả lời không đi thẳng vào vấn đề, chỉ trả lời về giá trị của 'temperature' và 'humidity'."
+      }
+    },
+    {
+      "question": "NutritionAIController sử dụng những model AI nào để ra quyết định điều khiển dinh dưỡng?",
+      "category": "factual",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu. Bạn có thể cung cấp thêm chi tiết hoặc cụ thể hóa câu hỏi để tôi có thể trả lời chính xác hơn.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.8,
+        "faithfulness_reasoning": "NutritionAIController sử dụng một mô hình AI đa phương thức (monitor classifier + controller regressor) để ra quyết định điều khiển dinh dưỡng.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "NutritionAIController sử dụng những model AI như DeepMind, Google Brain, và Microsoft Cognitive Toolkit (CNTK) để ra quyết định điều khiển dinh dưỡng."
+      }
+    },
+    {
+      "question": "target_ec được clamp (giới hạn) trong khoảng giá trị nào?",
+      "category": "factual",
+      "answer": "**Giới hạn của `target_ec`**\n\nTheo tài liệu tham khảo, giới hạn của `target_ec` được giới hạn trong khoảng giá trị `[0.1, 3.5]`. Điều này có nghĩa là `target_ec` chỉ được phép nằm trong phạm vi từ 0,1 đến 3,5.\n\n**Giải thích**\n\nGiới hạn này được áp dụng để đảm bảo rằng `target_ec` không vượt quá mức độ cần thiết để thực hiện chức năng của hệ thống. Ví dụ, nếu `target_ec` quá cao, nó có thể dẫn đến tình trạng thiếu oxy trong hệ thống, gây ra hậu quả nghiêm trọng.\n\n**Lưu ý**\n\nGiới hạn này chỉ áp dụng cho trường hợp cụ thể và được sử dụng để đảm bảo an toàn và hiệu suất của hệ thống. Trong các trường hợp khác, `target_ec` có thể được phép nằm trong phạm vi rộng hơn hoặc nhỏ hơn giới hạn này.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Giới hạn của `target_ec` được giới hạn trong khoảng giá trị `[0.1, 3.5]`.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Giới hạn của `target_ec` được giới hạn trong khoảng giá trị `[0.1, 3.5]`."
+      }
+    },
+    {
+      "question": "Ngưỡng an toàn (safety net) sẽ override quyết định của AI khi nào?",
+      "category": "factual",
+      "answer": "**Nguyên nhân và mục đích của ngưỡng an toàn**\n\nNgưỡng an toàn (safety net) là một phần quan trọng trong quá trình kiểm soát dinh dưỡng. Mục đích của nó là để đảm bảo rằng quyết định của hệ thống AI được thực hiện một cách an toàn và hiệu quả.\n\n**Mô hình ngưỡng an toàn**\n\nMô hình ngưỡng an toàn được mô tả trong tài liệu tham khảo như sau:\n\n* Nếu EC (tỷ lệ chất dinh dưỡng) >= 2.8, pH < 4.5 hoặc pH > 7.5, hoặc water_level_ok == False, quyết định của hệ thống AI sẽ bị override bởi ngưỡng an toàn.\n* Ngưỡng an toàn có thể được thiết lập dựa trên các điều kiện cụ thể trong tài liệu tham khảo.\n\n**Lợi ích của ngưỡng an toàn**\n\nNgưỡng an toàn giúp đảm bảo rằng quyết định của hệ thống AI được thực hiện một cách an toàn và hiệu quả. Điều này có thể giúp giảm thiểu rủi ro và đảm bảo rằng dinh dưỡng được kiểm soát một cách chính xác.\n\n**Kết luận**\n\nVậy, ngưỡng an toàn sẽ override quyết định của hệ thống AI khi EC >= 2.8, pH < 4.5 hoặc pH > 7.5, hoặc water_level_ok == False. Điều này giúp đảm bảo rằng dinh dưỡng được kiểm soát một cách an toàn và hiệu quả.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Ngưỡng an toàn (safety net) sẽ override quyết định của AI khi EC >= 2.8, pH < 4.5 hoặc pH > 7.5, hoặc water_level_ok == False.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Ngưỡng an toàn override quyết định của AI khi EC >= 2.8, pH < 4.5 hoặc pH > 7.5, hoặc water_level_ok == False."
+      }
+    },
+    {
+      "question": "status_code bằng 2 tương ứng với hành động điều khiển nào?",
+      "category": "factual",
+      "answer": "**Tìm kiếm thông tin về hành động điều khiển dựa trên mã tài liệu tham khảo**\n\nTôi không tìm thấy thông tin này trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Không tìm thấy thông tin về hành động điều khiển dựa trên mã tài liệu tham khảo",
+        "answer_relevancy": 0.0,
+        "answer_relevancy_reasoning": "Lack of direct answer to the question."
+      }
+    },
+    {
+      "question": "status_code bằng 5 tương ứng với hành động điều khiển nào?",
+      "category": "factual",
+      "answer": "**Tìm kiếm thông tin về hành động điều khiển khi **_status_code == 5** \n\nTheo tài liệu tham khảo, hành động điều khiển khi **_status_code == 5** là **pump_nutrient_boost**.\n\nVậy, khi **_status_code == 5**, hành động điều khiển là **pump_nutrient_boost**.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Hành động điều khiển khi _status_code == 5 là pump_nutrient_boost",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Câu trả lời không đi thẳng vào vấn đề, chỉ nói về một phần của câu hỏi."
+      }
+    },
+    {
+      "question": "Điều gì xảy ra nếu model AI của NutritionAIController không load được?",
+      "category": "edge_case",
+      "answer": "**Nếu model AI của NutritionAIController không load được thì:**\n\n- **Không có hành động nào được thực hiện**: Model AI sẽ không chuyển đổi dữ liệu sensor telemetry thành các hành động cụ thể, do đó, không có thông tin về việc thực hiện các hành động như điều chỉnh lượng dinh dưỡng, theo dõi nhiệt độ, v.v.\n- **Thay vào đó, hệ thống sẽ sử dụng một số phương pháp dự đoán**: Để xử lý tình huống này, hệ thống có thể sử dụng các phương pháp dự đoán hoặc tính toán dựa trên dữ liệu đã có. Ví dụ, nếu dữ liệu sensor telemetry không đủ để xác định chính xác lượng dinh dưỡng cần thiết, hệ thống có thể sử dụng các thông tin khác như lịch sử sử dụng sản phẩm, nhu cầu dinh dưỡng của cá nhân... để đưa ra quyết định.\n- **Có thể yêu cầu trợ giúp từ người dùng**: Trong một số trường hợp, hệ thống có thể yêu cầu người dùng cung cấp thêm thông tin hoặc dữ liệu để xác định chính xác lượng dinh dưỡng cần thiết. Điều này có thể được thực hiện thông qua các tính năng hỗ trợ của hệ thống như nhập liệu trực tiếp, sử dụng ứng dụng di động...",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Không có thông tin về việc thực hiện các hành động như điều chỉnh lượng dinh dưỡng, theo dõi nhiệt độ, v.v.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, không lan man hoặc thiếu ý chính."
+      }
+    },
+    {
+      "question": "Nếu thiếu các trường sensor bắt buộc (temperature, humidity, EC, pH) thì telemetry được xử lý ra sao?",
+      "category": "edge_case",
+      "answer": "**Trả lời**\n\nNếu thiếu các trường sensor bắt buộc (temperature, humidity, EC, pH), thì telemetry sẽ bị skip (không được xử lý). Điều này có nghĩa là nếu không có thông tin về các đặc điểm của môi trường hoặc chất lượng nước, thì hệ thống sẽ không thể thực hiện chức năng theo dõi và điều chỉnh.\n\n**Lưu ý:**\n\n- Nếu thiếu một trong những trường sensor quan trọng nhất (temperature, humidity, EC, pH), thì telemetry sẽ bị skip.\n- Nếu thiếu cả một số trường sensor quan trọng, thì hệ thống có thể không thể thực hiện chức năng theo dõi và điều chỉnh.\n\n**Kết luận:**\n\nThiếu các trường sensor bắt buộc sẽ dẫn đến việc telemetry bị skip, gây ảnh hưởng đến hiệu suất của hệ thống.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Thiếu các trường sensor bắt buộc sẽ dẫn đến việc telemetry bị skip, gây ảnh hưởng đến hiệu suất của hệ thống.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Thiếu các trường sensor bắt buộc sẽ dẫn đến việc telemetry bị skip, gây ảnh hưởng đến hiệu suất của hệ thống."
+      }
+    },
+    {
+      "question": "Safety net có mức ưu tiên cao hơn hay thấp hơn output của model AI trong luồng Nutrition Control?",
+      "category": "multi_hop",
+      "answer": "**Safety Net và Output của Model AI trong Luồng Nutrition Control**\n\nTrong luồng Nutrition Control, **safety net** (còn gọi là **physical safety-net overrides**) có mức ưu tiên cao hơn hay thấp hơn output của model AI. Sau khi xử lý các thông tin từ sensor telemetry, **safety net** sẽ áp dụng các quy định an toàn để đảm bảo an toàn cho sản phẩm và người sử dụng.\n\nVí dụ, nếu **model AI** không thể tải dữ liệu hoặc có vấn đề về kết nối, **safety net** sẽ thực hiện một quyết định fallback (status_code = -1) và hành động an toàn. Nếu **sensor features** như nhiệt độ, độ ẩm, EC, pH không được cung cấp, **telemetry** sẽ bị bỏ qua hoàn toàn.\n\nTuy nhiên, nếu **model AI** có thể đạt được **EC** mục tiêu (target_ec), **safety net** sẽ áp dụng các quy định an toàn để đảm bảo an toàn cho sản phẩm và người sử dụng. Điều này có nghĩa là **safety net** sẽ ưu tiên quyết định của **model AI** hơn so với quyết định của **safety net**.\n\nVí dụ, nếu **EC** đạt được 2.8, **safety net** sẽ không áp dụng các quy định an toàn và chỉ tập trung vào việc thực hiện quyết định của **model AI** để đảm bảo an toàn cho sản phẩm và người sử dụng.\n\nTóm lại, **safety net** có mức ưu tiên cao hơn hay thấp hơn output của **model AI** trong luồng Nutrition Control.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.8,
+        "faithfulness_reasoning": "safety net ưu tiên quyết định của model AI hơn",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "safety net ưu tiên quyết định của model AI hơn trong luồng Nutrition Control"
+      }
+    },
+    {
+      "question": "Gateway subscribe vào topic nào để nhận shared attributes từ CoreIoT dashboard?",
+      "category": "factual",
+      "answer": "**Gateway Subscribe Topic**\n\nĐể nhận được các thông tin về các **shared attributes**, Gateway cần phải subscribe vào một **topic cụ thể** trên **CoreIoT dashboard**.\n\nDựa trên tài liệu tham khảo, chúng ta có thể thấy rằng:\n\n* Gateway sẽ subscribe đến **v1/devices/me/attributes** để nhận được các thông tin về các **attribute** của device.\n* Attributes bao gồm cả **raw_image_data** và **process_trigger**, nên Gateway cần phải subscribe vào một topic có chứa cả hai thông tin này.\n\nVậy, để cụ thể hơn, Gateway sẽ subscribe vào **topic: v1/devices/me/attributes/raw/image/data** để nhận được các thông tin về shared attributes.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Gateway subscribe vào topic v1/devices/me/attributes/raw/image/data để nhận được các thông tin về shared attributes.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Gateway cần phải subscribe vào một topic cụ thể trên CoreIoT dashboard để nhận được các thông tin về shared attributes."
+      }
+    },
+    {
+      "question": "Sau khi nhận ảnh từ CoreIoT, gateway forward request tới edge qua local topic nào?",
+      "category": "factual",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu. Bạn có thể cung cấp thêm chi tiết hoặc làm rõ câu hỏi của mình để tôi có thể trả lời chính xác hơn.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Gateway forward request tới edge topic image_request",
+        "answer_relevancy": 0.5,
+        "answer_relevancy_reasoning": "Câu trả lời không đi thẳng vào vấn đề, lan man và thiếu ý chính."
+      }
+    },
+    {
+      "question": "DiseaseClassifier hỗ trợ những inference backend nào?",
+      "category": "factual",
+      "answer": "DiseaseClassifier hỗ trợ hai backend sau:\n\n1. **ONNX (Open Neural Network Exchange)**: Đây là một nền tảng phát triển mô hình trí tuệ nhân tạo (Machine Learning) mở, cho phép kết hợp các thuật toán học máy với dữ liệu thực tế.\n2. **TensorFlow**: Đây là một nền tảng phát triển mô hình trí tuệ nhân tạo (Machine Learning) mạnh mẽ và linh hoạt, được sử dụng rộng rãi trong nhiều ứng dụng khác nhau.\n\nDiseaseClassifier cũng có thể sử dụng **Base64** để đọc và xử lý dữ liệu Base64, nhưng không rõ ràng liệu nó hỗ trợ việc decode image hay không. Tuy nhiên, dựa trên các bước thực hiện của DiseaseClassifier, chúng ta có thể suy đoán rằng nó sẽ được sử dụng để đọc và xử lý dữ liệu Base64.\n\nVậy, kết luận là DiseaseClassifier hỗ trợ hai backend sau:\n\n* ONNX\n* TensorFlow\n\nTuy nhiên, cần lưu ý rằng không phải tất cả các bước đều rõ ràng về việc hỗ trợ backend nào. Vì vậy, chúng ta vẫn chưa chắc chắn về sự hỗ trợ của DiseaseClassifier cho từng bước cụ thể.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "DiseaseClassifier hỗ trợ hai backend sau: ONNX và TensorFlow.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "DiseaseClassifier hỗ trợ hai backend sau: ONNX và TensorFlow."
+      }
+    },
+    {
+      "question": "Điều gì xảy ra nếu việc decode ảnh thất bại ở phía edge trong luồng Image AI?",
+      "category": "edge_case",
+      "answer": "**Nếu việc decode ảnh thất bại ở phía edge trong luồng Image AI thì sẽ xảy ra:**\n\n*   **Khong phan tich duoc anh (decode loi):** Đây là một trong những rule được thiết kế để xử lý tình huống decode ảnh thất bại. Nếu điều này xảy ra, hệ thống sẽ không thể đọc được dữ liệu từ image và sẽ phải sử dụng fallback dự đoán.\n*   **If classifier is unavailable:** Nếu hệ thống không có sẵn mô hình đánh giá (classifier) thì sẽ không thể thực hiện việc dự đoán dựa trên ảnh. Trong trường hợp này, hệ thống sẽ chuyển đổi sang phương pháp khác để dự đoán.\n\n**Lưu ý:**\n\n*   Việc decode ảnh thất bại ở phía edge là một trong những nguyên nhân chính dẫn đến sự chậm trễ hoặc lỗi của luồng Image AI.\n*   Để giải quyết vấn đề này, cần phải đảm bảo rằng các bước xử lý ảnh được thực hiện đúng và không có lỗi.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.8,
+        "faithfulness_reasoning": "Nếu việc decode ảnh thất bại ở phía edge trong luồng Image AI thì sẽ xảy ra: Khong phan tich duoc anh (decode loi): If image decode fails, edge publishes fallback prediction text (Khong phan tich duoc anh (decode loi)).",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Việc decode ảnh thất bại ở phía edge là nguyên nhân chính dẫn đến sự chậm trễ hoặc lỗi của luồng Image AI."
+      }
+    },
+    {
+      "question": "Kết quả AI prediction cuối cùng được publish tới CoreIoT qua topic và field nào?",
+      "category": "factual",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.0,
+        "faithfulness_reasoning": "Không tìm thấy thông tin về kết quả AI prediction cuối cùng được publish tới CoreIoT qua topic và field.",
+        "answer_relevancy": 0.0,
+        "answer_relevancy_reasoning": "Không có thông tin cụ thể về kết quả AI prediction cuối cùng được publish tới CoreIoT qua topic và field."
+      }
+    },
+    {
+      "question": "Cơ chế deduplication trong luồng CoreIoT Image AI hoạt động ở những nơi nào?",
+      "category": "multi_hop",
+      "answer": "**Deduplication trong luồng CoreIoT Image AI**\n\nDeduplication là một kỹ thuật quản lý dữ liệu để loại bỏ các bản sao trùng lặp. Trong trường hợp của luồng CoreIoT Image AI, deduplication có thể diễn ra ở những nơi sau:\n\n* **Gateway**: Gateway sẽ lưu trữ bản sao của dữ liệu image trước khi gửi đến Edge. Sau đó, gateway sẽ gửi bản sao này đến Edge để thực hiện các bước tiếp theo.\n* **Edge**: Edge cũng sẽ lưu trữ bản sao của dữ liệu image trước khi gửi đến CoreIoT Telemetry. Sau đó, Edge sẽ gửi bản sao này đến CoreIoT Telemetry để thực hiện các bước tiếp theo.\n\nBằng cách loại bỏ bản sao trùng lặp, deduplication giúp giảm thiểu số lượng dữ liệu cần phải xử lý và lưu trữ, đồng thời tăng cường độ tin cậy của hệ thống.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Gateway lưu trữ bản sao của dữ liệu image trước khi gửi đến Edge.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Deduplication diễn ra ở Gateway và Edge để loại bỏ bản sao trùng lặp của dữ liệu image."
+      }
+    },
+    {
+      "question": "Vì sao gateway không tạo một CoreIoT MQTT client thứ hai riêng cho luồng Image Bridge?",
+      "category": "factual",
+      "answer": "**Giải thích tại sao Gateway không tạo một CoreIoT MQTT client thứ hai riêng cho luồng Image Bridge**\n\nTheo tài liệu tham khảo, Gateway chỉ tạo một CoreIoT MQTT client để xử lý các yêu cầu từ luồng Image Bridge. Điều này có thể được hiểu là vì mục đích của Gateway là để quản lý và xử lý các yêu cầu liên quan đến việc truyền tải hình ảnh từ IoT devices sang trung tâm dữ liệu.\n\nKhi Gateway nhận được yêu cầu từ Image Bridge, nó sẽ tạo một CoreIoT MQTT client để thực hiện các hành động như:\n\n* Hoàn cảnh: In cloud_connector/main.py, CoreIoTGatewayImageBridge.start\n* HOOK: CoreIoTGatewayImageBridge.start in cloud_connector/module/Image_Bridge/coreiot_attr_bridge.py\n* Xử lý dữ liệu: _handle_attribute_message parses incoming attribute JSON, merges shared section with top-level fields, and extracts raw_image_data and process_trigger\n\nTuy nhiên, sau đó Gateway sẽ hủy bỏ CoreIoT MQTT client này để tránh tạo một Client độc quyền (token collision) giữa các luồng Image Bridge khác nhau.\n\nVì vậy, Gateway không tạo một CoreIoT MQTT client thứ hai riêng cho luồng Image Bridge. Thay vào đó, nó chỉ tạo một Client duy nhất để xử lý các yêu cầu từ Image Bridge và sau đó hủy bỏ Client khi hoàn thành nhiệm vụ.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.8,
+        "faithfulness_reasoning": "Gateway chỉ tạo một CoreIoT MQTT client để xử lý các yêu cầu từ luồng Image Bridge, tránh tạo Client độc quyền (token collision) giữa các luồng Image Bridge khác nhau.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Gateway chỉ tạo một CoreIoT MQTT client để xử lý các yêu cầu từ luồng Image Bridge."
+      }
+    },
+    {
+      "question": "MqttReceiver trong Gateway Offline Buffering mặc định subscribe vào topic nào để nhận telemetry?",
+      "category": "factual",
+      "answer": "**MqttReceiver trong Gateway Offline Buffering**\n\nMqttReceiver trong Gateway Offline Buffering được thiết kế để nhận telemetry từ các nguồn khác nhau. Dưới đây là thông tin về các nguồn mà MqttReceiver có thể subscribe:\n\n*   **Ingest Topic (default tele/+/SENSOR)**: Đây là tiêu chuẩn đầu vào cho các nguồn telemetry. Khi MqttReceiver được cấu hình để subscribe đến `tele/+/SENSOR`, nó sẽ nhận tất cả các cuộc gọi đến topic này.\n*   **Batch**: Nếu batch của gateway không có giá trị battery, gateway có thể sử dụng last_known_gateway_battery để tái sử dụng và lưu trữ dữ liệu trong thời gian chờ đợi. MqttReceiver sẽ được cấu hình để subscribe đến `batch` để nhận telemetry từ nguồn này.\n\nMặc dù thông tin về các nguồn khác nhau đã được cung cấp trong tài liệu tham khảo, nhưng chúng tôi không thể xác định chính xác topic mà MqttReceiver được thiết kế để subscribe vào. Tuy nhiên, dựa trên chức năng và yêu cầu của Gateway Offline Buffering, có thể suy đoán rằng MqttReceiver sẽ được cấu hình để nhận telemetry từ `tele/+/SENSOR`.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "MqttReceiver được thiết kế để nhận telemetry từ `tele/+/SENSOR`.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "MqttReceiver được thiết kế để nhận telemetry từ Ingest Topic (default tele/+/SENSOR)"
+      }
+    },
+    {
+      "question": "Dữ liệu telemetry được lưu tạm ở đâu trước khi gửi lên cloud trong luồng Gateway Offline Buffering?",
+      "category": "factual",
+      "answer": "**Dữ liệu telemetry được lưu tạm ở SQLite**\n\nTrong luồng Gateway Offline Buffering, dữ liệu telemetry được lưu tạm ở SQLite để đảm bảo tính tin cậy và khả năng phục hồi sau khi mất kết nối với mạng. Sau khi lưu trữ dữ liệu vào SQLite, dữ liệu sẽ được chuyển sang cloud để gửi lên.\n\n**Lưu ý:** Dữ liệu telemetry được lưu trong một cơ sở dữ liệu tạm thời (offline_buffer.db) để giảm thiểu thời gian chờ đợi và đảm bảo tính tin cậy. Sau khi lưu trữ dữ liệu vào offline_buffer.db, dữ liệu sẽ được chuyển sang cloud để gửi lên.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Dữ liệu telemetry được lưu tạm ở SQLite để đảm bảo tính tin cậy và khả năng phục hồi sau khi mất kết nối với mạng.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Dữ liệu telemetry được lưu tạm ở SQLite trong luồng Gateway Offline Buffering để đảm bảo tính tin cậy và khả năng phục hồi sau khi mất kết nối với mạng."
+      }
+    },
+    {
+      "question": "Điều gì xảy ra khi SqliteQueue vượt quá max_size?",
+      "category": "edge_case",
+      "answer": "**VỊ TRÍ TỪ MAX_SIZE**\n\nKhi **SqliteQueue** vượt quá **max_size**, nó sẽ thực hiện hành động sau:\n\n*   **Đổi vị trí oldest**: **SqliteQueue** sẽ lấy ra những row cũ nhất (thường là gần nhất với thời gian) và chuyển chúng sang đầu tiên trong queue, thay vì giữ nguyên.\n*   **Sử dụng 1% của số lượng dữ liệu**: Nếu số lượng dữ liệu trong queue vượt quá **max_size**, **SqliteQueue** sẽ lấy ra khoảng 1% số lượng dữ liệu cũ nhất (thường là gần nhất với thời gian) và chuyển chúng sang đầu tiên trong queue, thay vì giữ nguyên.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "SqliteQueue sẽ lấy ra những row cũ nhất (thường là gần nhất với thời gian) và chuyển chúng sang đầu tiên trong queue, thay vì giữ nguyên.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "SqliteQueue vượt quá max_size sẽ thực hiện đổi vị trí oldest và sử dụng 1% của số lượng dữ liệu để chuyển data."
+      }
+    },
+    {
+      "question": "Cơ chế commit dữ liệu lên cloud (ack-delete semantics) hoạt động theo nguyên tắc gì?",
+      "category": "factual",
+      "answer": "**Cơ chế Commit dữ liệu lên Cloud (Ack-Delete Semantics)**\n\nTheo tài liệu tham khảo, cơ chế commit dữ liệu lên cloud (ack-delete semantics) hoạt động như sau:\n\n* **Commit**: Gateway gửi một yêu cầu publish đến cloud để lưu trữ dữ liệu.\n* **Ack**: Cloud nhận được yêu cầu publish và trả lời bằng cách gửi lại dữ liệu đã lưu trữ.\n* **Delete**: Sau khi nhận được dữ liệu từ cloud, gateway sẽ tự động delete dữ liệu khỏi bộ nhớ offline (offline_buffer.db).\n* **Commit**: Nếu yêu cầu publish thành công, gateway sẽ commit dữ liệu vào cloud.\n\n**Lưu ý**: Cơ chế này sử dụng \"ack-delete semantics\", nghĩa là Gateway phải trả lời lại với \"delete\" sau khi nhận được dữ liệu từ cloud. Điều này đảm bảo rằng dữ liệu chỉ được lưu trữ trong bộ nhớ offline cho đến khi Gateway nhận được thông báo từ cloud về việc lưu trữ dữ liệu thành công.\n\n**Kết luận**: Cơ chế commit dữ liệu lên cloud (ack-delete semantics) hoạt động theo nguyên tắc: Gateway gửi yêu cầu publish đến cloud, sau đó trả lời lại với \"delete\" nếu yêu cầu thành công. Sau khi nhận được dữ liệu từ cloud, Gateway tự động delete dữ liệu khỏi bộ nhớ offline và lưu trữ dữ liệu vào cloud.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Cơ chế commit dữ liệu lên cloud (ack-delete semantics) hoạt động theo nguyên tắc: Gateway gửi yêu cầu publish đến cloud, sau đó trả lời lại với 'delete' nếu yêu cầu thành công. Sau khi nhận được dữ liệu từ cloud, Gateway tự động delete dữ liệu khỏi bộ nhớ offline và lưu trữ dữ liệu vào cloud.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Cơ chế commit dữ liệu lên cloud (ack-delete semantics) hoạt động theo nguyên tắc Gateway gửi yêu cầu publish đến cloud, sau đó trả lời lại với 'delete' nếu yêu cầu thành công."
+      }
+    },
+    {
+      "question": "Nếu publish lên cloud thất bại thì dữ liệu telemetry đang buffer có bị mất không?",
+      "category": "edge_case",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Không tìm thấy thông tin trong tài liệu",
+        "answer_relevancy": 0.0,
+        "answer_relevancy_reasoning": "Không có thông tin cụ thể về vấn đề này trong tài liệu."
+      }
+    },
+    {
+      "question": "TelemetryAggregator bổ sung (enrich) những trường nào vào record trước khi lưu vào queue?",
+      "category": "factual",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu. Bạn có thể cung cấp thêm chi tiết hoặc làm rõ câu hỏi của mình để tôi có thể trả lời chính xác hơn.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.8,
+        "faithfulness_reasoning": "TelemetryAggregator không bổ sung các trường mới vào record trước khi lưu vào queue.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "TelemetryAggregator bổ sung trường dữ liệu theo dõi (location, timestamp) vào record trước khi lưu vào queue."
+      }
+    },
+    {
+      "question": "Nếu cloud token không tồn tại thì gateway xử lý khởi động ra sao?",
+      "category": "edge_case",
+      "answer": "**Giải thích**\n\nNếu cloud token không tồn tại, Gateway sẽ không thể truy cập vào hệ thống và thực hiện các hành động cần thiết. Điều này có thể dẫn đến tình trạng \"Gateway exits early with non-zero return code\".\n\n**Mẹo**\n\nĐể giải quyết vấn đề này, chúng ta có thể thêm một bước kiểm tra trước khi khởi động Gateway:\n\n```python\nif not cloud_token:\n    print(\"Cloud token không tồn tại. Khởi động lại Gateway.\")\nelse:\n    # Khởi động Gateway và thực hiện các hành động cần thiết\n```\n\nHoặc, chúng ta cũng có thể sử dụng một trong những quy tắc sau để xử lý tình huống này:\n\n* Rule: Gateway exits early with non-zero return code.\n* Rule: Gateway throws an error with a custom message.\n\nVí dụ:\n```python\nif not cloud_token:\n    raise ValueError(\"Cloud token không tồn tại. Khởi động lại Gateway.\")\nelse:\n    # Khởi động Gateway và thực hiện các hành động cần thiết\n```\n\nBằng cách thêm một bước kiểm tra hoặc quy tắc, chúng ta có thể đảm bảo rằng Gateway hoạt động đúng khi cloud token không tồn tại.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Gateway exits early with non-zero return code",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Gateway sẽ không thể truy cập vào hệ thống và thực hiện các hành động cần thiết nếu cloud token không tồn tại."
+      }
+    },
+    {
+      "question": "ThingsBoardPublisher publish payload lên những topic nào?",
+      "category": "factual",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Không tìm thấy thông tin về việc ThingsBoardPublisher publish payload lên những topic nào trong tài liệu.",
+        "answer_relevancy": 0.0,
+        "answer_relevancy_reasoning": "Không có thông tin cụ thể về việc ThingsBoardPublisher publish payload lên những topic nào trong tài liệu."
+      }
+    },
+    {
+      "question": "HTTPUploadServer trong Local Config Portal sử dụng framework web và server nào?",
+      "category": "factual",
+      "answer": "**HTTPUploadServer trong Local Config Portal sử dụng FastAPI**\n\n- **Framework:** FastAPI\n- **Server:** Uvicorn (cung cấp khả năng run trên nhiều nền tảng khác nhau như Windows, macOS, Linux)\n\nFastAPI là một framework web mạnh mẽ và hiện đại được phát triển bởi NumFOSS. Nó cung cấp các tính năng mạnh mẽ như hỗ trợ mã nguồn mở, tự động hóa các bước phát triển, và khả năng kết hợp với các thư viện khác nhau.\n\nUvicorn là một server HTTP mạnh mẽ và linh hoạt được thiết kế để run FastAPI ứng dụng. Nó cho phép bạn tạo ra các ứng dụng web nhanh chóng và dễ dàng, đồng thời cung cấp nhiều tính năng như tự động hóa các bước phát triển, hỗ trợ mã nguồn mở, và khả năng kết hợp với các thư viện khác nhau.\n\nDo đó, HTTPUploadServer trong Local Config Portal sử dụng FastAPI làm nền tảng để xây dựng một hệ thống quản lý mạng có thể thực hiện các chức năng như:\n\n- Xử lý các yêu cầu HTTP\n- Sử dụng các tính năng của Uvicorn để run ứng dụng web\n- Thực hiện các giao thức mạng như WiFi Provisioning API\n\nTóm lại, FastAPI là nền tảng chính cho việc xây dựng hệ thống quản lý mạng với Local Config Portal.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "FastAPI là nền tảng chính cho việc xây dựng hệ thống quản lý mạng với Local Config Portal.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "FastAPI là nền tảng chính cho việc xây dựng hệ thống quản lý mạng với Local Config Portal."
+      }
+    },
+    {
+      "question": "Endpoint GET /health của Config Portal trả về nội dung gì?",
+      "category": "factual",
+      "answer": "**Endpoint GET /health của Config Portal**\n\nTheo tài liệu tham khảo, endpoint `/health` của Config Portal sẽ trả về nội dung như sau:\n\n* `status`: \"ok\" (tức là kết quả kiểm tra thành công)\n\nVậy, Endpoint GET `/health` của Config Portal sẽ trả về nội dung: `{ \"status\": \"ok\" }`.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Endpoint GET /health của Config Portal trả về nội dung: { \"status\": \"ok\" }",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Endpoint GET /health của Config Portal trả về nội dung `{ \"status\": \"ok\" }`."
+      }
+    },
+    {
+      "question": "POST /api/config yêu cầu những section bắt buộc nào trong request body?",
+      "category": "factual",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu. Bạn có thể cung cấp thêm thông tin hoặc làm rõ câu hỏi của mình?",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Không tìm thấy thông tin trong tài liệu",
+        "answer_relevancy": 0.5,
+        "answer_relevancy_reasoning": "Câu trả lời không đi thẳng vào vấn đề được hỏi, không giải quyết đúng câu hỏi."
+      }
+    },
+    {
+      "question": "Nếu giá trị port trong config không nằm trong khoảng hợp lệ thì API trả về mã lỗi HTTP nào?",
+      "category": "edge_case",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Không tìm thấy thông tin trong tài liệu",
+        "answer_relevancy": 0.0,
+        "answer_relevancy_reasoning": "Không có thông tin về giá trị port trong config."
+      }
+    },
+    {
+      "question": "API quét mạng WiFi ưu tiên sử dụng lệnh nào trên hệ điều hành Linux?",
+      "category": "factual",
+      "answer": "**Trả lời:**\n\nLệnh WiFi scan được ưu tiên sử dụng lệnh `iwlist` trên hệ điều hành Linux. Đây là một trong những lệnh chính thức của Linux để kiểm tra và quản lý mạng WiFi.\n\n**Giải thích:**\n\n- `iwlist`: Lệnh này cho phép bạn xem danh sách các thiết bị WiFi trên hệ thống.\n- `nmcli`: Lệnh này được sử dụng để quản lý các thiết bị WiFi trên hệ điều hành Linux, bao gồm cả việc thực hiện các lệnh scan và connect.\n- `netsh`: Đây là một lệnh chính thức của Windows để quản lý mạng, nhưng nó cũng có thể được sử dụng để kiểm tra và quản lý mạng WiFi trên Linux.\n\n**Ví dụ:**\n\nĐể thực hiện một cuộc scan mạng WiFi bằng lệnh `iwlist`, bạn có thể sử dụng câu lệnh sau:\n\n```bash\niwlist wifi0 scan\n```\n\nLưu ý rằng `wifi0` là tên của thiết bị WiFi mà bạn muốn kiểm tra. Bạn cũng cần phải đảm bảo rằng quyền truy cập vào thiết bị WiFi của bạn được cấp phép và hợp pháp.\n\nTóm lại, để quét mạng WiFi trên hệ điều hành Linux, bạn nên sử dụng lệnh `iwlist`.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Lệnh WiFi scan được ưu tiên sử dụng lệnh `iwlist` trên hệ điều hành Linux.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Lệnh WiFi scan được ưu tiên sử dụng lệnh `iwlist` trên hệ điều hành Linux."
+      }
+    },
+    {
+      "question": "POST /api/wifi/connect trả về mã lỗi HTTP nào khi thiếu SSID?",
+      "category": "edge_case",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu. Bạn có thể cung cấp thêm thông tin hoặc chi tiết cụ thể để tôi có thể giúp bạn trả lời câu hỏi của bạn?",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Không tìm thấy thông tin",
+        "answer_relevancy": 0.5,
+        "answer_relevancy_reasoning": "Câu trả lời không đi thẳng vào vấn đề, thiếu thông tin cụ thể về mã lỗi HTTP khi thiếu SSID."
+      }
+    },
+    {
+      "question": "POST /api/wifi/connect trả về mã lỗi HTTP nào khi kết nối WiFi thất bại?",
+      "category": "edge_case",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu. Bạn có thể cung cấp thêm chi tiết hoặc làm rõ câu hỏi của mình để tôi có thể trả lời chính xác hơn.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Không tìm thấy thông tin về câu trả lời này trong tài liệu.",
+        "answer_relevancy": 0.5,
+        "answer_relevancy_reasoning": "Không có thông tin về mã lỗi HTTP nào khi kết nối WiFi thất bại trong tài liệu."
+      }
+    },
+    {
+      "question": "So sánh cơ chế lưu trữ khi có lỗi giữa luồng Edge Sensor Telemetry và luồng Gateway Offline Buffering: cả hai dùng SQLite ở đâu và cho mục đích gì?",
+      "category": "multi_hop",
+      "answer": "**So sánh Cơ chế Lưu Trả Khi Có Lỗi giữa Luồng Edge Sensor Telemetry và Luồng Gateway Offline Buffering**\n\nKhi có lỗi, hệ thống cần xử lý tình huống một cách hiệu quả và nhanh chóng. Trong trường hợp này, chúng ta sẽ so sánh cơ chế lưu trữ khi có lỗi giữa luồng Edge Sensor Telemetry và luồng Gateway Offline Buffering.\n\n**Luồng Edge Sensor Telemetry**\n\n* Dùng **SQLite** để lưu trữ dữ liệu: SQLite là một cơ sở dữ liệu mở và dễ sử dụng, phù hợp cho việc lưu trữ dữ liệu tạm thời.\n* Cho mục đích lưu trữ dữ liệu tạm thời: Luồng Edge Sensor Telemetry chỉ cần lưu trữ dữ liệu trong thời gian ngắn, thường là trong quá trình xử lý dữ liệu.\n\n**Luồng Gateway Offline Buffering**\n\n* Dùng **SQLite** để lưu trữ dữ liệu chính thức: Luồng Gateway Offline Buffering cũng sử dụng SQLite để lưu trữ dữ liệu chính thức, nhưng với mục đích dài hạn.\n* Cho mục đích lưu trữ dữ liệu chính thức: Luồng Gateway Offline Buffering lưu trữ dữ liệu trong thời gian dài hơn, thường là cho mục đích báo cáo hoặc phân tích dữ liệu.\n\n**So sánh**\n\n* SQLite được sử dụng để lưu trữ dữ liệu tạm thời (Edge Sensor Telemetry) và chính thức (Gateway Offline Buffering).\n* SQLite được sử dụng cho mục đích ngắn hạn (Edge Sensor Telemetry) và dài hạn (Gateway Offline Buffering).\n\nTóm lại, luồng Edge Sensor Telemetry sử dụng SQLite để lưu trữ dữ liệu tạm thời, trong khi luồng Gateway Offline Buffering cũng sử dụng SQLite nhưng với mục đích lưu trữ dữ liệu chính thức.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Luồng Edge Sensor Telemetry sử dụng SQLite để lưu trữ dữ liệu tạm thời, trong khi luồng Gateway Offline Buffering cũng sử dụng SQLite nhưng với mục đích lưu trữ dữ liệu chính thức.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "SQLite được sử dụng cho mục đích ngắn hạn và dài hạn."
+      }
+    },
+    {
+      "question": "Những feature nào trong tài liệu này có sử dụng SQLite để lưu trữ dữ liệu cục bộ?",
+      "category": "multi_hop",
+      "answer": "Tôi không tìm thấy thông tin về việc sử dụng SQLite để lưu trữ dữ liệu cục bộ trong tài liệu này. Tuy nhiên, tôi có thể nói rằng:\n\n* Feature Gateway Offline Buffering, Aggregation, and Cloud Telemetry Commit sử dụng SQLite để lưu trữ dữ liệu offline (các dữ liệu được lưu trữ trước khi kết nối với cloud).\n* Feature Edge Sensor Telemetry Ingestion, Normalization, and Anomaly Escalation không rõ ràng về việc sử dụng SQLite để lưu trữ dữ liệu cục bộ.\n\nTuy nhiên, nếu bạn muốn hỏi chính xác hơn, tôi có thể trả lời: \"Tôi không tìm thấy thông tin cụ thể về việc sử dụng SQLite để lưu trữ dữ liệu cục bộ trong tài liệu này.\"",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Không có thông tin cụ thể về việc sử dụng SQLite để lưu trữ dữ liệu cục bộ trong tài liệu này.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Không có thông tin cụ thể về việc sử dụng SQLite để lưu trữ dữ liệu cục bộ trong tài liệu này."
+      }
+    },
+    {
+      "question": "Trong toàn bộ tài liệu, những feature nào có tồn tại cơ chế deduplication để tránh xử lý trùng lặp?",
+      "category": "multi_hop",
+      "answer": "Trong tài liệu tham khảo, có hai feature có tồn tại cơ chế deduplication để tránh xử lý trùng lặp:\n\n1. **Double Deduplication**: Gateway _last_trigger và edge _last_image_trigger_by_cloud_device\n2. **Edge Sensor Telemetry Ingestion, Normalization, and Anomaly Escalation** (có thể là một trong những feature khác)\n\nTôi không tìm thấy thông tin cụ thể về các feature khác có tồn tại cơ chế deduplication.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Không có thông tin cụ thể về các feature khác có tồn tại cơ chế deduplication",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Không có thông tin cụ thể về các feature khác có tồn tại cơ chế deduplication."
+      }
+    },
+    {
+      "question": "Hãy tóm tắt nội dung chính của tài liệu này.",
+      "category": "summary",
+      "answer": "[TÀI LIỆU THAM KHẢO]\n\n**Nội dung chính của tài liệu**\n\nTài liệu này là một bản thảo về thiết kế hệ thống cảm biến và xử lý dữ liệu từ MQTT. Nội dung chính bao gồm:\n\n1. **Phương pháp thu thập dữ liệu**: Hệ thống sử dụng MiddlewareApplication để bắt đầu quá trình thu thập dữ liệu từ ESP32/Tasmota nodes.\n2. **Flux thực hiện**: Quá trình thực hiện được chia thành các bước, bao gồm:\n * MiddlewareApplication.start\n * SensorMQTTListener._on_connect và _on_message\n3. **Phân tích dữ liệu**: Hệ thống phân tích dữ liệu thu thập được từ MQTT và thực hiện các bước sau:\n * Decoding và recovery của payload JSON\n * Normal hóa dữ liệu theo định dạng internal\n4. **Anomaly detection**: Hệ thống phát hiện các trường hợp có thể là lỗi hoặc sai lệch, bao gồm:\n * Anomaly rule: pH/EC vượt quá giới hạn thiết kế\n * Range anomaly rule: giá trị pH và EC ngoài phạm vi thiết kế\n\n**Kết luận**\n\nTài liệu này cung cấp một cái nhìn tổng quan về cách thức thu thập dữ liệu từ MQTT và phân tích dữ liệu để phát hiện các trường hợp có thể là lỗi hoặc sai lệch. Hệ thống sử dụng một loạt các quy trình để xử lý dữ liệu, bao gồm mã hóa, normal hóa và phân tích.",
+      "retrieval_metrics": null,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Tài liệu này cung cấp một cái nhìn tổng quan về cách thức thu thập dữ liệu từ MQTT và phân tích dữ liệu để phát hiện các trường hợp có thể là lỗi hoặc sai lệch.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Tài liệu cung cấp một cái nhìn tổng quan về cách thức thu thập dữ liệu và phân tích dữ liệu từ MQTT."
+      }
+    },
+    {
+      "question": "Tài liệu này nói về những feature gì, cho tôi tổng quan?",
+      "category": "summary",
+      "answer": "[TÀI LIỆU THAM KHẢO]\n\n**Tổng quan về Feature \"Edge Sensor Telemetry Ingestion, Normalization, and Anomaly Escalation\"**\n\nFeature \"Edge Sensor Telemetry Ingestion, Normalization, and Anomaly Escalation\" là một trong những tính năng chính của hệ thống hiện tại. Nó được thiết kế để thu thập và xử lý dữ liệu từ các cảm biến ESP32/Tasmota trên mạng lưới, sau đó chuyển đổi dữ liệu thành dạng cần thiết cho hệ thống.\n\n**Phát triển Feature**\n\nFeature này bao gồm 5 bước chính:\n\n1. **Hoàn thiện Process Overview**: Đây là bước đầu tiên trong quá trình phát triển feature, nơi chúng ta mô tả tổng quan về tính năng và chức năng của nó.\n2. **Danh sách Detailed Execution Flow (Step-by-Step)**: Sau đó, chúng ta sẽ đi sâu vào từng bước cụ thể của quá trình phát triển feature, bao gồm các bước thực hiện như MiddlewareApplication.start, SensorMQTTListener._on_connect, v.v.\n3. **Phân tích và Normal hóa Payload**: Feature này cũng bao gồm việc phân tích và normal hóa dữ liệu thu thập từ cảm biến ESP32/Tasmota để đảm bảo tính chính xác và hợp lý.\n4. **Thiết lập Anomaly Escalation**: Sau khi xử lý dữ liệu, feature sẽ thiết lập các quy trình an toàn để cảnh báo về các trường hợp bất thường trong dữ liệu.\n5. **Phân tích và Xử lý Thống kê**: Feature này cũng bao gồm việc phân tích và xử lý thống kê từ dữ liệu thu thập được, giúp chúng ta hiểu rõ hơn về hiệu suất và hiệu quả của hệ thống.\n\n**Mục đích Feature**\n\nMục đích chính của feature \"Edge Sensor Telemetry Ingestion, Normalization, and Anomaly Escalation\" là để cải thiện hiệu suất và hiệu quả của hệ thống bằng cách thu thập và xử lý dữ liệu từ cảm biến ESP32/Tasmota một cách chính xác và nhanh chóng.\n\n**Kết luận**\n\nTổng quan về feature \"Edge Sensor Telemetry Ingestion, Normalization, and Anomaly Escalation\", nó là một trong những tính năng quan trọng của hệ thống hiện tại. Feature này giúp thu thập và xử lý dữ liệu từ cảm biến ESP32/Tasmota một cách chính xác và nhanh chóng, đồng thời thiết lập các quy trình an toàn để cảnh báo về các trường hợp bất thường trong dữ liệu.",
+      "retrieval_metrics": null,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Không có thông tin hỗ trợ",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Tổng quan về Feature \"Edge Sensor Telemetry Ingestion, Normalization, and Anomaly Escalation\" là một trong những tính năng chính của hệ thống hiện tại, giúp thu thập và xử lý dữ liệu từ cảm biến ESP32/Tasmota một cách chính xác và nhanh chóng."
+      }
+    },
+    {
+      "question": "Giá cổ phiếu Apple hôm nay là bao nhiêu?",
+      "category": "negative",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Không tìm thấy thông tin trong tài liệu",
+        "answer_relevancy": 0.0,
+        "answer_relevancy_reasoning": "Không có thông tin trong tài liệu."
+      }
+    },
+    {
+      "question": "Công thức nấu phở bò truyền thống gồm những nguyên liệu gì?",
+      "category": "negative",
+      "answer": "**Công thức nấu phở bò truyền thống**\n\nPhở là một món ăn truyền thống của Việt Nam, được yêu thích bởi mọi người trên toàn quốc. Công thức nấu phở bò truyền thống bao gồm các nguyên liệu sau:\n\n* **Nguyên liệu chính:**\n + Phở bò (có thể mua tại chợ hoặc nhà hàng)\n + Rau sống:\n + Rau răm\n + Rau mùi\n + Rau thơm (thường là rau mùi tây hoặc rau mùi húng quế)\n + Gạo trắng\n* **Nguyên liệu phụ:**\n + Thịt bò (có thể chọn loại bò tươi, ngon và có độ mềm cao)\n + Gia vị:\n + Nước mắm\n + Đường phèn\n + Rau thơm (thường là hành lá, tỏi, ớt)\n + Gừng\n + Muối\n* **Nguyên liệu khác:**\n + Đậu hũ (có thể chọn loại đậu hũ tươi hoặc khô)\n + Cà rốt\n + Hành lá\n\n**Công thức nấu phở bò truyền thống**\n\nDưới đây là công thức nấu phở bò truyền thống:\n\n**Bước 1:** Chuẩn bị nguyên liệu\n\n* Rửa sạch phở bò, thái nhỏ\n* Rửa sạch rau sống (rau răm, rau mùi, rau thơm)\n* Rửa sạch gạo trắng\n* Sơ chế thịt bò (cắt thành miếng nhỏ)\n\n**Bước 2:** Nấu phở**\n\n* Đun sôi nước trong nồi lớn\n* Thêm phở bò vào nồi, nấu cho mềm\n* Thêm gia vị (nước mắm, đường phèn, rau thơm) và nấu thêm 10 phút\n\n**Bước 3:** Chuẩn bị đậu hũ**\n\n* Rửa sạch đậu hũ, thái nhỏ\n* Nấu đậu hũ trong nước sôi cho đến khi mềm\n\n**Bước 4:** Thêm đậu hũ vào phở**\n\n* Thêm đậu hũ vào nồi phở, nấu thêm 5 phút\n\n**Bước 5:** Thêm rau và gia vị**\n\n* Thêm rau sống (rau răm, rau mùi, rau thơm) vào nồi phở\n* Thêm gừng, muối và đường phèn vào nồi phở\n\n**Bước 6:** Nấu phở đến khi nóng**\n\n* Nấu phở cho đến khi nóng và có màu đỏ tươi\n\nPhở bò truyền thống là một món ăn ngon và bổ dưỡng, được yêu thích bởi mọi người trên toàn quốc. Hy vọng công thức này sẽ giúp bạn nấu phở bò ngon và đúng cách!",
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Phở bò truyền thống là một món ăn ngon và bổ dưỡng, được yêu thích bởi mọi người trên toàn quốc.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Đúng"
+      }
+    },
+    {
+      "question": "This is a negative test question that should have no answer",
+      "category": "negative",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Không tìm thấy thông tin trong tài liệu",
+        "answer_relevancy": 0.0,
+        "answer_relevancy_reasoning": "Câu trả lời không đi thẳng vào vấn đề được hỏi và lan man."
+      }
+    }
+  ]
+}

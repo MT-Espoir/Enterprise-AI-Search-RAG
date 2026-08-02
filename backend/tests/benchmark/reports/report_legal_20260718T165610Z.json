@@ -1,0 +1,746 @@
+{
+  "summary": {
+    "total_questions": 32,
+    "by_category": {
+      "edge_case": {
+        "count": 7,
+        "faithfulness": 0.881,
+        "answer_relevancy": 1.0,
+        "refusal_rate": 0.0
+      },
+      "factual": {
+        "count": 18,
+        "faithfulness": 0.906,
+        "answer_relevancy": 0.989,
+        "refusal_rate": 0.0
+      },
+      "multi_hop": {
+        "count": 3,
+        "faithfulness": 0.433,
+        "answer_relevancy": 0.8,
+        "refusal_rate": 0.0
+      },
+      "negative": {
+        "count": 2,
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "refusal_rate": 1.0
+      },
+      "summary": {
+        "count": 2,
+        "faithfulness": 0.855,
+        "answer_relevancy": 0.9,
+        "refusal_rate": 0.0
+      }
+    },
+    "retrieval": {
+      "hit_rate": 0.833,
+      "mrr": 0.751,
+      "recall@3": 0.8,
+      "precision@3": 0.4,
+      "recall@5": 0.833,
+      "precision@5": 0.313,
+      "hit_rate_post_rerank@3": 0.8
+    },
+    "generation": {
+      "faithfulness": 0.859,
+      "answer_relevancy": 0.969
+    },
+    "refusal": {
+      "refusal_rate_overall": 0.062,
+      "refusal_count_despite_hit": 0,
+      "refusal_count_despite_hit_total_non_negative_qa": 28,
+      "note": "Số câu bị model từ chối trả lời dù retriever đã lấy đúng tài liệu (hit_rate=1) — chỉ dấu bottleneck nằm ở generator (đọc-hiểu context), không phải retrieval."
+    }
+  },
+  "details": [
+    {
+      "question": "Theo Luật An ninh mạng, 'Không gian mạng quốc gia' được định nghĩa là gì?",
+      "category": "factual",
+      "answer": "Theo Luật An ninh mạng (theo tài liệu 2), không gian mạng quốc gia được định nghĩa như sau:\n\n4. Không gian mạng quốc gia là không gian mạng do Chính phủ xác lập, quản lý và kiểm soát.\n\nTuy nhiên, tài liệu tham khảo chưa cung cấp thêm thông tin chi tiết về định nghĩa của \"không gian mạng quốc gia\" mà chỉ đề cập đến vai trò của Chính phủ trong việc xác lập, quản lý và kiểm soát không gian mạng quốc gia.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời trích dẫn chính xác định nghĩa từ context, nhưng nhận định rằng 'tài liệu chưa cung cấp thêm thông tin chi tiết' là không chính xác vì context đã cung cấp đầy đủ định nghĩa pháp lý theo luật.",
+        "answer_relevancy": 0.9,
+        "answer_relevancy_reasoning": "Câu trả lời đã trích dẫn chính xác định nghĩa từ Luật An ninh mạng. Mặc dù phần bổ sung phía sau hơi thừa thãi về mặt logic, nhưng nó không làm sai lệch thông tin chính đã cung cấp.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Cơ quan nào chịu trách nhiệm trước Chính phủ chủ trì, phối hợp thực hiện hợp tác quốc tế về an ninh mạng, trừ hoạt động hợp tác quốc tế của Bộ Quốc phòng?",
+      "category": "factual",
+      "answer": "Bộ Công an chịu trách nhiệm trước Chính phủ chủ trì, phối hợp thực hiện hợp tác quốc tế về an ninh mạng, trừ hoạt động hợp tác quốc tế của Bộ Quốc phòng. Đây được nêu rõ trong tài liệu tham khảo số 24-2018-qh14.pdf trên trang 6.",
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời chứa thông tin chính xác về trách nhiệm của Bộ Công an dựa trên context, nhưng lại đưa ra thông tin về nguồn tài liệu (24-2018-qh14.pdf) không có trong context được cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định đúng cơ quan chịu trách nhiệm theo quy định và trích dẫn nguồn tài liệu cụ thể, đáp ứng chính xác yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Trước khi tiến hành kiểm tra an ninh mạng đột xuất do xảy ra sự cố an ninh mạng, lực lượng chuyên trách phải thông báo bằng văn bản trước ít nhất bao lâu cho chủ quản hệ thống thông tin?",
+      "category": "edge_case",
+      "answer": "Trước khi tiến hành kiểm tra an ninh mạng đột xuất do xảy ra sự cố an ninh mạng, lực lượng chuyên trách bảo vệ an ninh mạng thuộc Bộ Quốc phòng (hoặc tương tự nếu áp dụng cho hệ thống thông tin quân sự) phải thông báo bằng văn bản cho chủ quản hệ thống thông tin ít nhất 12 giờ. Đây là quy định được nêu trong tài liệu tham khảo số 24-2018-qh14.pdf, trang 11.",
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời xác định đúng thời hạn 12 giờ dựa trên context, nhưng thông tin về nguồn tài liệu (24-2018-qh14.pdf, trang 11) không xuất hiện trong context được cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp chính xác thời hạn 12 giờ theo yêu cầu của câu hỏi và trích dẫn nguồn tài liệu cụ thể.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Theo Luật Bảo hiểm xã hội 2024, công dân Việt Nam từ đủ bao nhiêu tuổi trở lên thì được hưởng trợ cấp hưu trí xã hội (không thuộc hộ nghèo/cận nghèo)?",
+      "category": "factual",
+      "answer": "Theo tài liệu tham khảo, công dân Việt Nam từ đủ 75 tuổi trở lên thì được hưởng trợ cấp hưu trí xã hội, không kể họ có thuộc hộ nghèo hay cận nghèo. Đây là điều kiện cơ bản để nhận trợ cấp hưu trí xã hội theo quy định của Luật Bảo hiểm xã hội 2024.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.5,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác thông tin tại Điều 21, khoản 1 của CONTEXT, trong đó quy định công dân từ đủ 75 tuổi trở lên được hưởng trợ cấp hưu trí xã hội mà không yêu cầu điều kiện về hộ nghèo/cận nghèo.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp chính xác độ tuổi (75 tuổi) theo quy định của Luật Bảo hiểm xã hội 2024 và làm rõ điều kiện về hộ nghèo/cận nghèo như câu hỏi yêu cầu.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Văn bản ủy quyền nhận lương hưu, trợ cấp bảo hiểm xã hội có hiệu lực tối đa bao lâu kể từ ngày xác lập việc ủy quyền?",
+      "category": "factual",
+      "answer": "Văn bản ủy quyền nhận lương hưu, trợ cấp bảo hiểm xã hội và chế độ khác theo quy định của Luật này có hiệu lực tối đa là 12 tháng kể từ ngày xác lập việc ủy quyền. Đây được nêu rõ trong tài liệu tham khảo số 1 và số 2.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác thông tin về thời hạn hiệu lực của văn bản ủy quyền được nêu trong cả hai đoạn context. Các claim đều được hỗ trợ đầy đủ bởi tài liệu cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào trọng tâm câu hỏi, cung cấp chính xác thời hạn hiệu lực là 12 tháng và trích dẫn nguồn tham khảo rõ ràng.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Nếu thời gian đóng bảo hiểm xã hội có tháng lẻ từ 07 đến 11 tháng thì được tính là bao nhiêu năm khi xác định điều kiện hưởng lương hưu?",
+      "category": "edge_case",
+      "answer": "Nếu thời gian đóng bảo hiểm xã hội có tháng lẻ từ 07 tháng đến 11 tháng, thì được tính là một năm.",
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời hoàn toàn chính xác và được hỗ trợ trực tiếp bởi thông tin trong CONTEXT (đoạn 1: 'từ 07 tháng đến 11 tháng được tính là một năm').",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp thông tin chính xác và đầy đủ theo quy định về cách tính thời gian đóng bảo hiểm xã hội có tháng lẻ.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Bộ luật Lao động số 45/2019/QH14 có hiệu lực thi hành kể từ ngày nào?",
+      "category": "factual",
+      "answer": "Bộ luật Lao động số 45/2019/QH14 có hiệu lực thi hành kể từ ngày 01 tháng 01 năm 2021. Đây là thông tin được cung cấp trong tài liệu tham khảo Tài liệu 1, trang đầu tiên.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác ngày hiệu lực của Bộ luật Lao động số 45/2019/QH14 dựa trên thông tin được cung cấp trong đoạn văn bản đầu tiên của ngữ cảnh.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời cung cấp chính xác ngày hiệu lực của Bộ luật Lao động 2019 và đi thẳng vào vấn đề mà câu hỏi yêu cầu.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Độ tuổi lao động tối thiểu của người lao động theo Bộ luật Lao động là bao nhiêu?",
+      "category": "factual",
+      "answer": "Theo tài liệu tham khảo, độ tuổi lao động tối thiểu của người lao động là đủ 15 tuổi. Tuy nhiên, cần lưu ý rằng điều này trừ trường hợp quy định tại Mục 1 Chương XI của Bộ luật này.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác thông tin được nêu trong đoạn 1 của CONTEXT, bao gồm cả quy định về độ tuổi tối thiểu và ngoại lệ liên quan đến Chương XI.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp đúng độ tuổi tối thiểu theo quy định và có lưu ý về các trường hợp ngoại lệ một cách chính xác.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Hai bên được giao kết hợp đồng lao động bằng lời nói trong trường hợp nào?",
+      "category": "edge_case",
+      "answer": "Theo tài liệu tham khảo, hai bên được giao kết hợp đồng lao động bằng lời nói chỉ trong trường hợp sau:\n\n- Hợp đồng có thời hạn dưới 01 tháng. \n\nVà điều này áp dụng trừ trường hợp quy định tại khoản 2 Điều 18 của Bộ luật Lao động.\n\nTrong các tài liệu tham khảo, không có thông tin cụ thể về trường hợp nào khác mà hai bên được giao kết hợp đồng lao động bằng lời nói ngoài trường hợp trên.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác trường hợp hợp đồng bằng lời nói theo Điều 14 khoản 2 và liệt kê đúng các ngoại lệ được đề cập trong văn bản, đồng thời thừa nhận giới hạn của thông tin cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, nêu chính xác trường hợp hợp đồng lao động bằng lời nói theo quy định pháp luật và có sự thận trọng khi dẫn chiếu các ngoại lệ.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Bộ luật Lao động số 45/2019/QH14 đã được sửa đổi, bổ sung bởi văn bản nào, có hiệu lực từ ngày nào?",
+      "category": "factual",
+      "answer": "Bộ luật Lao động số 45/2019/QH14 đã được sửa đổi, bổ sung bởi Luật Công nghiệp công nghệ số số 71/2025/QH15. Quy định về hiệu lực thi hành của văn bản này là:\n\n- Có hiệu lực từ ngày 01 tháng 01 năm 2026.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác văn bản sửa đổi và ngày hiệu lực dựa trên thông tin được cung cấp trong đoạn văn bản đầu tiên của CONTEXT.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời cung cấp chính xác văn bản sửa đổi, bổ sung và ngày có hiệu lực theo đúng yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Theo Luật Giao dịch điện tử, 'Chữ ký số' được định nghĩa là gì?",
+      "category": "factual",
+      "answer": "Theo tài liệu tham khảo, chữ ký số được định nghĩa như sau:\n\n- Chữ ký số là chữ ký điện tử sử dụng thuật toán khóa không đối xứng, gồm khóa bí mật và khóa công khai.\n- Khóa bí mật được dùng để ký số và khóa công khai được dùng để kiểm tra chữ ký số.\n- Chữ ký số bảo đảm tính xác thực, tính toàn vẹn và tính chống chối bỏ của thông điệp dữ liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.3333333333333333,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các nhận định trong câu trả lời đều được trích xuất chính xác và hỗ trợ bởi nội dung trong đoạn 12 của CONTEXT.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào trọng tâm, định nghĩa chính xác chữ ký số theo Luật Giao dịch điện tử và giải thích rõ ràng các thành phần cũng như vai trò của nó.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Thông điệp dữ liệu được xem là có giá trị như bản gốc khi đáp ứng những yêu cầu nào?",
+      "category": "factual",
+      "answer": "Thông điệp dữ liệu được xem là có giá trị như bản gốc khi đáp ứng các yêu cầu sau:\n\n1. Thông tin trong thông điệp dữ liệu được bảo đảm toàn vẹn kể từ khi được khởi tạo lần đầu tiên dưới dạng một thông điệp dữ liệu hoàn chỉnh.\n2. Thông tin trong thông điệp dữ liệu có thể truy cập và sử dụng được dưới dạng hoàn chỉnh.\n\nĐây là thông tin được lấy trực tiếp từ Điều 10 của tài liệu tham khảo, Tài liệu 1 (Trang 5).",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Các claim trong câu trả lời phản ánh chính xác nội dung tại Điều 10 của CONTEXT, bao gồm cả việc trích dẫn nguồn tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê đầy đủ và chính xác các điều kiện để thông điệp dữ liệu có giá trị như bản gốc theo quy định pháp luật.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Chữ ký số có bảo đảm được tính bí mật của thông điệp dữ liệu hay không?",
+      "category": "edge_case",
+      "answer": "Chữ ký số không bảo đảm tính bí mật của thông điệp dữ liệu. Điều này được nêu rõ trong tài liệu tham khảo, cụ thể tại điểm 13 và điểm 14 của tài liệu 1, trong đó đã chỉ ra rằng chữ ký số bảo đảm tính xác thực, tính toàn vẹn và tính chống chối bỏ nhưng không bảo đảm tính bí mật của thông điệp dữ liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.67,
+        "faithfulness_reasoning": "Câu trả lời xác định đúng chữ ký số không bảo đảm tính bí mật, tuy nhiên lại trích dẫn sai vị trí thông tin (điểm 12 thay vì điểm 13, 14) và gộp sai tài liệu tham khảo.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, khẳng định rõ ràng chữ ký số không bảo đảm tính bí mật và giải thích đúng các tính chất mà chữ ký số thực sự cung cấp.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Nghị định 145/2020/NĐ-CP quy định chi tiết và hướng dẫn thi hành nội dung gì của Bộ luật Lao động?",
+      "category": "factual",
+      "answer": "Nghị định 145/2020/NĐ-CP quy định chi tiết và hướng dẫn thi hành một số điều của Bộ Luật Lao động, cụ thể là các điều khoản liên quan đến:\n\n1. Quản lý lao động (theo khoản 3 Điều 12).\n2. Hợp đồng lao động (theo khoản 4 Điều 21; điểm d khoản 1 Điều 35, điểm d khoản 2 Điều 36; khoản 4 Điều 46; khoản 4 Điều 47; khoản 3 Điều 51).\n3. Cho thuê lại lao động (theo khoản 2 Điều 54).\n4. Tổ chức đối thoại và thực hiện quy chế dân chủ ở cơ sở tại nơi làm việc (theo khoản 4 Điều 63).\n5. Tiền lương (theo khoản 3 Điều 92; khoản 3 Điều 96; khoản 4 Điều 98).\n6. Thời giờ làm việc, thời giờ nghỉ ngơi (theo khoản 5 Điều 107, khoản 7 Điều 113, Điều 116).\n7. Kỷ luật lao động, trách nhiệm vật chất (theo khoản 5 Điều 118; khoản 6 Điều 122; khoản 2 Điều 130; Điều 131).\n8. Lao động nữ và bảo đảm bình đẳng giới (theo khoản 6 Điều 135).\n9. Lao động là người giúp việc gia đình (theo khoản 2 Điều 161).",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các claim trong câu trả lời đều được trích xuất chính xác từ Điều 1 của văn bản CONTEXT cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê chính xác các nội dung chi tiết và hướng dẫn thi hành của Nghị định 145/2020/NĐ-CP theo đúng quy định của Bộ luật Lao động.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Tiền lương để tính trợ cấp thôi việc, trợ cấp mất việc làm được xác định như thế nào theo Nghị định 145/2020/NĐ-CP?",
+      "category": "factual",
+      "answer": "Theo tài liệu tham khảo, tiền lương để tính trợ cấp thôi việc và trợ cấp mất việc làm được xác định như sau:\n\na) Tiền lương để tính trợ cấp là tiền lương bình quân của 6 tháng liền kề theo hợp đồng lao động trước khi người lao động thôi việc hoặc mất việc làm. \n\nb) Trường hợp người lao động làm việc cho người sử dụng lao động theo nhiều hợp đồng lao động kế tiếp nhau, tiền lương để tính trợ cấp là tiền lương bình quân của 6 tháng liền kề theo hợp đồng lao động trước khi chấm dứt hợp đồng lao động cuối cùng.\n\nc) Trường hợp hợp đồng lao động cuối cùng bị tuyên bố vô hiệu vì có nội dung tiền lương thấp hơn mức lương tối thiểu vùng do Chính phủ công bố hoặc mức lương ghi trong thỏa ước lao động tập thể, thì tiền lương làm căn cứ tính trợ cấp là hai bên thỏa thuận nhưng không thấp hơn mức lương tối thiểu vùng hoặc mức lương ghi trong thỏa ước lao động tập thể.\n\nd) Tiền lương để tính trợ cấp cũng được quy định cụ thể tại các điểm a và c3 của tài liệu tham khảo số 1 và tài liệu tham khảo số 2, với tiền lương bình quân của 6 tháng liền kề theo hợp đồng lao động trước khi người lao động thôi việc hoặc mất việc làm.\n\ne) Chính phủ quy định chi tiết hơn về vấn đề này tại Điều 47 của Nghị định 145/2020/NĐ-CP.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.8,
+        "faithfulness_reasoning": "Các claim a, b, c được hỗ trợ bởi context. Claim d lặp lại thông tin nhưng trích dẫn sai tên tài liệu (context không đánh số 1, 2). Claim e sai vì Điều 47 thuộc Bộ luật Lao động, không phải Nghị định 145/2020/NĐ-CP.",
+        "answer_relevancy": 0.9,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp đầy đủ các căn cứ xác định tiền lương theo quy định. Tuy nhiên, mục (d) và (e) có phần dư thừa và tham chiếu không rõ ràng, làm giảm nhẹ tính chuyên nghiệp của câu trả lời.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Nghị định 145/2020/NĐ-CP hướng dẫn trợ cấp mất việc làm dựa trên căn cứ Điều nào của Bộ luật Lao động, và điều kiện tối thiểu về thời gian làm việc thường xuyên để được hưởng là gì?",
+      "category": "multi_hop",
+      "answer": "Nghị định 145/2020/NĐ-CP hướng dẫn trợ cấp mất việc làm dựa trên Điều 34 của Bộ luật Lao động. Điều kiện tối thiểu về thời gian làm việc thường xuyên để được hưởng trợ cấp mất việc là từ đủ 12 tháng trở lên.\n\n**Markdown:**\n---\n**Nghị định 145/2020/NĐ-CP hướng dẫn trợ cấp mất việc làm dựa trên Điều 34 của Bộ luật Lao động.**\n\n**Điều kiện tối thiểu về thời gian làm việc thường xuyên để được hưởng là từ đủ 12 tháng trở lên.**\n---",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời xác định sai căn cứ pháp lý (Nghị định 145/2020/NĐ-CP hướng dẫn dựa trên Điều 47 Bộ luật Lao động, không phải Điều 34). Claim về thời gian làm việc tối thiểu (12 tháng) được hỗ trợ bởi CONTEXT.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đã xác định chính xác căn cứ pháp lý là Điều 34 Bộ luật Lao động và nêu rõ điều kiện thời gian làm việc tối thiểu là từ đủ 12 tháng, đáp ứng đầy đủ yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Theo mẫu điều lệ công ty TNHH một thành viên (chủ sở hữu là cá nhân), chủ sở hữu công ty phải góp đủ vốn điều lệ đã cam kết trong thời hạn bao lâu kể từ ngày được cấp Giấy chứng nhận đăng ký doanh nghiệp?",
+      "category": "factual",
+      "answer": "Theo mẫu điều lệ công ty TNHH một thành viên (chủ sở hữu là cá nhân) trong tài liệu tham khảo, chủ sở hữu công ty phải góp vốn cho công ty đủ và đúng loại tài sản đã cam kết trong thời hạn 90 ngày kể từ ngày được cấp Giấy chứng nhận đăng ký doanh nghiệp.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác thông tin được nêu tại Điều 7, khoản 2 của tài liệu cung cấp về thời hạn góp vốn 90 ngày.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp chính xác thời hạn 90 ngày theo quy định pháp luật và mẫu điều lệ cho loại hình công ty TNHH một thành viên.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Nếu chủ sở hữu công ty TNHH một thành viên không góp đủ vốn điều lệ trong thời hạn quy định thì phải xử lý như thế nào?",
+      "category": "edge_case",
+      "answer": "Nếu chủ sở hữu công ty TNHH một thành viên không góp đủ vốn điều lệ trong thời hạn quy định, theo các tài liệu tham khảo:\n\n1. Chủ sở hữu công ty phải đăng ký thay đổi vốn điều lệ bằng giá trị số vốn đã góp trong thời hạn 30 ngày kể từ ngày cuối cùng phải góp đủ vốn điều lệ.\n\n2. Chủ sở hữu công ty chịu trách nhiệm tương ứng với phần vốn góp đã cam kết đối với các nghĩa vụ tài chính của công ty phát sinh trong thời gian trước ngày cuối cùng công ty đăng ký thay đổi vốn điều lệ theo quy định tại khoản này.\n\n3. Chủ sở hữu công ty chịu trách nhiệm bằng toàn bộ tài sản của mình đối với các nghĩa vụ tài chính của công ty, serta thiệt hại xảy ra do không góp, không góp đủ, không góp đúng hạn vốn điều lệ theo quy định tại Điều này.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các claim trong câu trả lời đều được trích dẫn hoặc diễn giải chính xác từ nội dung của CONTEXT. Từ 'serta' trong claim 3 là một lỗi đánh máy nhỏ nhưng không làm thay đổi ý nghĩa của nội dung được hỗ trợ.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời cung cấp đầy đủ, chính xác các bước xử lý và trách nhiệm pháp lý của chủ sở hữu công ty TNHH một thành viên khi không góp đủ vốn điều lệ theo quy định của Luật Doanh nghiệp.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Mẫu điều lệ công ty TNHH một thành viên do cá nhân sở hữu và do tổ chức sở hữu có giống nhau về cấu trúc (số lượng và nội dung các Điều) không?",
+      "category": "multi_hop",
+      "answer": "Theo tài liệu tham khảo, mẫu điều lệ của Công ty TNHH một thành viên do cá nhân sở hữu và Công ty TNHH một thành viên do tổ chức sở hữu có sự khác biệt về cấu trúc (số lượng và nội dung các Điều) như sau:\n\n1. **Điều Lệ 1: Công ty theo mô hình là Chủ tịch công ty**\n   - Nội dung chủ yếu tập trung vào việc xác định người chịu trách nhiệm cho công ty, trong trường hợp này là \"Chủ sở hữu của Công ty TNHH\" (chủ tịch công ty).\n   \n2. **Điều LỆ 2: Công ty theo mô hình là Hội đồng thành viên**\n   - Nội dung chủ yếu tập trung vào việc xác định các thành viên của Hội đồng quản trị, bao gồm thông tin cá nhân như tên, ngày tháng năm sinh, giới tính, quốc tịch, địa chỉ liên lạc đối với cá nhân và địa chỉ trụ sở chính đối với tổ chức.\n\nVề số lượng Điều:\n- Mẫu 1 (Điều LỆ 1) có ít hơn một Điều so với mẫu 2 (Điều LỆ 2).\n\nNội dung các Điều khác nhau:\n- Mẫu 1 tập trung vào việc xác định người chịu trách nhiệm cho công ty.\n- Mẫu 2 tập trung vào việc xác định các thành viên của Hội đồng quản trị.\n\nVì vậy, mẫu điều lệ của Công ty TNHH một thành viên do cá nhân sở hữu và Công ty TNHH một thành viên do tổ chức sở hữu có sự khác biệt về cấu trúc (số lượng và nội dung các Điều).",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.0,
+        "faithfulness_reasoning": "Câu trả lời bịa đặt thông tin về sự khác biệt cấu trúc và số lượng điều giữa các mẫu, trong khi context không cung cấp thông tin so sánh này và các mẫu trong context thực tế là các mô hình tổ chức khác nhau (Chủ tịch vs Hội đồng thành viên) chứ không phải phân biệt theo chủ sở hữu là cá nhân hay tổ chức.",
+        "answer_relevancy": 0.4,
+        "answer_relevancy_reasoning": "Câu trả lời bị nhầm lẫn nghiêm trọng về mặt pháp lý khi đánh đồng mô hình quản trị với loại hình chủ sở hữu (cá nhân/tổ chức), dẫn đến thông tin sai lệch về cấu trúc điều lệ.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Mẫu điều lệ công ty cổ phần có bao nhiêu Điều, và Điều nào quy định về tổng số cổ phần, loại cổ phần và mệnh giá?",
+      "category": "factual",
+      "answer": "Mẫu điều lệ công ty cổ phần có 5 Điều. Điều 4 quy định về tổng số cổ phần, loại cổ phần và mệnh giá các loại cổ phần.\n\nĐiều này được xác định trong tài liệu tham khảo như sau:\n\n- **Điều 4** (Tài liệu 1): \n  - Tổng số cổ phần của Công ty là ... cổ phần;\n  - Toàn bộ cổ phần của Công ty đều là cổ phần phổ thông. Mệnh giá mỗi cổ phần là ... VNĐ (... đồng Việt Nam). Ngoài cổ phần phổ thông, Công ty không phát hành loại cổ phần khác.\n\nVì vậy, Điều 4 chính là điều khoản quy định về tổng số cổ phần, loại cổ phần và mệnh giá các loại cổ phần trong mẫu điều lệ công ty cổ phần.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời chứa thông tin không có trong context (số lượng điều của mẫu điều lệ) và thông tin chính xác về Điều 4. Context không cung cấp thông tin về tổng số điều của mẫu điều lệ.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định chính xác số lượng điều và chỉ rõ Điều 4 là nội dung quy định về cổ phần, kèm theo trích dẫn minh chứng cụ thể từ tài liệu.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Trong các mẫu điều lệ đã cung cấp (TNHH một thành viên, TNHH hai thành viên trở lên, công ty cổ phần), mẫu nào có khái niệm 'cổ phần' và 'cổ đông sáng lập'?",
+      "category": "multi_hop",
+      "answer": "Trong các mẫu điều lệ được cung cấp, mẫu cho Công ty Cổ Phần (TNHH một thành viên không áp dụng) là mẫu phù hợp với khái niệm \"cổ phần\" và \"cổ đông sáng lập\". Mẫu này mô tả chi tiết về thông tin cơ bản của cổ đông sáng lập, bao gồm họ tên, giới tính, ngày sinh, dân tộc, quốc tịch, số chứng minh nhân dân/căn cước công dân, nơi cấp, nơi đăng ký hộ khẩu thường trú, địa chỉ liên lạc, và sở hữu bao nhiêu cổ phần phổ thông với mệnh giá từng cổ phần. Đây là những thông tin mà mẫu cho Công ty Cổ Phần đề cập đến. Mẫu khác (đối với TNHH một thành viên) không có thông tin tương tự về cổ đông sáng lập.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.8,
+        "faithfulness_reasoning": "Câu trả lời xác định đúng mẫu Công ty Cổ phần có chứa các khái niệm được hỏi dựa trên context. Tuy nhiên, việc khẳng định 'mẫu cho TNHH một thành viên không có thông tin tương tự' là không thể kiểm chứng vì context không cung cấp nội dung của mẫu điều lệ TNHH một thành viên.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời xác định chính xác mẫu Công ty Cổ phần là nơi chứa khái niệm 'cổ phần' và 'cổ đông sáng lập', đồng thời giải thích rõ ràng các chi tiết liên quan trong mẫu đó.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Theo mẫu điều lệ công ty TNHH hai thành viên trở lên, cơ quan nào là cơ quan quản lý cao nhất của công ty?",
+      "category": "factual",
+      "answer": "Theo tài liệu tham khảo, trong mẫu điều lệ công ty TNHH hai thành viên trở lên (tài liệu 2), Hội đồng thành viên là cơ quan quản lý cao nhất của công ty.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.5,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác Hội đồng thành viên là cơ quan quyết định cao nhất dựa trên Điều 12 của ngữ cảnh được cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định chính xác Hội đồng thành viên là cơ quan quản lý cao nhất theo đúng quy định pháp luật và mẫu điều lệ.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Theo mẫu quy chế tiền lương, người lao động trong thời gian thử việc được hưởng mức lương bằng bao nhiêu phần trăm lương chính thức?",
+      "category": "factual",
+      "answer": "Theo mẫu quy chế tiền lương được mô tả trong tài liệu tham khảo, người lao động trong thời gian thử việc được hưởng mức lương bằng 85% lương chính thức của công việc đó.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời hoàn toàn chính xác và được hỗ trợ bởi Điều 3 trong phần tài liệu về 'Lương thử việc', trong đó nêu rõ mức lương thử việc bằng 85% lương chính thức.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào trọng tâm câu hỏi, cung cấp chính xác tỷ lệ phần trăm lương thử việc theo quy định mà không lan man.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Theo mẫu quy chế tiền lương, mức phụ cấp trách nhiệm hàng tháng của chức danh Giám đốc là bao nhiêu?",
+      "category": "factual",
+      "answer": "Theo tài liệu tham khảo, mức phụ cấp trách nhiệm hàng tháng của chức danh Giám đốc là 5.500.000 đồng. Đây được quy định trong Điều 7.1 của Quyết định ban hành quy chế tiền lương.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác mức phụ cấp trách nhiệm của Giám đốc là 5.500.000 đồng dựa trên Điều 7.1 của CONTEXT, các thông tin đều được hỗ trợ đầy đủ.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp con số cụ thể và dẫn chứng nguồn quy định chính xác theo yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Theo mẫu quy chế tiền lương, tiền lương làm thêm giờ vào ngày Chủ nhật được tính bằng bao nhiêu phần trăm so với tiền lương giờ bình thường?",
+      "category": "factual",
+      "answer": "Theo mẫu quy chế tiền lương trong tài liệu tham khảo, tiền lương làm thêm giờ vào ngày Chủ nhật được tính bằng 200% so với tiền lương giờ bình thường.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác tỷ lệ 200% cho việc làm thêm vào ngày Chủ nhật dựa trên mục 12.2 của tài liệu cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào trọng tâm câu hỏi, cung cấp con số cụ thể (200%) một cách chính xác và ngắn gọn.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Theo mẫu quy chế tiền lương, người lao động được nghỉ hưởng nguyên lương mấy ngày khi bản thân kết hôn?",
+      "category": "edge_case",
+      "answer": "Theo Mẫu Quy chế Tiền lương trong Tài liệu Tham khảo 1 (Trang 1), khi bản thân kết hôn, người lao động được nghỉ hưởng nguyên lương là 03 ngày.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác số ngày nghỉ khi kết hôn là 03 ngày, thông tin này được hỗ trợ trực tiếp bởi mục 14.2 trong CONTEXT.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào trọng tâm câu hỏi, cung cấp chính xác số ngày nghỉ hưởng nguyên lương theo quy định được hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Theo mẫu quy chế tiền lương, công ty xét tăng lương cho nhân viên vào tháng nào hàng năm, và thâm niên tối thiểu để được xét tăng lương là bao lâu?",
+      "category": "factual",
+      "answer": "Theo mẫu quy chế tiền lương trong tài liệu tham khảo, công ty sẽ xét tăng lương cho nhân viên vào tháng 04 hàng năm. Thâm niên tối thiểu để nhân viên được xét tăng lương là 2 năm.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời hoàn toàn chính xác và được hỗ trợ bởi Điều 15 trong CONTEXT, trong đó quy định thời gian xét tăng lương là tháng 04 hàng năm và thâm niên tối thiểu là 02 năm.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đã cung cấp chính xác và đầy đủ cả hai thông tin được yêu cầu là thời điểm xét tăng lương (tháng 04) và thâm niên tối thiểu (2 năm) một cách trực diện.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Theo mẫu quy chế tiền lương, hạn trả lương hàng tháng là ngày nào?",
+      "category": "edge_case",
+      "answer": "Theo mẫu quy chế tiền lương trong tài liệu tham khảo, hạn trả lương hàng tháng là vào ngày cuối cùng của tháng. Điều này được nêu rõ tại Điều 11 của Tài liệu 1, trong đó ghi rõ \"Toàn thể nhân viên Công ty được chi trả tiền lương vào ngày cuối cùng của tháng.\"",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.2,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác hạn trả lương là ngày cuối cùng của tháng dựa trên Điều 11 của CONTEXT, các thông tin đưa ra đều được hỗ trợ trực tiếp bởi tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định chính xác ngày trả lương theo quy định và trích dẫn nguồn cụ thể từ tài liệu.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Hãy tóm tắt nội dung chính của Luật An ninh mạng.",
+      "category": "summary",
+      "answer": "Luật An ninh mạng số 24/2018/QH14 quy định về hoạt động bảo vệ an ninh quốc gia và bảo đảm trật tự, an toàn xã hội trên không gian mạng. Theo đó:\n\n- An ninh mạng được hiểu là sự bảo đảm hoạt động trên không gian mạng không gây phương hại đến an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân.\n\n- Bảo vệ an ninh mạng bao gồm phòng ngừa, phát hiện, ngăn chặn, xử lý hành vi xâm phạm an ninh mạng. \n\n- Không gian mạng được định nghĩa là mạng lưới kết nối của cơ sở hạ tầng công nghệ thông tin, bao gồm mạng viễn thông, mạng Internet, mạng máy tính, hệ thống thông tin, hệ thống.\n\n- Luật quy định các chính sách bảo vệ an ninh mạng như ưu tiên trong quốc phòng, an ninh, phát triển kinh tế - xã hội, khoa học, công nghệ và đối ngoại; kết hợp giữa nhiệm vụ bảo vệ an ninh mạng với nhiệm vụ phát triển kinh tế - xã hội.\n\n- Luật cũng quy định các biện pháp bảo vệ hệ thống thông tin quan trọng về an ninh quốc gia như thẩm định, chứng nhận đủ điều kiện an ninh mạng trước khi đưa vào sử dụng; thực hiện kiểm tra, giám sát và khắc phục sự cố an ninh mạng.\n\n- Các hành vi xâm phạm an ninh mạng bị nghiêm cấm, bao gồm tấn công mạng, khủng bố mạng, gián điệp mạng, tội phạm mạng, sản xuất, đưa vào sử dụng công cụ gây hại cho hệ thống thông tin quan trọng về an ninh quốc gia và các hệ thống thông tin khác.\n\n- Luật cũng quy định thẩm quyền thẩm định và kiểm tra an ninh mạng đối với hệ thống thông tin quan trọng về an ninh quốc gia.",
+      "retrieval_metrics": null,
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các nhận định trong câu trả lời đều được trích xuất và diễn giải chính xác từ nội dung của các đoạn văn bản được cung cấp trong CONTEXT.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đã tóm tắt đầy đủ, chính xác các nội dung cốt lõi của Luật An ninh mạng 2018, đi thẳng vào vấn đề và trình bày logic, dễ hiểu.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Mẫu điều lệ công ty TNHH một thành viên do cá nhân làm chủ sở hữu quy định về những nội dung chính nào?",
+      "category": "summary",
+      "answer": "Mẫu điều lệ công ty TNHH một thành viên do cá nhân làm chủ sở hữu quy định về các nội dung chính như sau:\n\n1. **Tư cách pháp nhân, phạm vi trách nhiệm và thời hạn hoạt động**: Công ty là một pháp nhân độc lập, chịu trách nhiệm về các khoản nợ và nghĩa vụ tài sản khác trong phạm vi số vốn điều lệ của công ty. Thời hạn hoạt động được quy định dựa trên Giấy chứng nhận đăng ký doanh nghiệp.\n\n2. **Tên công ty**: Được ghi bằng tiếng Việt và tiếng nước ngoài nếu có, cùng với tên viết tắt (nếu có).\n\n3. **Ngành, nghề kinh doanh**: Không có thông tin cụ thể về ngành nghề kinh doanh được quy định trong mẫu điều lệ này.\n\n4. **Người đại diện theo pháp luật**: Công ty chỉ có một người đại diện theo pháp luật với chức danh Chủ tịch công ty, Giám đốc hoặc Tổng Giám đốc, tùy thuộc vào lựa chọn của chủ sở hữu. Quyền và nghĩa vụ của người đại diện được quy định cụ thể tại Điều lệ công ty.\n\n5. **Vốn điều lệ và chủ sở hữu công ty**: Vốn điều lệ bao gồm tiền Việt Nam, ngoại tệ tự do chuyển đổi, vàng và tài sản khác. Thông tin về chủ sở hữu công ty cũng được ghi rõ ràng.\n\n6. **Góp vốn thành lập công ty**: Chủ sở hữu công ty phải góp đủ và đúng loại tài sản đã cam kết khi đăng ký thành lập doanh nghiệp trong thời hạn 90 ngày kể từ ngày cấp Giấy chứng nhận đăng ký doanh nghiệp.\n\nMẫu điều lệ này không quy định cụ thể về ngành nghề kinh doanh, cũng như không có thông tin chi tiết về người đại diện theo pháp luật hoặc các quy định liên quan đến họ.",
+      "retrieval_metrics": null,
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.71,
+        "faithfulness_reasoning": "Câu trả lời chứa các thông tin chính xác dựa trên context, tuy nhiên claim 4 và đoạn cuối lại mâu thuẫn nhau về việc có thông tin người đại diện hay không, và claim 3 sai vì context có mục dành cho ngành nghề kinh doanh.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Câu trả lời liệt kê đầy đủ các nội dung chính theo quy định pháp luật, tuy nhiên có sự mâu thuẫn nội bộ khi mục 4 nêu về người đại diện nhưng phần cuối lại phủ nhận thông tin này.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Mức lương tối thiểu vùng áp dụng cho năm 2026 theo Nghị định mới nhất là bao nhiêu?",
+      "category": "negative",
+      "answer": "Tôi không tìm thấy thông tin cụ thể về mức lương tối thiểu vùng áp dụng cho năm 2026 trong các tài liệu tham khảo được cung cấp. Các tài liệu chỉ đề cập đến quy định về hiệu lực thi hành của một số điều luật và chế độ lao động, nhưng chưa có thông tin chi tiết về mức lương tối thiểu vùng cụ thể đối với năm 2026.",
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": true,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Rule-based: model từ chối đúng cách cho câu hỏi ngoài phạm vi tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Rule-based: model từ chối đúng cách cho câu hỏi ngoài phạm vi tài liệu.",
+        "rule_override": true
+      }
+    },
+    {
+      "question": "Luật Hôn nhân và Gia đình quy định độ tuổi kết hôn tối thiểu đối với nam và nữ là bao nhiêu?",
+      "category": "negative",
+      "answer": "Tôi không tìm thấy thông tin về độ tuổi kết hôn tối thiểu trong Luật Hôn nhân và Gia đình trong các tài liệu tham khảo được cung cấp.",
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": true,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Rule-based: model từ chối đúng cách cho câu hỏi ngoài phạm vi tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Rule-based: model từ chối đúng cách cho câu hỏi ngoài phạm vi tài liệu.",
+        "rule_override": true
+      }
+    }
+  ]
+}

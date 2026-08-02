@@ -1,0 +1,99 @@
+# =====================
+# Environment Variables
+# =====================
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# =====================
+# Secrets / Credentials (defensive — không commit bất kỳ khóa/chứng chỉ nào)
+# =====================
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+*.keystore
+credentials.json
+service_account*.json
+serviceAccount*.json
+*secret*.json
+secrets/
+
+# =====================
+# Python
+# =====================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+pip-wheel-metadata/
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+ml_env/
+# =====================
+# Vector DB Data
+# =====================
+chromadb_data/
+!chromadb_data/.gitkeep
+
+# =====================
+# Uploads (tài liệu người dùng tải lên — không đẩy lên repo)
+# =====================
+uploads/
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# =====================
+# Test dataset (52 file Luật/Nghị định VN, ~348MB — giữ ở local, không đẩy lên repo)
+# =====================
+backend/tests/Test_subject/*
+!backend/tests/Test_subject/.gitkeep
+
+# =====================
+# Databases / Local data
+# =====================
+*.sqlite
+*.sqlite3
+*.db
+celerybeat-schedule
+dump.rdb
+
+# =====================
+# Claude Code (settings/permissions theo máy local)
+# =====================
+.claude/settings.local.json
+
+# =====================
+# Node / Frontend
+# =====================
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# =====================
+# IDEs
+# =====================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+.agents/
+.claude/
+.SYSTEM_ARCHITECTURE.md
+roadmap_tasklist/
+CLAUDE.md

@@ -1,0 +1,1054 @@
+{
+  "summary": {
+    "total_questions": 46,
+    "by_category": {
+      "edge_case": {
+        "count": 11,
+        "faithfulness": 0.773,
+        "answer_relevancy": 1.0,
+        "refusal_rate": 0.0
+      },
+      "factual": {
+        "count": 25,
+        "faithfulness": 0.886,
+        "answer_relevancy": 0.916,
+        "refusal_rate": 0.04
+      },
+      "multi_hop": {
+        "count": 5,
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.92,
+        "refusal_rate": 0.0
+      },
+      "negative": {
+        "count": 3,
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "refusal_rate": 1.0
+      },
+      "summary": {
+        "count": 2,
+        "faithfulness": 0.975,
+        "answer_relevancy": 0.9,
+        "refusal_rate": 0.0
+      }
+    },
+    "retrieval": {
+      "hit_rate": 0.932,
+      "mrr": 0.86,
+      "recall@3": 0.932,
+      "precision@3": 0.795,
+      "recall@5": 0.932,
+      "precision@5": 0.732,
+      "hit_rate_post_rerank@3": 0.932
+    },
+    "generation": {
+      "faithfulness": 0.856,
+      "answer_relevancy": 0.941
+    },
+    "refusal": {
+      "refusal_rate_overall": 0.087,
+      "refusal_count_despite_hit": 1,
+      "refusal_count_despite_hit_total_non_negative_qa": 41,
+      "note": "Số câu bị model từ chối trả lời dù retriever đã lấy đúng tài liệu (hit_rate=1) — chỉ dấu bottleneck nằm ở generator (đọc-hiểu context), không phải retrieval."
+    }
+  },
+  "details": [
+    {
+      "question": "MiddlewareApplication.start khởi động thành phần nào để lắng nghe dữ liệu MQTT từ cảm biến?",
+      "category": "factual",
+      "answer": "MiddlewareApplication.start khởi động thành phần SensorMQTTListener để lắng nghe dữ liệu MQTT từ cảm biến. Đây được mô tả trong bước 1 của quy trình thực thi chi tiết (Detailed Execution Flow).",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời hoàn toàn chính xác và được hỗ trợ trực tiếp bởi Step 1 trong phần Detailed Execution Flow của context, nơi xác nhận MiddlewareApplication.start khởi động SensorMQTTListener.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời xác định chính xác thành phần SensorMQTTListener được khởi động bởi MiddlewareApplication.start và cung cấp ngữ cảnh nguồn tin rõ ràng, đáp ứng đầy đủ yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "SensorMQTTListener mặc định subscribe vào MQTT topic nào?",
+      "category": "factual",
+      "answer": "SensorMQTTListener mặc định subscribe vào MQTT topic có mẫu như sau: `tele/+/SENSOR`.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác topic mặc định là 'tele/+/SENSOR' dựa trên thông tin được cung cấp trong phần 'Detailed Execution Flow' của tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp chính xác mẫu topic mặc định mà SensorMQTTListener sử dụng.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Điều gì xảy ra nếu payload MQTT bị lỗi JSON (malformed)?",
+      "category": "edge_case",
+      "answer": "Nếu payload MQTT bị lỗi JSON (malformed), theo quy tắc được nêu trong Tài liệu 1, parser sẽ cố gắng phục hồi một lần. Nếu payload vẫn không hợp lệ, nó sẽ bị bỏ qua và payload này sẽ bị drop.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các nhận định trong câu trả lời đều được hỗ trợ trực tiếp bởi quy tắc trong phần 'Business Rules & Edge Cases' của context.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, giải thích rõ ràng cơ chế xử lý của hệ thống khi gặp payload lỗi JSON là cố gắng phục hồi một lần rồi drop nếu vẫn không hợp lệ.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Quy tắc hard anomaly cho pH và EC trong luồng Edge Sensor Telemetry là gì?",
+      "category": "factual",
+      "answer": "Quy tắc hard anomaly cho pH và EC trong luồng Edge Sensor Telemetry được mô tả như sau:\n\n- Nếu pH vượt quá giới hạn 11.0 hoặc EC (đơn vị uS/cm) bằng 0, telemetry sẽ bị đánh dấu là anomalous danhsach và thông báo lỗi (anomaly_ph_ec) sẽ được ghi vào payload.\n\nĐây là quy tắc hard anomaly vì nó yêu cầu cả hai giá trị pH và EC phải tuân theo giới hạn cụ thể mới không bị đánh dấu anomalous. Nếu bất kỳ một trong hai giá trị này vượt quá giới hạn, telemetry sẽ luôn bị đánh dấu anomalous và thông báo lỗi được ghi vào payload.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời sai về logic điều kiện (sử dụng 'hoặc' thay vì 'và') và đưa ra nhận định sai lệch rằng bất kỳ giá trị nào vượt quá giới hạn đều bị đánh dấu anomalous, trong khi context chỉ định rõ điều kiện cụ thể là pH > 11.0 VÀ EC = 0.0.",
+        "answer_relevancy": 0.9,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, nêu rõ các ngưỡng hard anomaly cho pH và EC. Tuy nhiên, có một lỗi chính tả nhỏ ('danhsach') trong phần giải thích.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Khoảng giá trị bình thường (range) mặc định cho pH và EC là bao nhiêu?",
+      "category": "factual",
+      "answer": "Theo tài liệu tham khảo, khoảng giá trị bình thường (range) mặc định cho pH là 5.5-7.5 dan cho EC là 800-1800 uS/cm.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.8,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời trích xuất chính xác thông tin về khoảng giá trị mặc định của pH (5.5-7.5) và EC (800-1800 uS/cm) từ Step 9 của đoạn context đầu tiên.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời cung cấp chính xác và đầy đủ các khoảng giá trị mặc định cho cả pH và EC theo đúng yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Khi phát hiện anomaly, hệ thống lưu alert vào đâu?",
+      "category": "factual",
+      "answer": "Khi phát hiện anomalous kondisi, hệ thống sẽ menyimpan alert ke dalam tabel `messages` di database `queue/messages.db`. Alert tersebut akan memiliki tipe pesan 'alert', prioritas 'high', dan ttl (time-to-live) setiap 3600 detik.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác thông tin từ Step 12 của tài liệu, bao gồm vị trí lưu trữ, tên bảng, và các thuộc tính của alert.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời cung cấp chính xác vị trí lưu trữ alert (bảng messages trong database queue/messages.db) và các thông tin bổ sung liên quan một cách trực tiếp, đầy đủ.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Nếu ghi alert vào queue thất bại thì pipeline xử lý ra sao?",
+      "category": "edge_case",
+      "answer": "Nếu ghi alert vào queue thất bại (MessageQueue.enqueue exception), error sẽ được log và pipeline tiếp tục xử lý. Đây là quy tắc được mô tả trong tài liệu 1, trang 1.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời chứa 2 claim: (1) về việc log lỗi và tiếp tục pipeline (được hỗ trợ bởi context), và (2) về nguồn gốc thông tin từ 'tài liệu 1, trang 1' (không có thông tin này trong context).",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, giải thích rõ cơ chế xử lý khi gặp lỗi enqueue và trích dẫn nguồn tài liệu cụ thể.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "device_id được xác định như thế nào nếu payload thiếu trường này?",
+      "category": "factual",
+      "answer": "Rule: Nếu payload không bao gồm trường device_id, listener lấy nó từ mẫu topic MQTT là tele/{device}/SENSOR.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác quy tắc được nêu trong phần 'Business Rules & Edge Cases' của context, trong đó xác định device_id được lấy từ mẫu topic MQTT tele/{device}/SENSOR khi thiếu trường này.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, giải thích rõ ràng cơ chế lấy device_id từ topic MQTT khi payload thiếu trường này.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "NutritionAIController sử dụng những model AI nào để ra quyết định điều khiển dinh dưỡng?",
+      "category": "factual",
+      "answer": "NutritionAIController sử dụng hai mô hình AI chính để ra quyết định điều khiển dinh dưỡng:\n\n1. Mô hình giám sát (monitor model) được sử dụng để thực hiện inference cho mã trạng thái (status_code).\n2. Mô hình điều khiển (controller model) được sử dụng để thực hiện inference cho mục tiêu EC (target_ec).\n\nCụ thể, quá trình này diễn ra như sau theo tài liệu tham khảo:\n\n- **Step 6**: NutritionAIController.process_telemetry trong edge_computing/modules/Ai_processing/nutrition_controller.py thực hiện việc tách các đặc trưng từ telemetry. Sau đó, nó sử dụng _run_inference để chạy mô hình giám sát cho mã trạng thái và mô hình điều khiển cho mục tiêu EC (target_ec).\n  \n- **Step 5**: Trong quá trình này, NutritionAIController sẽ tách các đặc trưng từ dữ liệu như nhiệt độ (temperature), độ ẩm (humidity), EC (ec_us_cm -> ec_current), pH (ph_level -> ph_current) và một số thông số khác. Mô hình giám sát và mô hình điều khiển được sử dụng để đưa ra quyết định dựa trên những thông số này.\n\nNhư vậy, NutritionAIController sử dụng hai mô hình AI: mô hình giám sát và mô hình điều khiển để đưa ra quyết định về việc điều chỉnh dinh dưỡng.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.5,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các nhận định trong câu trả lời đều được hỗ trợ trực tiếp bởi thông tin trong CONTEXT (đặc biệt là Step 4, 5 và 6).",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê chính xác hai mô hình AI được sử dụng và trích dẫn nguồn tài liệu cụ thể để làm rõ quy trình vận hành.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "target_ec được clamp (giới hạn) trong khoảng giá trị nào?",
+      "category": "factual",
+      "answer": "Target EC được clamp vào [0.1, 3.5] như đã chỉ rõ trong bước 8 của quy trình xử lý inference.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.5,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời xác định đúng khoảng giá trị [0.1, 3.5] nhưng xác định sai bước thực hiện (context ghi là bước 7, câu trả lời ghi là bước 8).",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời trực tiếp cung cấp khoảng giá trị giới hạn của target_ec và trích dẫn nguồn gốc thông tin một cách chính xác, đáp ứng đầy đủ yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Ngưỡng an toàn (safety net) sẽ override quyết định của AI khi nào?",
+      "category": "factual",
+      "answer": "Ngưỡng an toàn (safety net) sẽ override quyết định của AI khi các điều kiện sau được thỏa mãn:\n\n1. **Phân tích tài liệu 3**:\n   - **Rule**: \"Safety thresholds in code\" xác định các ngưỡng mà nếu đạt đến, sẽ kích hoạt override của ngưỡng an toàn.\n   - Các ngưỡng này bao gồm: EC >= 2.8, pH < 4.5 hoặc pH > 7.5, hoặc water_level_ok == False.\n\n2. **Tóm tắt**:\n   - Nếu chỉ số EC (EC) vượt quá giới hạn là 2.8.\n   - Chỉ số pH thấp hơn 4.5 hoặc cao hơn 7.5.\n   - Nồng độ nước không ổn định (water_level_ok == False).\n\nVì vậy, ngưỡng an toàn sẽ override quyết định của AI nếu chỉ số EC, chỉ số pH hoặc nồng độ nước không nằm trong phạm vi cho phép.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời trích xuất chính xác các ngưỡng an toàn từ tài liệu (Step 9) và giải thích đúng vai trò của safety net trong việc override quyết định của AI.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê chính xác các điều kiện kỹ thuật cụ thể dẫn đến việc kích hoạt ngưỡng an toàn (safety net) dựa trên dữ liệu được cung cấp.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "status_code bằng 2 tương ứng với hành động điều khiển nào?",
+      "category": "factual",
+      "answer": "Status code == 2 tương ứng với hành động điều khiển là \"pump_water_dilute với thời gian kéo dài và ngắt nguồn dinh dưỡng\". Đây được quy định trong Rule từ Tài liệu tham khảo đầu tiên.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.5,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác status_code 2 tương ứng với 'pump_water_dilute' kèm theo các điều kiện bổ sung được trích xuất trực tiếp từ CONTEXT.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định chính xác hành động điều khiển tương ứng với status_code bằng 2 dựa trên tài liệu tham khảo.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "status_code bằng 5 tương ứng với hành động điều khiển nào?",
+      "category": "factual",
+      "answer": "Status code bằng 5 tương ứng với hành động điều khiển là **pump_nutrient_boost**.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.3333333333333333,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời chỉ chứa một claim duy nhất và claim này được hỗ trợ trực tiếp bởi quy tắc 'Rule: status_code == 5 maps to pump_nutrient_boost' trong CONTEXT.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định chính xác hành động điều khiển tương ứng với status_code bằng 5 mà không lan man.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Điều gì xảy ra nếu model AI của NutritionAIController không load được?",
+      "category": "edge_case",
+      "answer": "Nếu model AI của NutritionAIController không load được, thì inference sẽ trả về quyết định fallback (status_code=-1) và thực hiện hành vi an toàn. Đây là quy tắc được xác định trong tài liệu tham khảo như sau:\n\n- Rule: Nếu mô hình không thể tải lên, inference trả về quyết định fallback (status_code=-1) và thực hiện hành động bảo vệ an toàn.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác quy tắc được nêu trong phần 'Business Rules & Edge Cases' của context, trong đó xác nhận việc model không load được sẽ dẫn đến fallback decision với status_code=-1.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, giải thích chính xác cơ chế fallback khi model không load được và trích dẫn đúng quy tắc từ tài liệu.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Nếu thiếu các trường sensor bắt buộc (temperature, humidity, EC, pH) thì telemetry được xử lý ra sao?",
+      "category": "edge_case",
+      "answer": "Nếu thiếu các trường sensor bắt buộc seperti temperature, humidity, EC, và pH, telemetry sẽ bị bỏ qua.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác quy tắc 'If sensor features are missing (temperature, humidity, EC, pH), telemetry is skipped (None decision)' có trong context.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định rõ hành động xử lý (bị bỏ qua) khi thiếu các trường dữ liệu bắt buộc theo đúng yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Safety net có mức ưu tiên cao hơn hay thấp hơn output của model AI trong luồng Nutrition Control?",
+      "category": "multi_hop",
+      "answer": "Safety net có mức ưu tiên cao hơn so với output của model AI trong luồng Nutrition Control. Theo tài liệu, Rule 3 trong Tài liệu Tham khảo 1 xác định rằng \"Safety net has higher priority than model output and can force alert/dilution actions.\"",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác mức ưu tiên của Safety net dựa trên quy tắc được nêu trực tiếp trong phần Business Rules của CONTEXT.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời trực tiếp xác nhận Safety net có mức ưu tiên cao hơn và trích dẫn chính xác tài liệu tham khảo để chứng minh, giải quyết hoàn toàn câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Gateway subscribe vào topic nào để nhận shared attributes từ CoreIoT dashboard?",
+      "category": "factual",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": true,
+      "ragas": {
+        "faithfulness": 0.0,
+        "faithfulness_reasoning": "Câu trả lời từ chối là không chính xác vì tài liệu đã cung cấp thông tin tại Step 2, nơi nêu rõ Gateway subscribe vào topic 'v1/devices/me/attributes' để nhận shared attributes.",
+        "answer_relevancy": 0.0,
+        "answer_relevancy_reasoning": "Câu trả lời từ chối cung cấp thông tin trong khi câu hỏi có thể trả lời được dựa trên tài liệu kỹ thuật tiêu chuẩn của hệ thống IoT, cho thấy hệ thống RAG đã thất bại trong việc truy xuất thông tin.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Sau khi nhận ảnh từ CoreIoT, gateway forward request tới edge qua local topic nào?",
+      "category": "factual",
+      "answer": "Sau khi nhận ảnh từ CoreIoT, gateway sẽ publish yêu cầu đến local MQTT topic **edge/image_request**. Đây là bước 5 trong quá trình xử lý chuỗi (Sequence Diagram) được mô tả trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác topic 'edge/image_request' dựa trên Step 5 của tài liệu cung cấp. Các nhận định đều khớp với thông tin trong context.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời xác định chính xác local topic là 'edge/image_request' và cung cấp ngữ cảnh cụ thể từ tài liệu, đáp ứng trực tiếp yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "DiseaseClassifier hỗ trợ những inference backend nào?",
+      "category": "factual",
+      "answer": "Dựa trên tài liệu tham khảo, DiseaseClassifier sử dụng dua backend để infer với dữ liệu: ONNX và TensorFlow.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác hai backend là ONNX và TensorFlow dựa trên thông tin được cung cấp trong Step 11 của CONTEXT.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê chính xác hai inference backend là ONNX và TensorFlow theo đúng yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Điều gì xảy ra nếu việc decode ảnh thất bại ở phía edge trong luồng Image AI?",
+      "category": "edge_case",
+      "answer": "Nếu việc decode ảnh thất bại ở phía edge trong luồng Image AI, thì edge sẽ phát hành text dự đoán fallback. Đây là quy tắc được định rõ trong tài liệu 1 (Trang 1).",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác hành động của hệ thống khi decode ảnh thất bại dựa trên quy tắc được cung cấp trong context. Mặc dù tài liệu không đánh số trang cụ thể, nội dung claim hoàn toàn khớp với quy tắc 'If image decode fails, edge publishes fallback prediction text'.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp giải pháp cụ thể (phát hành text dự đoán fallback) và dẫn nguồn rõ ràng theo yêu cầu.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Kết quả AI prediction cuối cùng được publish tới CoreIoT qua topic và field nào?",
+      "category": "factual",
+      "answer": "Kết quả AI prediction cuối cùng được publish tới CoreIoT qua topic `v1/devices/me/telemetry`.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.8,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác topic được đề cập trong Step 15 của CONTEXT, không chứa thông tin bịa đặt.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Câu trả lời đã xác định đúng topic, tuy nhiên thiếu thông tin về field cụ thể mà người dùng yêu cầu.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Cơ chế deduplication trong luồng CoreIoT Image AI hoạt động ở những nơi nào?",
+      "category": "multi_hop",
+      "answer": "Cơ chế de-duplication trong luồng CoreIoT Image AI hoạt động ở các nơi sau:\n\n1. **Edge Bridge**: Tại bước 9 của tài liệu, _handle_image_event trong edge_computing/app/app.py thực hiện de-duplication bằng cách sử dụng _last_image_trigger_by_cloud_device.\n\n2. **Gateway**: Theo quy tắc số 3 từ tài liệu 3, Gateway không tạo CoreIoT Client mới; nó tái sử dụng client đã được truyền vào để tránh việc trùng lặp token. Đồng thời, tài liệu cũng chỉ ra rằng de-duplication có thể xảy ra ở bước _last_trigger của Gateway.\n\nVì vậy, cơ chế de-duplication trong luồng CoreIoT Image AI hoạt động ở cả Edge Bridge và Gateway.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.75,
+        "faithfulness_reasoning": "Câu trả lời xác định đúng hai vị trí deduplication, tuy nhiên phần giải thích về Gateway bị lẫn lộn giữa việc 'tránh trùng lặp token' (không phải deduplication) và 'de-duplication bằng _last_trigger'.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định chính xác hai vị trí thực hiện deduplication là Edge Bridge và Gateway kèm theo dẫn chứng cụ thể từ tài liệu.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Vì sao gateway không tạo một CoreIoT MQTT client thứ hai riêng cho luồng Image Bridge?",
+      "category": "factual",
+      "answer": "Gateway không tạo một CoreIoT MQTT client thứ hai riêng cho luồng Image Bridge do quy tắc số 1 trong tài liệu, đó là \"Rule: Gateway does not create a second CoreIoT client; it reuses injected client to avoid token collision.\" Điều này cho thấy gateway đang tái sử dụng client đã được truyền vào để tránh xung đột token.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời trích dẫn chính xác quy tắc từ tài liệu (Business Rules & Edge Cases) và giải thích đúng lý do gateway tái sử dụng client để tránh xung đột token.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời giải thích trực tiếp và chính xác lý do kỹ thuật (tránh xung đột token) dựa trên quy tắc được trích dẫn, đáp ứng đầy đủ yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "MqttReceiver trong Gateway Offline Buffering mặc định subscribe vào topic nào để nhận telemetry?",
+      "category": "factual",
+      "answer": "MqttReceiver trong Gateway Offline Buffering mặc định subscribes vào topic **tele/+/SENSOR**. Đây là thông tin được cung cấp từ tài liệu tham khảo số 1, trong phần Step 2 của quá trình thực thi chi tiết (Detailed Execution Flow).",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác topic mặc định là 'tele/+/SENSOR' dựa trên Step 2 của tài liệu Detailed Execution Flow. Việc trích dẫn nguồn tài liệu là thông tin bổ sung không làm ảnh hưởng đến tính trung thực của nội dung chính.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp chính xác topic mặc định và trích dẫn nguồn tài liệu một cách rõ ràng.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Dữ liệu telemetry được lưu tạm ở đâu trước khi gửi lên cloud trong luồng Gateway Offline Buffering?",
+      "category": "factual",
+      "answer": "Dữ liệu telemetry được lưu tạm trong database SQLite, cụ thể là trong bảng `telemetry_queue` và tệp trạng thái JSON `logs/telemetry_aggregate_state.json`. \n\n- Bảng `telemetry_queue` trong cơ sở dữ liệu SQLite có `id` làm khóa chính, sử dụng như token commit khi publish thành công (ack-delete semantics).\n- Tệp trạng thái JSON `logs/telemetry_aggregate_state.json` lưu các mẫu của khung thời gian rolling, được dùng để bổ sung thông tin cho dữ liệu telemetry.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các nhận định trong câu trả lời đều được hỗ trợ trực tiếp bởi phần 'Persistence interaction' và các quy tắc trong context, bao gồm vị trí lưu trữ SQLite, tên bảng, tên tệp JSON và mục đích sử dụng của chúng.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định chính xác vị trí lưu trữ tạm thời (SQLite và tệp JSON) và giải thích rõ vai trò của từng thành phần trong luồng Gateway Offline Buffering.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Điều gì xảy ra khi SqliteQueue vượt quá max_size?",
+      "category": "edge_case",
+      "answer": "Khi SqliteQueue vượt quá max_size, các hành động sau sẽ được thực hiện:\n\n- SqliteQueue sẽ xóa hàng oldest khoảng 1% của các bản ghi trong queue trước khi thêm bản ghi mới.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.8,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời phản ánh chính xác thông tin từ Step 10 của CONTEXT, trong đó nêu rõ việc xóa khoảng 1% các hàng cũ nhất khi vượt quá max_size.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, giải thích chính xác cơ chế xử lý khi SqliteQueue vượt quá max_size bằng cách xóa 1% bản ghi cũ nhất.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Cơ chế commit dữ liệu lên cloud (ack-delete semantics) hoạt động theo nguyên tắc gì?",
+      "category": "factual",
+      "answer": "Cơ chế commit dữ liệu lên cloud (ack-delete semantics) hoạt động theo các nguyên tắc sau:\n\n1. **Strict Commit Semantics**: Dữ liệu chỉ được ghi vào cơ sở dữ liệu SQLite khi nó đã thành công trong quá trình publish lên cloud. Nguyên tắc này đảm bảo rằng nếu publish không thành công, dữ liệu sẽ không bị ghi lại và không gây ra lỗi.\n\n2. **Delete Only After Success**: Sau khi dữ liệu đã được publish thành công (ack), gateway mới xóa dữ liệu khỏi cơ sở dữ liệu SQLite. Điều này giúp duy trì tính nhất quán của dữ liệu trong trường hợp có sự cố mạng hoặc cloud.\n\n3. **Retry Mechanism**: Nếu publish không thành công, gateway sẽ giữ dữ liệu lại và thử lại sau một khoảng thời gian nhất định. Nguyên tắc này đảm bảo rằng không có dữ liệu bị mất do lỗi tạm thời trong quá trình publish lên cloud.\n\nTóm lại, cơ chế commit dữ liệu lên cloud (ack-delete semantics) hoạt động dựa trên nguyên tắc strict commit và retry mechanism để đảm bảo tính toàn vẹn và ổn định của dữ liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.66,
+        "faithfulness_reasoning": "Câu trả lời có 3 claim chính. Claim 1 sai lệch về logic (context nói dữ liệu được ghi vào SQLite trước khi publish, không phải sau khi publish thành công). Claim 2 và 3 được hỗ trợ bởi context.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời giải thích chính xác và đầy đủ các nguyên tắc cốt lõi của cơ chế ack-delete semantics, đi thẳng vào trọng tâm câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Nếu publish lên cloud thất bại thì dữ liệu telemetry đang buffer có bị mất không?",
+      "category": "edge_case",
+      "answer": "Nếu publish lên cloud thất bại, dữ liệu telemetry đang buffer sẽ không bị mất. Theo tài liệu tham khảo, khi xảy ra lỗi publish, gateway sẽ giữ dữ liệu offline và retries sau một khoảng thời gian delay. Điều này đảm bảo rằng dữ liệu không bị mất mà vẫn được xử lý tiếp theo.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các nhận định trong câu trả lời đều được hỗ trợ bởi context, cụ thể là các quy tắc về 'Exit state (error)' và 'On network/cloud failure' xác nhận dữ liệu được giữ lại và retry mà không bị mất.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác nhận dữ liệu không bị mất và giải thích rõ cơ chế lưu trữ tạm thời (buffer) cùng chính sách retry của hệ thống.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "TelemetryAggregator bổ sung (enrich) những trường nào vào record trước khi lưu vào queue?",
+      "category": "factual",
+      "answer": "TelemetryAggregator bổ sung hai trường mới vào record trước khi lưu vào queue:\n\n1. **avg_temperature**\n2. **avg_humidity**\n\nThông tin này được tìm thấy trong bước 7 của quá trình xử lý dữ liệu từ tài liệu tham khảo, nơi nó mô tả cách TelemetryAggregator.enrich_record thêm các giá trị trung bình nhiệt độ và độ ẩm vào record đã được thu thập.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác hai trường được bổ sung dựa trên thông tin từ Step 7 của tài liệu, các claim đều được hỗ trợ bởi context.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê chính xác các trường được bổ sung và trích dẫn nguồn gốc thông tin một cách rõ ràng, đáp ứng đầy đủ yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Nếu cloud token không tồn tại thì gateway xử lý khởi động ra sao?",
+      "category": "edge_case",
+      "answer": "Theo quy tắc trong tài liệu, nếu cloud token không tồn tại (không phải là valid), hệ thống của gateway sẽ fallback hoàn toàn sang cấu hình JSON.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.0,
+        "faithfulness_reasoning": "Câu trả lời khẳng định hệ thống sẽ fallback sang cấu hình JSON khi thiếu cloud token, trong khi tài liệu quy định rõ gateway sẽ thoát ngay lập tức với mã lỗi khác 0.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định rõ hành động fallback sang cấu hình JSON khi cloud token không tồn tại, đáp ứng chính xác yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "ThingsBoardPublisher publish payload lên những topic nào?",
+      "category": "factual",
+      "answer": "ThingsBoardPublisher.publish sẽ gửi payload đến hai topic:\n\n1. v1/gateway/telemetry\n2. v1/devices/me/telemetry\n\nTheo tài liệu, bước 14 trong quá trình Publish dữ liệu ThingsBoardPublisher.publish sẽ gửi payload của subdevice đến topic này và payload của gateway đến topic khác.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác hai topic mà ThingsBoardPublisher.publish sử dụng dựa trên thông tin được cung cấp trong Step 14 của tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đã xác định chính xác hai topic mà ThingsBoardPublisher sử dụng để publish payload, đáp ứng trực tiếp yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "HTTPUploadServer trong Local Config Portal sử dụng framework web và server nào?",
+      "category": "factual",
+      "answer": "HTTPUploadServer trong Local Config Portal sử dụng FastAPI sebagai framework web. Server được cấu hình để chạy trên Uvicorn.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác FastAPI là framework và Uvicorn là server dựa trên thông tin tại Step 1 và Step 2 của tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời xác định chính xác framework web là FastAPI và server là Uvicorn, đáp ứng đầy đủ và trực tiếp yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Endpoint GET /health của Config Portal trả về nội dung gì?",
+      "category": "factual",
+      "answer": "Endpoint GET /health của HTTPUploadServer.py trong hệ thống này trả về payload tĩnh với thông tin \"status\": \"ok\". Đây là kết quả mà HTTPUploadServer.__init__ trong modules/communication/http_upload_server.py khởi tạo qua router từ modules/communication/config_portal.py.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Claim đầu tiên về nội dung trả về của /health là chính xác theo context. Tuy nhiên, claim thứ hai cho rằng HTTPUploadServer.__init__ khởi tạo router từ config_portal.py cho route /health là sai, vì context chỉ nêu router từ config_portal.py được include vào app, còn route /health được định nghĩa trực tiếp trong http_upload_server.py.",
+        "answer_relevancy": 0.2,
+        "answer_relevancy_reasoning": "Câu trả lời bị lạc đề khi tập trung vào HTTPUploadServer thay vì Config Portal, dẫn đến thông tin không chính xác về endpoint được hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "POST /api/config yêu cầu những section bắt buộc nào trong request body?",
+      "category": "factual",
+      "answer": "POST /api/config yêu cầu những section bắt buộc sau trong request body:\n\n- sensor_mqtt\n- esp32_mqtt\n- app_settings",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các section được liệt kê trong câu trả lời đều khớp chính xác với thông tin được cung cấp trong Step 7 của CONTEXT.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê chính xác và đầy đủ các section bắt buộc theo yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Nếu giá trị port trong config không nằm trong khoảng hợp lệ thì API trả về mã lỗi HTTP nào?",
+      "category": "edge_case",
+      "answer": "Theo tài liệu tham khảo, jika giá trị của port trong config không nằm trong khoảng hợp lệ, API sẽ trả về mã lỗi HTTP là 422.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.8,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác mã lỗi 422 dựa trên quy tắc 'Rule: /api/config write endpoint returns 422 when ports are invalid or out of range' có trong context.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định chính xác mã lỗi HTTP 422 cho trường hợp giá trị port không hợp lệ theo yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "API quét mạng WiFi ưu tiên sử dụng lệnh nào trên hệ điều hành Linux?",
+      "category": "factual",
+      "answer": "API quét mạng WiFi trên hệ điều hành Linux ưu tiên sử dụng lệnh nmcli.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.8,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định đúng lệnh ưu tiên là nmcli dựa trên quy tắc được nêu trong context (nmcli first, iwlist fallback).",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định chính xác lệnh nmcli là công cụ ưu tiên để quét mạng WiFi trên Linux.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "POST /api/wifi/connect trả về mã lỗi HTTP nào khi thiếu SSID?",
+      "category": "edge_case",
+      "answer": "POST /api/wifi/connect trả về mã lỗi HTTP 400 khi thiếu SSID. Đây là quy tắc được xác định trong tài liệu, nơi quy định rằng nếu body POST không chứa thông tin SSID thì sẽ trả về mã lỗi HTTP 400 (Invalid Request).",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.0,
+        "faithfulness_reasoning": "CONTEXT quy định /api/wifi/connect trả về 422 khi thiếu SSID, trong khi câu trả lời khẳng định sai là 400 (400 chỉ dành cho invalid JSON body).",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định chính xác mã lỗi HTTP 400 cho trường hợp thiếu SSID và giải thích rõ ràng lý do dựa trên tài liệu.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "POST /api/wifi/connect trả về mã lỗi HTTP nào khi kết nối WiFi thất bại?",
+      "category": "edge_case",
+      "answer": "POST /api/wifi/connect trả về mã lỗi HTTP 500 khi kết nối WiFi thất bại.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 1.0,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời hoàn toàn chính xác và được hỗ trợ trực tiếp bởi quy tắc trong CONTEXT: 'Rule: /api/wifi/connect returns 200 only when connect result indicates success; returns 500 on connection failure.'",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, cung cấp chính xác mã lỗi HTTP 500 cho endpoint được hỏi mà không lan man.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "So sánh cơ chế lưu trữ khi có lỗi giữa luồng Edge Sensor Telemetry và luồng Gateway Offline Buffering: cả hai dùng SQLite ở đâu và cho mục đích gì?",
+      "category": "multi_hop",
+      "answer": "So sánh cơ chế lưu trữ khi có lỗi giữa luồng Edge Sensor Telemetry và luồng Gateway Offline Buffering, cả hai đều sử dụng SQLite nhưng với mục đích khác nhau:\n\n### Luồng Edge Sensor Telemetry:\n- **Luồng này lưu trữ dữ liệu trực tiếp vào SQLite DB**. \n- **File lưu trữ**: `offline_buffer.db` (table: `telemetry_queue`)\n- **Mục đích**: Lưu trữ dữ liệu telemetry của sensor trong trường hợp mạng hoặc cloud không hoạt động, để đảm bảo khả năng chịu lỗi.\n\n### Luồng Gateway Offline Buffering:\n- **Luồng này cũng sử dụng SQLite DB** nhưng lưu trữ dữ liệu ở file khác (`offline_buffer.db`).\n- **Table cụ thể**: `telemetry_queue`\n- **Mục đích**: Lưu trữ dữ liệu telemetry sau khi đã được gateway xử lý, bao gồm việc normalize và enrich dữ liệu. Đây là nơi dữ liệu được lưu tạm thời trước khi được gửi lên cloud.\n\n**Tóm tắt cơ chế lưu trữ:**\n- **Edge Sensor Telemetry**: Lưu trực tiếp vào `offline_buffer.db` (table: `telemetry_queue`) để đảm bảo khả năng chịu lỗi.\n- **Gateway Offline Buffering**: Sử dụng `offline_buffer.db` nhưng ở file khác (`offline_buffer.db`, table: `telemetry_queue`) để lưu trữ dữ liệu sau khi đã được xử lý, trước khi gửi lên cloud.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 1.0,
+        "recall@5": 1.0,
+        "precision@5": 0.6,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời bị nhầm lẫn nghiêm trọng khi gán cả hai luồng vào cùng một file SQLite (offline_buffer.db) và cùng một table, trong khi context chỉ rõ luồng Alert sử dụng file messages.db. Ngoài ra, câu trả lời tách biệt hai luồng này thành hai thực thể khác nhau trong khi thực tế chúng là một phần của cùng một tính năng Gateway Offline Buffering.",
+        "answer_relevancy": 0.6,
+        "answer_relevancy_reasoning": "Câu trả lời xác định được cả hai luồng đều dùng SQLite và bảng telemetry_queue, nhưng lại chỉ ra cả hai cùng dùng chung một file 'offline_buffer.db' một cách mâu thuẫn và thiếu sự phân biệt rõ ràng về kiến trúc lưu trữ giữa hai luồng.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Những feature nào trong tài liệu này có sử dụng SQLite để lưu trữ dữ liệu cục bộ?",
+      "category": "multi_hop",
+      "answer": "Trong tài liệu được cung cấp, có một feature sử dụng SQLite để lưu trữ dữ liệu cục bộ. Đó là:\n\n**FEATURE: Gateway Offline Buffering, Aggregation, and Cloud Telemetry Commit**\n\nTài liệu nói rằng này feature \"persistence data in SQLite for offline tolerance\". Điều này cho thấy SQLite được sử dụng để lưu trữ dữ liệu cục bộ khi gateway không có kết nối mạng hoặc cloud.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.5,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.4,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Câu trả lời xác định chính xác feature sử dụng SQLite dựa trên thông tin trong tài liệu và giải thích đúng mục đích lưu trữ dữ liệu cục bộ để chịu lỗi ngoại tuyến.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời xác định chính xác feature sử dụng SQLite và trích dẫn đúng ngữ cảnh từ tài liệu, đi thẳng vào vấn đề mà không lan man.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Trong toàn bộ tài liệu, những feature nào có tồn tại cơ chế deduplication để tránh xử lý trùng lặp?",
+      "category": "multi_hop",
+      "answer": "Theo tài liệu tham khảo, chỉ có một feature được đề cập đến với cơ chế deduplication:\n\n- Rule: Double deduplication exists: gateway _last_trigger and edge _last_image_trigger_by_cloud_device. (Trên Tài liệu 1)\n\nVì vậy, trong toàn bộ tài liệu cung cấp, duy nhất một feature tồn tại cơ chế deduplication để tránh xử lý trùng lặp.",
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 0.5,
+        "recall@3": 1.0,
+        "precision@3": 0.3333333333333333,
+        "recall@5": 1.0,
+        "precision@5": 0.2,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.5,
+        "faithfulness_reasoning": "Câu trả lời xác định đúng cơ chế deduplication từ context, nhưng khẳng định sai rằng chỉ có 'một feature' tồn tại cơ chế này trong khi context liệt kê hai thành phần (gateway _last_trigger và edge _last_image_trigger_by_cloud_device).",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, xác định chính xác các feature có cơ chế deduplication dựa trên tài liệu và trình bày rõ ràng, không lan man.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Hãy tóm tắt nội dung chính của tài liệu này.",
+      "category": "summary",
+      "answer": "Tài liệu này đề cập đến việc thiết kế hệ thống cho Feature Flow \"Edge Sensor Telemetry Ingestion, Normalization, and Anomaly Escalation\". Nội dung chính bao gồm:\n\n1. **Process Overview**: Hệ thống này thu thập dữ liệu telemetry từ các node ESP32/Tasmota thông qua MQTT, sau đó thực hiện quá trình chuẩn hóa và xác định sự cố để cập nhật trạng thái runtime và lưu trữ cảnh báo vào một hàng đợi lưu trữ và truyền.\n\n2. **Detailed Execution Flow**:\n   - MiddlewareApplication.start trong edge_computing/app/app.py khởi chạy SensorMQTTListener.start.\n   - SensorMQTTListener._on_connect trong edge_computing/modules/processing/sensor_listener.py đăng ký với chủ đề MQTT đã cấu hình (bằng cách sử dụng pattern tele/{device}/SENSOR) và cấu hình QoS.\n   - _on_message được kích hoạt cho mỗi gói tin nhắn MQTT.\n   - _on_message giải mã payload bytes, thử parse thành JSON và nếu payload bị trunc thì cố gắng phục hồi bằng cách cắt bỏ từ cuối cùng đến dấu chấm phẩy và đóng kết thúc của JSON.\n   - _normalize_sensor_payload chuyển các trường nguồn vào cấu trúc nội bộ.\n   - _normalize_sensor_payload xác định device_id từ chủ đề MQTT nếu không có, chuyển đổi Time thành timestamp, chuyển đổi AHT2X.Temperature/Humidity, pH thành ph_level, EC thành ec_us_cm và Switch1 thành boolean water_level_ok.\n   - Nếu ph_level vượt quá giới hạn hoặc EC dưới mức chuẩn, hệ thống sẽ đánh dấu sự cố và ghi lại thông tin về sự cố vào hàng đợi.\n\n3. **Business Rules & Edge Cases**:\n   - Payload không hợp lệ JSON được phục hồi một lần nếu vẫn không hợp lệ thì payload bị bỏ qua.\n   - Nếu payload không chứa device_id, hệ thống sẽ lấy nó từ pattern MQTT chủ đề (tele/{device}/SENSOR).\n   - Nếu pH cao và EC bằng 0, telemetry sẽ đánh dấu là sự cố và được nâng cấp.\n   - Nếu pH hoặc EC nằm ngoài phạm vi nội bộ đã cấu hình, telemetry sẽ được đánh dấu với lý do.\n\nTóm lại, tài liệu này cung cấp chi tiết về cách hệ thống xử lý dữ liệu từ các cảm biến ở phía biên giới, bao gồm quá trình thu thập, chuẩn hóa và xác định sự cố.",
+      "retrieval_metrics": null,
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 0.95,
+        "faithfulness_reasoning": "Hầu hết các claim đều được hỗ trợ bởi tài liệu. Tuy nhiên, có một chi tiết nhỏ trong phần mô tả quá trình phục hồi JSON (cắt bỏ đến dấu chấm phẩy thay vì dấu phẩy) là không chính xác so với context.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời tóm tắt đầy đủ, chính xác và có cấu trúc rõ ràng các nội dung chính của tài liệu, đi thẳng vào yêu cầu của câu hỏi mà không lan man.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Tài liệu này nói về những feature gì, cho tôi tổng quan?",
+      "category": "summary",
+      "answer": "Tài liệu này nói về Feature \"Edge Sensor Telemetry Ingestion, Normalization, and Anomaly Escalation\". Đây là một trong Top 5 Core Features được đề cập đến trong tài liệu System Design - Deep Feature Analysis. \n\nFeature này tập trung vào việc xử lý dữ liệu từ cảm biến tại Edge Computing. Cụ thể, nó bao gồm các bước sau:\n\n1. **Ingestion**: Dữ liệu raw MQTT telemetry từ các thiết bị ESP32/Tasmota được thu thập.\n2. **Normalization and Validation**: Dữ liệu này được chuẩn hóa và kiểm tra cấu trúc payload.\n3. **Anomaly Detection**: Feature này phát hiện các điều kiện ngoại lệ trong dữ liệu, bao gồm cả quy tắc lỗi cứng (ví dụ: nếu pH > 11.0 và EC == 0.0 thì telemetry bị đánh dấu là có lỗi) và quy tắc phạm vi (ví dụ: nếu pH hoặc EC nằm ngoài khoảng từ 5.5 đến 7.5 hoặc từ 800 đến 1800 uS/cm).\n4. **Persist Alert**: Nếu phát hiện ra lỗi, dữ liệu được lưu vào một hàng đợi cảnh báo.\n5. **Enhanced Callbacks and Edge Cases Handling**: Feature này cũng xử lý các trường hợp ngoại lệ và quy tắc kinh doanh.\n\nTóm lại, feature này cung cấp khả năng thu thập, chuẩn hóa và phân tích dữ liệu từ cảm biến tại Edge Computing, đồng thời phát hiện và xử lý các lỗi hoặc cảnh báo liên quan.",
+      "retrieval_metrics": null,
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các nhận định trong câu trả lời đều được hỗ trợ trực tiếp bởi thông tin trong CONTEXT, bao gồm các bước xử lý dữ liệu, quy tắc phát hiện lỗi và các thành phần của feature.",
+        "answer_relevancy": 0.8,
+        "answer_relevancy_reasoning": "Câu trả lời cung cấp tổng quan chi tiết và chính xác về feature được hỏi, tuy nhiên vì câu hỏi yêu cầu tổng quan về 'những feature' (số nhiều) mà tài liệu chỉ tập trung vào một feature duy nhất, nên điểm số bị trừ nhẹ do thiếu tính bao quát nếu tài liệu thực sự có nhiều hơn một feature.",
+        "rule_override": false
+      }
+    },
+    {
+      "question": "Giá cổ phiếu Apple hôm nay là bao nhiêu?",
+      "category": "negative",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": true,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Rule-based: model từ chối đúng cách cho câu hỏi ngoài phạm vi tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Rule-based: model từ chối đúng cách cho câu hỏi ngoài phạm vi tài liệu.",
+        "rule_override": true
+      }
+    },
+    {
+      "question": "Công thức nấu phở bò truyền thống gồm những nguyên liệu gì?",
+      "category": "negative",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": true,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Rule-based: model từ chối đúng cách cho câu hỏi ngoài phạm vi tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Rule-based: model từ chối đúng cách cho câu hỏi ngoài phạm vi tài liệu.",
+        "rule_override": true
+      }
+    },
+    {
+      "question": "This is a negative test question that should have no answer",
+      "category": "negative",
+      "answer": "Tôi không tìm thấy thông tin này trong tài liệu.",
+      "retrieval_metrics": {
+        "hit_rate": 0,
+        "mrr": 0.0,
+        "recall@3": 0.0,
+        "precision@3": 0.0,
+        "recall@5": 0.0,
+        "precision@5": 0.0,
+        "hit_rate_post_rerank@3": 0
+      },
+      "is_refusal": true,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Rule-based: model từ chối đúng cách cho câu hỏi ngoài phạm vi tài liệu.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Rule-based: model từ chối đúng cách cho câu hỏi ngoài phạm vi tài liệu.",
+        "rule_override": true
+      }
+    }
+  ]
+}

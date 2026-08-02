@@ -1,0 +1,111 @@
+{
+  "summary": {
+    "total_conversations": 1,
+    "by_condition": {
+      "with_rewrite": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "recall@5": 1.0,
+        "hit_rate_post_rerank@3": 1,
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "refusal_rate": 0.0,
+        "rewrite_triggered_count": 0
+      },
+      "no_rewrite": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "recall@5": 1.0,
+        "hit_rate_post_rerank@3": 1,
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "refusal_rate": 0.0,
+        "rewrite_triggered_count": 0
+      }
+    },
+    "by_category_and_condition": {
+      "pronoun_reference": {
+        "with_rewrite": {
+          "count": 1,
+          "hit_rate": 1,
+          "faithfulness": 1.0,
+          "answer_relevancy": 1.0,
+          "refusal_rate": 0.0
+        },
+        "no_rewrite": {
+          "count": 1,
+          "hit_rate": 1,
+          "faithfulness": 1.0,
+          "answer_relevancy": 1.0,
+          "refusal_rate": 0.0
+        }
+      }
+    }
+  },
+  "details": [
+    {
+      "conversation_id": "mt_01",
+      "category": "pronoun_reference",
+      "target_question": "Nhà nước bảo vệ nó bằng những biện pháp nào?",
+      "condition": "with_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Nhà nước bảo vệ không gian mạng quốc gia thông qua các biện pháp như:\n\n1. Bảo vệ không gian mạng quốc gia, phòng ngừa và xử lý hành vi xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng (Điều 6).\n\n2. Hợp tác quốc tế về an ninh mạng nhằm nghiên cứu, phân tích xu hướng an ninh mạng; xây dựng cơ chế, chính sách để đẩy mạnh hợp tác giữa các bên trong lĩnh vực này; chia sẻ thông tin, kinh nghiệm và hỗ trợ đào tạo, trang thiết bị, công nghệ bảo vệ an ninh mạng (Điều 7).\n\n3. Triển khai biện pháp quản lý, kỹ thuật để phòng ngừa, phát hiện, ngăn chặn hành vi gián điệp mạng, xâm phạm bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân và bí mật gia đình (Điều 8).",
+      "top_chunk_texts": [
+        "46 CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 i) Yêu cầu xóa bỏ, truy cập xóa bỏ thông tin trái pháp luật hoặc thông tin sai sự thật trên không gian mạng xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân; k) Thu thập dữ liệu điện tử liên quan đến hoạt động xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng; l) Phong tỏa, hạn chế hoạt động của hệ thống thông tin; đình chỉ, tạm đình chỉ hoặc yêu cầu ngừng hoạt động của hệ thống thông tin, thu hồi tên miền theo quy định của pháp luật; m) Khởi tố, điều tra, truy tố, xét xử theo quy định của Bộ luật Tố tụng hình sự; n) Biện pháp khác theo quy định của pháp luật về an ninh quốc gia, pháp luật về xử lý vi phạm hành chính. 2. Chính phủ quy định trình tự, thủ tục áp dụng biện pháp bảo vệ an ninh mạng, trừ biện pháp quy định tại điểm m và điểm n khoản 1 Điều này. Điều 6. Bảo vệ không gian mạng quốc gia Nhà nước áp",
+        "chính. 2. Chính phủ quy định trình tự, thủ tục áp dụng biện pháp bảo vệ an ninh mạng, trừ biện pháp quy định tại điểm m và điểm n khoản 1 Điều này. Điều 6. Bảo vệ không gian mạng quốc gia Nhà nước áp dụng các biện pháp để bảo vệ không gian mạng quốc gia; phòng ngừa, xử lý hành vi xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng. Điều 7. Hợp tác quốc tế về an ninh mạng 1. Hợp tác quốc tế về an ninh mạng được thực hiện trên cơ sở tôn trọng độc lập, chủ quyền và toàn vẹn lãnh thổ, không can thiệp vào công việc nội bộ của nhau, bình đẳng và cùng có lợi. 2. Nội dung hợp tác quốc tế về an ninh mạng bao gồm: a) Nghiên cứu, phân tích xu hướng an ninh mạng; b) Xây dựng cơ chế, chính sách nhằm đẩy mạnh hợp tác giữa tổ chức, cá nhân Việt Nam với tổ chức, cá nhân nước ngoài, tổ chức quốc tế hoạt động về an ninh mạng; c) Chia sẻ thông tin, kinh nghiệm; hỗ trợ đào tạo, trang thiết bị, công nghệ bảo vệ an ninh mạng; d)",
+        "bảo mật; phát hiện, ngăn chặn và xử lý các hoạt động xâm nhập bất hợp pháp hoặc nguy cơ khác đe dọa an ninh mạng; b) Triển khai biện pháp quản lý, kỹ thuật để phòng ngừa, phát hiện, ngăn chặn hành vi gián điệp mạng, xâm phạm bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân, bí mật gia đình và đời sống riêng tư trên hệ thống thông tin và kịp thời gỡ bỏ thông tin liên quan đến hành vi này; c) Phối hợp, thực hiện yêu cầu của lực lượng chuyên trách an ninh mạng về phòng, chống gián điệp mạng, bảo vệ thông tin thuộc bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân, bí mật gia đình và đời sống riêng tư trên hệ thống thông tin. 3. Cơ quan soạn thảo, lưu trữ thông tin, tài liệu thuộc bí mật nhà nước có trách nhiệm bảo vệ bí mật nhà nước được soạn thảo, lưu giữ trên máy tính, thiết bị khác hoặc trao đổi trên không gian mạng theo quy định của pháp luật về bảo vệ bí mật nhà nước. 4. Bộ Công an có trách nhiệm sau đây, trừ quy định tại khoản 5 và khoản 6 Điều"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.8,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các nhận định trong câu trả lời đều được trích xuất và diễn giải chính xác từ nội dung của các Điều 6, 7 và 8 trong ngữ cảnh được cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời đi thẳng vào vấn đề, liệt kê đầy đủ và chính xác các biện pháp bảo vệ không gian mạng quốc gia theo quy định pháp luật, đáp ứng đúng yêu cầu của câu hỏi.",
+        "rule_override": false
+      }
+    },
+    {
+      "conversation_id": "mt_01",
+      "category": "pronoun_reference",
+      "target_question": "Nhà nước bảo vệ nó bằng những biện pháp nào?",
+      "condition": "no_rewrite",
+      "rewrite_used": false,
+      "rewritten_query": null,
+      "answer": "Nhà nước bảo vệ không gian mạng quốc gia thông qua các biện pháp như:\n\n1. Yêu cầu xóa bỏ, truy cập xóa bỏ thông tin trái pháp luật hoặc thông tin sai sự thật trên không gian mạng.\n2. Thu thập dữ liệu điện tử liên quan đến hoạt động xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng.\n3. Phong tỏa, hạn chế hoạt động của hệ thống thông tin; đình chỉ, tạm đình chỉ hoặc yêu cầu ngừng hoạt động của hệ thống thông tin, thu hồi tên miền theo quy định của pháp luật.\n4. Khởi tố, điều tra, truy tố, xét xử theo quy định của Bộ Luật Tố tụng hình sự.\n5. Hợp tác quốc tế về an ninh mạng, bao gồm việc nghiên cứu, phân tích xu hướng an ninh mạng; xây dựng cơ chế, chính sách nhằm đẩy mạnh hợp tác giữa tổ chức, cá nhân Việt Nam với tổ chức, cá nhân nước ngoài và tổ chức quốc tế hoạt động về an ninh mạng.\n6. Triển khai biện pháp quản lý, kỹ thuật để phòng ngừa, phát hiện, ngăn chặn hành vi gián điệp mạng, xâm phạm bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân, bí mật gia đình và đời sống riêng tư trên hệ thống thông tin.\n7. Phối hợp với lực lượng chuyên trách an ninh mạng về phòng, chống gián điệp mạng, bảo vệ thông tin thuộc bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân, bí mật gia đình và đời sống riêng tư trên hệ thống thông tin.\n8. Bảo vệ bí mật nhà nước được soạn thảo, lưu giữ trên máy tính, thiết bị khác hoặc trao đổi trên không gian mạng theo quy định của pháp luật về bảo vệ bí mật nhà nước.\n\nNhững biện pháp này nhằm đảm bảo an ninh quốc gia, trật tự, an toàn xã hội và quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân.",
+      "top_chunk_texts": [
+        "46 CÔNG BÁO/Số 775 + 776/Ngày 14-7-2018 i) Yêu cầu xóa bỏ, truy cập xóa bỏ thông tin trái pháp luật hoặc thông tin sai sự thật trên không gian mạng xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân; k) Thu thập dữ liệu điện tử liên quan đến hoạt động xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng; l) Phong tỏa, hạn chế hoạt động của hệ thống thông tin; đình chỉ, tạm đình chỉ hoặc yêu cầu ngừng hoạt động của hệ thống thông tin, thu hồi tên miền theo quy định của pháp luật; m) Khởi tố, điều tra, truy tố, xét xử theo quy định của Bộ luật Tố tụng hình sự; n) Biện pháp khác theo quy định của pháp luật về an ninh quốc gia, pháp luật về xử lý vi phạm hành chính. 2. Chính phủ quy định trình tự, thủ tục áp dụng biện pháp bảo vệ an ninh mạng, trừ biện pháp quy định tại điểm m và điểm n khoản 1 Điều này. Điều 6. Bảo vệ không gian mạng quốc gia Nhà nước áp",
+        "chính. 2. Chính phủ quy định trình tự, thủ tục áp dụng biện pháp bảo vệ an ninh mạng, trừ biện pháp quy định tại điểm m và điểm n khoản 1 Điều này. Điều 6. Bảo vệ không gian mạng quốc gia Nhà nước áp dụng các biện pháp để bảo vệ không gian mạng quốc gia; phòng ngừa, xử lý hành vi xâm phạm an ninh quốc gia, trật tự, an toàn xã hội, quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân trên không gian mạng. Điều 7. Hợp tác quốc tế về an ninh mạng 1. Hợp tác quốc tế về an ninh mạng được thực hiện trên cơ sở tôn trọng độc lập, chủ quyền và toàn vẹn lãnh thổ, không can thiệp vào công việc nội bộ của nhau, bình đẳng và cùng có lợi. 2. Nội dung hợp tác quốc tế về an ninh mạng bao gồm: a) Nghiên cứu, phân tích xu hướng an ninh mạng; b) Xây dựng cơ chế, chính sách nhằm đẩy mạnh hợp tác giữa tổ chức, cá nhân Việt Nam với tổ chức, cá nhân nước ngoài, tổ chức quốc tế hoạt động về an ninh mạng; c) Chia sẻ thông tin, kinh nghiệm; hỗ trợ đào tạo, trang thiết bị, công nghệ bảo vệ an ninh mạng; d)",
+        "bảo mật; phát hiện, ngăn chặn và xử lý các hoạt động xâm nhập bất hợp pháp hoặc nguy cơ khác đe dọa an ninh mạng; b) Triển khai biện pháp quản lý, kỹ thuật để phòng ngừa, phát hiện, ngăn chặn hành vi gián điệp mạng, xâm phạm bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân, bí mật gia đình và đời sống riêng tư trên hệ thống thông tin và kịp thời gỡ bỏ thông tin liên quan đến hành vi này; c) Phối hợp, thực hiện yêu cầu của lực lượng chuyên trách an ninh mạng về phòng, chống gián điệp mạng, bảo vệ thông tin thuộc bí mật nhà nước, bí mật công tác, bí mật kinh doanh, bí mật cá nhân, bí mật gia đình và đời sống riêng tư trên hệ thống thông tin. 3. Cơ quan soạn thảo, lưu trữ thông tin, tài liệu thuộc bí mật nhà nước có trách nhiệm bảo vệ bí mật nhà nước được soạn thảo, lưu giữ trên máy tính, thiết bị khác hoặc trao đổi trên không gian mạng theo quy định của pháp luật về bảo vệ bí mật nhà nước. 4. Bộ Công an có trách nhiệm sau đây, trừ quy định tại khoản 5 và khoản 6 Điều"
+      ],
+      "retrieval_metrics": {
+        "hit_rate": 1,
+        "mrr": 1.0,
+        "recall@3": 1.0,
+        "precision@3": 0.6666666666666666,
+        "recall@5": 1.0,
+        "precision@5": 0.8,
+        "hit_rate_post_rerank@3": 1
+      },
+      "is_refusal": false,
+      "ragas": {
+        "faithfulness": 1.0,
+        "faithfulness_reasoning": "Tất cả các biện pháp được liệt kê trong câu trả lời đều được trích xuất và diễn giải chính xác từ các đoạn văn bản trong CONTEXT cung cấp.",
+        "answer_relevancy": 1.0,
+        "answer_relevancy_reasoning": "Câu trả lời liệt kê đầy đủ, chi tiết và chính xác các biện pháp nhà nước sử dụng để bảo vệ không gian mạng quốc gia, đi thẳng vào trọng tâm câu hỏi.",
+        "rule_override": false
+      }
+    }
+  ]
+}

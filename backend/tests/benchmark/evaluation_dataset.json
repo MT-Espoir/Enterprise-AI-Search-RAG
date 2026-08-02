@@ -1,0 +1,232 @@
+[
+  {
+    "question": "MiddlewareApplication.start khởi động thành phần nào để lắng nghe dữ liệu MQTT từ cảm biến?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "SensorMQTTListener mặc định subscribe vào MQTT topic nào?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Điều gì xảy ra nếu payload MQTT bị lỗi JSON (malformed)?",
+    "category": "edge_case",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Quy tắc hard anomaly cho pH và EC trong luồng Edge Sensor Telemetry là gì?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Khoảng giá trị bình thường (range) mặc định cho pH và EC là bao nhiêu?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Khi phát hiện anomaly, hệ thống lưu alert vào đâu?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Nếu ghi alert vào queue thất bại thì pipeline xử lý ra sao?",
+    "category": "edge_case",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "device_id được xác định như thế nào nếu payload thiếu trường này?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "NutritionAIController sử dụng những model AI nào để ra quyết định điều khiển dinh dưỡng?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "target_ec được clamp (giới hạn) trong khoảng giá trị nào?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Ngưỡng an toàn (safety net) sẽ override quyết định của AI khi nào?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "status_code bằng 2 tương ứng với hành động điều khiển nào?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "status_code bằng 5 tương ứng với hành động điều khiển nào?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Điều gì xảy ra nếu model AI của NutritionAIController không load được?",
+    "category": "edge_case",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Nếu thiếu các trường sensor bắt buộc (temperature, humidity, EC, pH) thì telemetry được xử lý ra sao?",
+    "category": "edge_case",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Safety net có mức ưu tiên cao hơn hay thấp hơn output của model AI trong luồng Nutrition Control?",
+    "category": "multi_hop",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Gateway subscribe vào topic nào để nhận shared attributes từ CoreIoT dashboard?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Sau khi nhận ảnh từ CoreIoT, gateway forward request tới edge qua local topic nào?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "DiseaseClassifier hỗ trợ những inference backend nào?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Điều gì xảy ra nếu việc decode ảnh thất bại ở phía edge trong luồng Image AI?",
+    "category": "edge_case",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Kết quả AI prediction cuối cùng được publish tới CoreIoT qua topic và field nào?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Cơ chế deduplication trong luồng CoreIoT Image AI hoạt động ở những nơi nào?",
+    "category": "multi_hop",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Vì sao gateway không tạo một CoreIoT MQTT client thứ hai riêng cho luồng Image Bridge?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "MqttReceiver trong Gateway Offline Buffering mặc định subscribe vào topic nào để nhận telemetry?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Dữ liệu telemetry được lưu tạm ở đâu trước khi gửi lên cloud trong luồng Gateway Offline Buffering?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Điều gì xảy ra khi SqliteQueue vượt quá max_size?",
+    "category": "edge_case",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Cơ chế commit dữ liệu lên cloud (ack-delete semantics) hoạt động theo nguyên tắc gì?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Nếu publish lên cloud thất bại thì dữ liệu telemetry đang buffer có bị mất không?",
+    "category": "edge_case",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "TelemetryAggregator bổ sung (enrich) những trường nào vào record trước khi lưu vào queue?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Nếu cloud token không tồn tại thì gateway xử lý khởi động ra sao?",
+    "category": "edge_case",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "ThingsBoardPublisher publish payload lên những topic nào?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "HTTPUploadServer trong Local Config Portal sử dụng framework web và server nào?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Endpoint GET /health của Config Portal trả về nội dung gì?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "POST /api/config yêu cầu những section bắt buộc nào trong request body?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Nếu giá trị port trong config không nằm trong khoảng hợp lệ thì API trả về mã lỗi HTTP nào?",
+    "category": "edge_case",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "API quét mạng WiFi ưu tiên sử dụng lệnh nào trên hệ điều hành Linux?",
+    "category": "factual",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "POST /api/wifi/connect trả về mã lỗi HTTP nào khi thiếu SSID?",
+    "category": "edge_case",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "POST /api/wifi/connect trả về mã lỗi HTTP nào khi kết nối WiFi thất bại?",
+    "category": "edge_case",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "So sánh cơ chế lưu trữ khi có lỗi giữa luồng Edge Sensor Telemetry và luồng Gateway Offline Buffering: cả hai dùng SQLite ở đâu và cho mục đích gì?",
+    "category": "multi_hop",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Những feature nào trong tài liệu này có sử dụng SQLite để lưu trữ dữ liệu cục bộ?",
+    "category": "multi_hop",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Trong toàn bộ tài liệu, những feature nào có tồn tại cơ chế deduplication để tránh xử lý trùng lặp?",
+    "category": "multi_hop",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Hãy tóm tắt nội dung chính của tài liệu này.",
+    "category": "summary",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Tài liệu này nói về những feature gì, cho tôi tổng quan?",
+    "category": "summary",
+    "expected_sources": [{ "filename": "System_Design_Deep_Feature_Analysis.md", "page_num": 1 }]
+  },
+  {
+    "question": "Giá cổ phiếu Apple hôm nay là bao nhiêu?",
+    "category": "negative",
+    "expected_sources": []
+  },
+  {
+    "question": "Công thức nấu phở bò truyền thống gồm những nguyên liệu gì?",
+    "category": "negative",
+    "expected_sources": []
+  },
+  {
+    "question": "This is a negative test question that should have no answer",
+    "category": "negative",
+    "expected_sources": []
+  }
+]

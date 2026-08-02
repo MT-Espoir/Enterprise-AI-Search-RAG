@@ -1,0 +1,316 @@
+[
+  {
+    "question": "Theo Luật An ninh mạng, 'Không gian mạng quốc gia' được định nghĩa là gì?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "24-2018-qh14.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Cơ quan nào chịu trách nhiệm trước Chính phủ chủ trì, phối hợp thực hiện hợp tác quốc tế về an ninh mạng, trừ hoạt động hợp tác quốc tế của Bộ Quốc phòng?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "24-2018-qh14.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Trước khi tiến hành kiểm tra an ninh mạng đột xuất do xảy ra sự cố an ninh mạng, lực lượng chuyên trách phải thông báo bằng văn bản trước ít nhất bao lâu cho chủ quản hệ thống thông tin?",
+    "category": "edge_case",
+    "expected_sources": [
+      {
+        "filename": "24-2018-qh14.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Theo Luật Bảo hiểm xã hội 2024, công dân Việt Nam từ đủ bao nhiêu tuổi trở lên thì được hưởng trợ cấp hưu trí xã hội (không thuộc hộ nghèo/cận nghèo)?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "41-2024-qh15.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Văn bản ủy quyền nhận lương hưu, trợ cấp bảo hiểm xã hội có hiệu lực tối đa bao lâu kể từ ngày xác lập việc ủy quyền?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "41-2024-qh15.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Nếu thời gian đóng bảo hiểm xã hội có tháng lẻ từ 07 đến 11 tháng thì được tính là bao nhiêu năm khi xác định điều kiện hưởng lương hưu?",
+    "category": "edge_case",
+    "expected_sources": [
+      {
+        "filename": "41-2024-qh15.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Bộ luật Lao động số 45/2019/QH14 có hiệu lực thi hành kể từ ngày nào?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "luat-so-125.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Độ tuổi lao động tối thiểu của người lao động theo Bộ luật Lao động là bao nhiêu?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "luat-so-125.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Hai bên được giao kết hợp đồng lao động bằng lời nói trong trường hợp nào?",
+    "category": "edge_case",
+    "expected_sources": [
+      {
+        "filename": "luat-so-125.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Bộ luật Lao động số 45/2019/QH14 đã được sửa đổi, bổ sung bởi văn bản nào, có hiệu lực từ ngày nào?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "luat-so-125.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Theo Luật Giao dịch điện tử, 'Chữ ký số' được định nghĩa là gì?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "luat20-2023-qh15__e7e78.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Thông điệp dữ liệu được xem là có giá trị như bản gốc khi đáp ứng những yêu cầu nào?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "luat20-2023-qh15__e7e78.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Chữ ký số có bảo đảm được tính bí mật của thông điệp dữ liệu hay không?",
+    "category": "edge_case",
+    "expected_sources": [
+      {
+        "filename": "luat20-2023-qh15__e7e78.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Nghị định 145/2020/NĐ-CP quy định chi tiết và hướng dẫn thi hành nội dung gì của Bộ luật Lao động?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "1452020nd-cp_25102023165145.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Tiền lương để tính trợ cấp thôi việc, trợ cấp mất việc làm được xác định như thế nào theo Nghị định 145/2020/NĐ-CP?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "1452020nd-cp_25102023165145.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Nghị định 145/2020/NĐ-CP hướng dẫn trợ cấp mất việc làm dựa trên căn cứ Điều nào của Bộ luật Lao động, và điều kiện tối thiểu về thời gian làm việc thường xuyên để được hưởng là gì?",
+    "category": "multi_hop",
+    "expected_sources": [
+      {
+        "filename": "1452020nd-cp_25102023165145.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Theo mẫu điều lệ công ty TNHH một thành viên (chủ sở hữu là cá nhân), chủ sở hữu công ty phải góp đủ vốn điều lệ đã cam kết trong thời hạn bao lâu kể từ ngày được cấp Giấy chứng nhận đăng ký doanh nghiệp?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "dieu-le-cong-ty-tnhh-1-thanh-vien-so-huu-ca-nhan .docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Nếu chủ sở hữu công ty TNHH một thành viên không góp đủ vốn điều lệ trong thời hạn quy định thì phải xử lý như thế nào?",
+    "category": "edge_case",
+    "expected_sources": [
+      {
+        "filename": "dieu-le-cong-ty-tnhh-1-thanh-vien-so-huu-ca-nhan .docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Mẫu điều lệ công ty TNHH một thành viên do cá nhân sở hữu và do tổ chức sở hữu có giống nhau về cấu trúc (số lượng và nội dung các Điều) không?",
+    "category": "multi_hop",
+    "expected_sources": [
+      {
+        "filename": "dieu-le-cong-ty-tnhh-1-thanh-vien-so-huu-ca-nhan .docx",
+        "page_num": null
+      },
+      {
+        "filename": "dieu-le-cong-ty-tnhh-1-thanh-vien-so-huu-to-chuc.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Mẫu điều lệ công ty cổ phần có bao nhiêu Điều, và Điều nào quy định về tổng số cổ phần, loại cổ phần và mệnh giá?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "mau-dieu-le-cong-ty-co-phan-mau-1.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Trong các mẫu điều lệ đã cung cấp (TNHH một thành viên, TNHH hai thành viên trở lên, công ty cổ phần), mẫu nào có khái niệm 'cổ phần' và 'cổ đông sáng lập'?",
+    "category": "multi_hop",
+    "expected_sources": [
+      {
+        "filename": "mau-dieu-le-cong-ty-co-phan-mau-1.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Theo mẫu điều lệ công ty TNHH hai thành viên trở lên, cơ quan nào là cơ quan quản lý cao nhất của công ty?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "mau-dieu-le-tnhh-2-thanh-vien-tro-len.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Theo mẫu quy chế tiền lương, người lao động trong thời gian thử việc được hưởng mức lương bằng bao nhiêu phần trăm lương chính thức?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "quyet-dinh-ban-hanh-quy-che-tien-luong_1005174201.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Theo mẫu quy chế tiền lương, mức phụ cấp trách nhiệm hàng tháng của chức danh Giám đốc là bao nhiêu?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "quyet-dinh-ban-hanh-quy-che-tien-luong_1005174201.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Theo mẫu quy chế tiền lương, tiền lương làm thêm giờ vào ngày Chủ nhật được tính bằng bao nhiêu phần trăm so với tiền lương giờ bình thường?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "quyet-dinh-ban-hanh-quy-che-tien-luong_1005174201.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Theo mẫu quy chế tiền lương, người lao động được nghỉ hưởng nguyên lương mấy ngày khi bản thân kết hôn?",
+    "category": "edge_case",
+    "expected_sources": [
+      {
+        "filename": "quyet-dinh-ban-hanh-quy-che-tien-luong_1005174201.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Theo mẫu quy chế tiền lương, công ty xét tăng lương cho nhân viên vào tháng nào hàng năm, và thâm niên tối thiểu để được xét tăng lương là bao lâu?",
+    "category": "factual",
+    "expected_sources": [
+      {
+        "filename": "quyet-dinh-ban-hanh-quy-che-tien-luong_1005174201.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Theo mẫu quy chế tiền lương, hạn trả lương hàng tháng là ngày nào?",
+    "category": "edge_case",
+    "expected_sources": [
+      {
+        "filename": "quyet-dinh-ban-hanh-quy-che-tien-luong_1005174201.docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Hãy tóm tắt nội dung chính của Luật An ninh mạng.",
+    "category": "summary",
+    "expected_sources": [
+      {
+        "filename": "24-2018-qh14.pdf",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Mẫu điều lệ công ty TNHH một thành viên do cá nhân làm chủ sở hữu quy định về những nội dung chính nào?",
+    "category": "summary",
+    "expected_sources": [
+      {
+        "filename": "dieu-le-cong-ty-tnhh-1-thanh-vien-so-huu-ca-nhan .docx",
+        "page_num": null
+      }
+    ]
+  },
+  {
+    "question": "Mức lương tối thiểu vùng áp dụng cho năm 2026 theo Nghị định mới nhất là bao nhiêu?",
+    "category": "negative",
+    "expected_sources": []
+  },
+  {
+    "question": "Luật Hôn nhân và Gia đình quy định độ tuổi kết hôn tối thiểu đối với nam và nữ là bao nhiêu?",
+    "category": "negative",
+    "expected_sources": []
+  }
+]
