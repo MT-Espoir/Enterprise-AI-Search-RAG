@@ -1,5 +1,6 @@
+import logging
 import os
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, send_file
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from ..services.document_service import DocumentService
 from ..ingestion.embedder.local_embedder import LocalEmbedder
@@ -7,8 +8,11 @@ from ..ingestion.pipeline import IngestionPipeline
 from ..ingestion.ocr.tesseract_ocr_engine import TesseractOCREngine
 from ..vectorstore.operations import VectorStoreOps
 from ..core.bm25_index import get_bm25_index
+from ..core.retriever_factory import build_retriever
 from ..extensions import limiter, user_or_ip_key
 from ..services.document_service import DuplicateDocumentError
+
+logger = logging.getLogger(__name__)
 
 documents_bp = Blueprint('documents', __name__, url_prefix='/api/documents')
 
@@ -94,6 +98,79 @@ def list_documents():
     result = doc_service.get_documents(page=page, limit=limit, search=search, status=status,
                                         acl_department=department, acl_bypass=is_admin)
     return jsonify(result)
+
+
+@documents_bp.route('/search', methods=['GET'])
+@jwt_required()
+def search_documents():
+    """Tìm FILE để dẫn hướng + tải về (tính năng tìm kiếm file, TÁCH khỏi RAG hỏi-đáp).
+    Khớp tên file + nội dung (semantic), LỌC theo Document-level ACL phòng ban.
+
+    Route literal '/search' được Werkzeug ưu tiên hơn '/<doc_id>' nên không xung đột."""
+    q = (request.args.get('q') or '').strip()
+    if not q:
+        return jsonify({"query": q, "results": []})
+    try:
+        limit = min(int(request.args.get('limit', 10)), 50)
+    except ValueError:
+        limit = 10
+
+    department = get_jwt().get("department")
+    is_admin = get_jwt().get("role") == "admin"
+
+    vector_ops = VectorStoreOps()
+    doc_service = DocumentService(vector_ops, upload_folder=current_app.config['UPLOAD_FOLDER'])
+
+    # Semantic: tìm tài liệu theo NỘI DUNG (không chỉ tên file) — tái dùng retriever,
+    # ACL áp ngay ở tầng retrieve. Fail-open: lỗi semantic KHÔNG chặn, vẫn còn match tên file.
+    semantic_doc_ids = []
+    try:
+        embedder = LocalEmbedder(model_name=current_app.config.get('LOCAL_EMBEDDING_MODEL'))
+        strategy = current_app.config.get('RETRIEVAL_STRATEGY', 'hybrid')
+        bm25_index = get_bm25_index() if strategy == "hybrid" else None
+        retriever = build_retriever(strategy, ops=vector_ops, embedder=embedder, bm25_index=bm25_index, top_k=20)
+        chunks = retriever.retrieve(q, acl_department=department, acl_bypass=is_admin)
+        seen = set()
+        for c in chunks:
+            if c.doc_id not in seen:
+                seen.add(c.doc_id)
+                semantic_doc_ids.append(c.doc_id)
+    except Exception as exc:
+        logger.warning(f"Semantic search lỗi (fail-open, chỉ dùng match tên file): {exc}")
+
+    results = doc_service.search_files(
+        q, semantic_doc_ids=semantic_doc_ids,
+        acl_department=department, acl_bypass=is_admin, limit=limit,
+    )
+    return jsonify({"query": q, "results": results})
+
+
+@documents_bp.route('/<doc_id>/download', methods=['GET'])
+@jwt_required()
+def download_document(doc_id):
+    """Tải file gốc. LỌC ACL: khác phòng ban → 404 (không xác nhận tồn tại, chống rò rỉ,
+    cùng pattern get_document_status). 410 nếu file đã bị xóa (tài liệu ingest TRƯỚC khi
+    bật lưu file gốc — chỉ file upload sau thay đổi này mới tải được)."""
+    vector_ops = VectorStoreOps()
+    doc_service = DocumentService(vector_ops, upload_folder=current_app.config['UPLOAD_FOLDER'])
+
+    department = get_jwt().get("department")
+    is_admin = get_jwt().get("role") == "admin"
+
+    doc = doc_service.get_document_by_id(doc_id, acl_department=department, acl_bypass=is_admin)
+    if not doc:
+        return jsonify({"error": "Document not found"}), 404
+
+    file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], doc['filename'])
+    if not os.path.exists(file_path):
+        return jsonify({
+            "error": "File gốc không còn khả dụng (tài liệu được ingest trước khi bật lưu file). "
+                     "Hãy upload lại tài liệu để tải về được.",
+            "code": "file_gone",
+        }), 410
+
+    return send_file(file_path, as_attachment=True,
+                     download_name=doc.get('original_name') or doc['filename'])
 
 
 @documents_bp.route('/<doc_id>', methods=['GET'])

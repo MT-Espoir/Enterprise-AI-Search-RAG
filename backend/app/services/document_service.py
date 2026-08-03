@@ -1,6 +1,7 @@
 import hashlib
 import logging
 import os
+import re
 from datetime import datetime, timezone
 
 from ..models.document import Document
@@ -242,6 +243,63 @@ class DocumentService:
             "limit":     limit,
             "pages":     (total + limit - 1) // limit,
         }
+
+    def _acl_query(self, acl_department: str, acl_bypass: bool) -> dict:
+        """Điều kiện Mongo lọc theo Document-level ACL phòng ban (tái dùng cho
+        list + search). admin (bypass) → không lọc. Nếu không: chỉ document phòng
+        ban rỗng/chưa gán (fail-open, tài liệu cũ) HOẶC khớp đúng phòng ban user."""
+        if acl_bypass:
+            return {}
+        dept = acl_department or ""
+        return {"department": {"$in": ["", None] if not dept else ["", None, dept]}}
+
+    def search_files(self, query: str, semantic_doc_ids: list[str] = None,
+                     acl_department: str = None, acl_bypass: bool = False,
+                     limit: int = 10) -> list[dict]:
+        """
+        Tìm FILE (không phải chunk) để dẫn hướng + tải về — dùng cho tính năng
+        "tìm kiếm file". Kết hợp 2 tín hiệu, đều LỌC ACL phòng ban:
+          1. Khớp TÊN FILE (regex, không phân biệt hoa thường) — ưu tiên hiển thị trước.
+          2. Khớp NỘI DUNG: doc_id lấy từ semantic search (retriever, do route tính sẵn
+             và đã lọc ACL ở tầng retrieve) — bắt được cả file mà tên không chứa từ khóa.
+        Chỉ trả tài liệu status="done" (đã ingest xong, có file để tải). Mỗi kết quả
+        kèm download_url + match_reason để UI hiển thị.
+        """
+        from bson import ObjectId
+
+        acl = self._acl_query(acl_department, acl_bypass)
+        matched: dict[str, tuple] = {}   # doc_id -> (doc_dict, match_reason)
+
+        # 1. Khớp tên file
+        name_query = {**acl, "status": "done",
+                      "original_name": {"$regex": re.escape(query), "$options": "i"}}
+        for d in mongo.db[Document.COLLECTION].find(name_query).limit(limit):
+            matched[str(d["_id"])] = (d, "filename")
+
+        # 2. Khớp nội dung (giữ đúng thứ tự relevance của semantic search)
+        for doc_id in (semantic_doc_ids or []):
+            if doc_id in matched:
+                continue
+            try:
+                oid = ObjectId(doc_id)
+            except Exception:
+                continue
+            d = mongo.db[Document.COLLECTION].find_one({"_id": oid, "status": "done", **acl})
+            if d:
+                matched[doc_id] = (d, "content")
+
+        results = []
+        for doc_id, (d, reason) in matched.items():
+            results.append({
+                "doc_id":        doc_id,
+                "original_name": d.get("original_name"),
+                "file_type":     d.get("file_type"),
+                "document_type": d.get("document_type", ""),
+                "department":    d.get("department", ""),
+                "match_reason":  reason,
+                "download_url":  f"/api/documents/{doc_id}/download",
+            })
+        return results[:limit]
 
     def get_document_by_id(self, doc_id: str, acl_department: str = None, acl_bypass: bool = True) -> dict | None:
         """Lấy chi tiết 1 document."""

@@ -22,6 +22,9 @@ chromadb
 # ---- Google AI ----
 google-generativeai
 
+# ---- Anthropic (Claude) ----
+anthropic
+
 # ---- Document Parsing ----
 pymupdf
 python-docx

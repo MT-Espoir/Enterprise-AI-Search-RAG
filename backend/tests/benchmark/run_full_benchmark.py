@@ -56,7 +56,9 @@ from tests.benchmark.ragas_metrics import (
     score_answer_relevancy,
     is_refusal_answer,
     GEMINI_JUDGE_MODEL_DEFAULT,
+    CLAUDE_JUDGE_MODEL_DEFAULT,
 )
+from tests.benchmark.latency import StageTimer, summarize_latency, warm_up_pipeline
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "benchmark_chromadb")
 COLLECTION_NAME = "benchmark"
@@ -78,14 +80,24 @@ def _mean(values: list[float]) -> float | None:
 
 
 def run():
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        print("❌ Thiếu GOOGLE_API_KEY trong .env (chỉ cần cho judge, không cần cho generator/embedding)")
-        sys.exit(1)
+    # Judge provider: "gemini" (mặc định) | "claude". Chọn qua env JUDGE_PROVIDER.
+    judge_provider = os.getenv("JUDGE_PROVIDER", "gemini").strip().lower()
+    if judge_provider == "claude":
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            print("❌ Thiếu ANTHROPIC_API_KEY trong .env (cần cho judge Claude — xem JUDGE_PROVIDER=claude)")
+            sys.exit(1)
+        judge_model = os.getenv("ANTHROPIC_JUDGE_MODEL", CLAUDE_JUDGE_MODEL_DEFAULT)
+    else:
+        api_key = os.getenv("GOOGLE_API_KEY")
+        if not api_key:
+            print("❌ Thiếu GOOGLE_API_KEY trong .env (chỉ cần cho judge, không cần cho generator/embedding)")
+            sys.exit(1)
+        judge_model = os.getenv("GEMINI_JUDGE_MODEL", GEMINI_JUDGE_MODEL_DEFAULT)
+    print(f"⚖️  Judge: provider={judge_provider}, model={judge_model}\n")
 
     ollama_base_url = os.getenv("OLLAMA_BASE_URL", OLLAMA_BASE_URL_DEFAULT)
     local_llm_model = os.getenv("LOCAL_LLM_MODEL", LOCAL_GENERATOR_MODEL_DEFAULT)
-    judge_model = os.getenv("GEMINI_JUDGE_MODEL", GEMINI_JUDGE_MODEL_DEFAULT)
 
     try:
         requests.get(f"{ollama_base_url.rstrip('/')}/api/tags", timeout=5).raise_for_status()
@@ -135,6 +147,15 @@ def run():
     with open(dataset_path, "r", encoding="utf-8") as f:
         dataset = json.load(f)
 
+    # Warm-up: nạp toàn bộ model vào RAM TRƯỚC khi đo latency, để câu đầu tiên không
+    # gánh cold-start làm lệch số đo (xem latency.py::warm_up_pipeline).
+    print("🔥 Warm-up (nạp model, KHÔNG tính vào số đo)...")
+    warm_secs = warm_up_pipeline(
+        query_processor, retriever, reranker, generator,
+        warm_question="Nội dung chính của tài liệu là gì?",
+    )
+    print(f"   Warm-up xong trong {warm_secs}s.\n")
+
     print(f"🚀 Chạy full benchmark trên {len(dataset)} câu hỏi...\n")
 
     detailed_results = []
@@ -147,11 +168,16 @@ def run():
         print(f"[{idx + 1}/{len(dataset)}] ({category}) Q: {question}")
 
         record = {"question": question, "category": category}
+        timer = StageTimer()
 
         if category == "summary":
             # Luồng SUMMARY bypass vector search — không tính retrieval metrics,
             # chỉ chạy full pipeline để lấy answer và chấm ragas metrics.
-            result = rag.run(question, doc_id=DOC_ID)
+            # Đo end-to-end qua rag.run() (đường bypass_retrieval thật), không tách stage
+            # được vì rag.run() đóng gói nội bộ — ghi vào "generation_ms" (stage chi phối
+            # chính của luồng tóm tắt: lấy 10 chunk đầu rồi generate).
+            with timer.stage("generation_ms"):
+                result = rag.run(question, doc_id=DOC_ID)
             answer = result["answer"]
             # RAGPipeline.run() không trả raw chunk text ra ngoài cho path SUMMARY, nên
             # gọi lại đúng hàm mà nó dùng nội bộ (get_first_chunks_of_doc) để lấy context
@@ -174,16 +200,20 @@ def run():
             # tự tìm đúng file trong toàn bộ corpus — đây chính là điều retrieval metric cần đo.
             # (Trước đây filter cứng vào DOC_ID="benchmark_doc_001" khiến hit_rate luôn cao giả
             # tạo vì đã "mớm" sẵn đúng tài liệu, vô hiệu hóa mục đích thêm 3 file PDF.)
-            plan = query_processor.process(question)
+            with timer.stage("preprocessing_ms"):
+                plan = query_processor.process(question)
             vector_query = plan.rewritten_query if plan.rewrite else None
-            candidates = retriever.retrieve(question, vector_query=vector_query)
+            with timer.stage("retrieval_ms"):
+                candidates = retriever.retrieve(question, vector_query=vector_query)
 
             if not candidates:
                 answer = "Tôi không tìm thấy tài liệu nào liên quan đến câu hỏi của bạn."
                 top_chunks = []
             else:
-                top_chunks = reranker.rerank(question, candidates)
-                gen_result = generator.generate(question, top_chunks)
+                with timer.stage("rerank_ms"):
+                    top_chunks = reranker.rerank(question, candidates)
+                with timer.stage("generation_ms"):
+                    gen_result = generator.generate(question, top_chunks)
                 answer = gen_result.answer
 
             top_chunk_texts = [c.text for c in top_chunks] if candidates else []
@@ -212,6 +242,10 @@ def run():
                 }
             )
 
+        # Ghi latency NGAY sau khi đo hệ thống, TRƯỚC mọi lời gọi judge bên dưới —
+        # đảm bảo thời gian Gemini judge KHÔNG lọt vào số đo hiệu năng.
+        record["latency_ms"] = timer.as_record()
+
         refusal = is_refusal_answer(answer)
         record["is_refusal"] = refusal
 
@@ -238,10 +272,12 @@ def run():
         else:
             # ── RAGAS-style generation metrics (LLM-as-judge qua Gemini) ────
             faithfulness = score_faithfulness(
-                question, answer, top_chunk_texts, api_key=api_key, model_name=judge_model
+                question, answer, top_chunk_texts, api_key=api_key,
+                model_name=judge_model, provider=judge_provider,
             )
             relevancy = score_answer_relevancy(
-                question, answer, api_key=api_key, is_negative_expected=False, model_name=judge_model
+                question, answer, api_key=api_key, is_negative_expected=False,
+                model_name=judge_model, provider=judge_provider,
             )
             record["ragas"] = {
                 "faithfulness": faithfulness.get("score"),
@@ -260,7 +296,8 @@ def run():
         rm_str = f"Hit={rm['hit_rate']} MRR={rm['mrr']:.2f}" if rm else "Hit=N/A (summary)"
         faith_score = record["ragas"]["faithfulness"]
         rel_score = record["ragas"]["answer_relevancy"]
-        print(f"    {rm_str} | Faithfulness={faith_score} | Relevancy={rel_score}")
+        e2e = record["latency_ms"]["end_to_end_ms"]
+        print(f"    {rm_str} | Faithfulness={faith_score} | Relevancy={rel_score} | {e2e}ms")
 
         # In lý do chấm khi điểm thấp hoặc judge parse lỗi (score=None), để debug ngay tại chỗ
         if faith_score is None or faith_score < 0.5:
@@ -295,6 +332,9 @@ def run():
             "faithfulness": _mean([r["ragas"]["faithfulness"] for r in detailed_results]),
             "answer_relevancy": _mean([r["ragas"]["answer_relevancy"] for r in detailed_results]),
         },
+        # Hiệu năng (response time) — mean + p50/p95/p99 + min/max theo từng stage.
+        # Đã warm-up trước, KHÔNG tính thời gian Gemini judge (xem latency.py).
+        "latency": summarize_latency([r["latency_ms"] for r in detailed_results]),
         # Metric rule-based, KHÔNG qua LLM judge — đáng tin hơn faithfulness/relevancy ở trên
         # vì không phụ thuộc khả năng suy luận của judge 1B.
         "refusal": {
@@ -312,11 +352,13 @@ def run():
 
     for cat in sorted(set(r["category"] for r in detailed_results)):
         cat_records = [r for r in detailed_results if r["category"] == cat]
+        cat_e2e = summarize_latency([r["latency_ms"] for r in cat_records])["end_to_end_ms"]
         summary["by_category"][cat] = {
             "count": len(cat_records),
             "faithfulness": _mean([r["ragas"]["faithfulness"] for r in cat_records]),
             "answer_relevancy": _mean([r["ragas"]["answer_relevancy"] for r in cat_records]),
             "refusal_rate": round(sum(r["is_refusal"] for r in cat_records) / len(cat_records), 3),
+            "latency_end_to_end_ms": {"mean": cat_e2e["mean"], "p95": cat_e2e["p95"]} if cat_e2e else None,
         }
 
     print("\n" + "=" * 50)
@@ -335,6 +377,12 @@ def run():
         f"  refuse dù hit_rate=1        : {summary['refusal']['refusal_count_despite_hit']}"
         f"/{summary['refusal']['refusal_count_despite_hit_total_non_negative_qa']}"
     )
+    print("\n-- Hiệu năng / Response time (ms, đã warm-up, KHÔNG tính judge) --")
+    print(f"  {'stage':<18}{'mean':>9}{'p50':>9}{'p95':>9}{'p99':>9}{'max':>9}   n")
+    for k in ("preprocessing_ms", "retrieval_ms", "rerank_ms", "generation_ms", "end_to_end_ms"):
+        s = summary["latency"].get(k)
+        if s:
+            print(f"  {k:<18}{s['mean']:>9}{s['p50']:>9}{s['p95']:>9}{s['p99']:>9}{s['max']:>9}{s['n']:>4}")
     print("\n-- Theo category --")
     for cat, stats in summary["by_category"].items():
         print(
@@ -344,11 +392,30 @@ def run():
     print("=" * 50)
 
     # ── Lưu báo cáo để so sánh giữa các sprint ──────────────────────
+    # run_config: bối cảnh chạy để số liệu latency REPRODUCIBLE/đáng tin (khác máy/model
+    # sẽ ra số khác — không có block này thì số latency vô nghĩa khi so sánh về sau).
+    run_config = {
+        "corpus": "iot_generic",
+        "retrieval_strategy": strategy,
+        "generator_model": local_llm_model,
+        "embedding_model": os.getenv("LOCAL_EMBEDDING_MODEL") or "BAAI/bge-m3 (default)",
+        "reranker_top_k": 3,
+        "slm_enabled": slm_enabled,
+        "judge_provider": judge_provider,
+        "judge_model": judge_model,
+        "warm_up_seconds": warm_secs,
+        "device_note": "CPU-only (không GPU) — latency phản ánh cấu hình phần cứng máy chạy benchmark",
+        "latency_excludes": "Không tính thời gian Gemini judge; đã warm-up model trước khi đo",
+    }
+
     os.makedirs(REPORTS_DIR, exist_ok=True)
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     report_path = os.path.join(REPORTS_DIR, f"report_{timestamp}.json")
     with open(report_path, "w", encoding="utf-8") as f:
-        json.dump({"summary": summary, "details": detailed_results}, f, ensure_ascii=False, indent=2)
+        json.dump(
+            {"run_config": run_config, "summary": summary, "details": detailed_results},
+            f, ensure_ascii=False, indent=2,
+        )
     print(f"\n💾 Báo cáo chi tiết đã lưu: {report_path}")
 
 

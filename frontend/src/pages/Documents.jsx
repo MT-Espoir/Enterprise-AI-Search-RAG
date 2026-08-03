@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Upload, Trash2 } from "lucide-react";
+import { Upload, Trash2, Search, Download, FileText } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { apiFetch, apiJson } from "../api/client";
 
@@ -22,6 +22,9 @@ export default function Documents() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState(null); // null = chưa tìm; [] = tìm rồi, rỗng
+  const [searching, setSearching] = useState(false);
 
   async function loadDocuments(targetPage = page) {
     setLoading(true);
@@ -85,6 +88,50 @@ export default function Documents() {
     }
   }
 
+  async function handleSearch(e) {
+    e?.preventDefault();
+    const q = searchQuery.trim();
+    if (!q) {
+      setSearchResults(null);
+      return;
+    }
+    setSearching(true);
+    setError("");
+    try {
+      const res = await apiFetch(`/api/documents/search?q=${encodeURIComponent(q)}`);
+      const body = await res.json();
+      if (!res.ok) throw new Error(body?.error || "Tìm kiếm thất bại");
+      setSearchResults(body.results || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSearching(false);
+    }
+  }
+
+  async function handleDownload(docId, name) {
+    // Download cần JWT header -> tải qua apiFetch thành blob rồi trigger tải xuống,
+    // không dùng <a href> trực tiếp (sẽ thiếu Authorization -> 401).
+    try {
+      const res = await apiFetch(`/api/documents/${docId}/download`);
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.error || "Tải file thất bại");
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = name || "document";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   async function handleDelete(docId) {
     if (!confirm("Xóa tài liệu này?")) return;
     try {
@@ -111,6 +158,74 @@ export default function Documents() {
       </div>
 
       {error && <div className="mt-3 text-sm text-red-600">{error}</div>}
+
+      {/* Tìm kiếm file để dẫn hướng + tải về (tách khỏi RAG hỏi-đáp; lọc theo ACL phòng ban) */}
+      <form onSubmit={handleSearch} className="mt-5 flex gap-2">
+        <div className="relative flex-1">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate" />
+          <input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Tìm file / biểu mẫu (vd: biểu mẫu hợp đồng lao động)"
+            className="w-full rounded-lg border border-ice-200 py-2 pl-9 pr-3 text-sm text-navy focus:border-navy focus:outline-none"
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={searching}
+          className="rounded-lg bg-navy px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-navy-light disabled:opacity-50"
+        >
+          {searching ? "Đang tìm..." : "Tìm file"}
+        </button>
+        {searchResults !== null && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearchResults(null);
+              setSearchQuery("");
+            }}
+            className="rounded-lg border border-ice-200 px-3 py-2 text-sm text-slate hover:bg-ice-50"
+          >
+            Xóa
+          </button>
+        )}
+      </form>
+
+      {searchResults !== null && (
+        <div className="mt-4 rounded-xl border border-ice-200 bg-white p-4">
+          <div className="mb-2 text-sm font-semibold text-navy">
+            Kết quả tìm kiếm ({searchResults.length})
+          </div>
+          {searchResults.length === 0 ? (
+            <div className="text-sm text-slate">
+              Không tìm thấy file phù hợp (hoặc file không thuộc phòng ban của bạn).
+            </div>
+          ) : (
+            <ul className="divide-y divide-ice-100">
+              {searchResults.map((r) => (
+                <li key={r.doc_id} className="flex items-center justify-between py-2.5">
+                  <div className="flex items-center gap-2">
+                    <FileText size={16} className="shrink-0 text-navy" />
+                    <div>
+                      <div className="text-sm text-navy">{r.original_name}</div>
+                      <div className="text-xs text-slate">
+                        {r.match_reason === "filename" ? "khớp tên file" : "khớp nội dung"}
+                        {r.document_type ? ` · ${r.document_type}` : ""}
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleDownload(r.doc_id, r.original_name)}
+                    className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-navy px-3 py-1.5 text-sm font-medium text-navy hover:bg-ice-50"
+                  >
+                    <Download size={14} /> Tải về
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       {loading ? (
         <div className="mt-6 text-sm text-slate">Đang tải...</div>

@@ -23,24 +23,30 @@ chat_bp = Blueprint('chat', __name__, url_prefix='/api/chat')
 
 from ..ingestion.embedder.local_embedder import LocalEmbedder
 from ..core.local_generator import LocalGenerator
+from ..core.claude_generator import ClaudeGenerator
 
 def get_rag_pipeline():
     """Khởi tạo RAG Pipeline từ app config."""
     vector_ops = VectorStoreOps()
     api_key = current_app.config['GOOGLE_API_KEY']
     
-    use_local_llm = current_app.config.get('USE_LOCAL_LLM', True)
-    
+    provider = current_app.config.get('LLM_PROVIDER', 'local')
+
     # LUÔN SỬ DỤNG LOCAL EMBEDDER (BGE-M3, offline, khớp với embedder dùng lúc ingest)
     embedder = LocalEmbedder(model_name=current_app.config.get('LOCAL_EMBEDDING_MODEL'))
 
-    if use_local_llm:
+    if provider == 'claude':
+        generator = ClaudeGenerator(
+            api_key=current_app.config.get('ANTHROPIC_API_KEY'),
+            model_name=current_app.config.get('ANTHROPIC_MODEL'),
+        )
+    elif provider == 'gemini':
+        generator = Generator(api_key=api_key)
+    else:  # "local" (mặc định)
         generator = LocalGenerator(
             base_url=current_app.config.get('OLLAMA_BASE_URL'),
             model_name=current_app.config.get('LOCAL_LLM_MODEL')
         )
-    else:
-        generator = Generator(api_key=api_key)
         
     strategy = current_app.config.get('RETRIEVAL_STRATEGY', 'hybrid')
     bm25_index = get_bm25_index() if strategy == "hybrid" else None

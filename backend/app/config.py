@@ -16,6 +16,17 @@ class BaseConfig:
     LOCAL_EMBEDDING_MODEL = os.getenv("LOCAL_EMBEDDING_MODEL", "BAAI/bge-m3")
     OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
     LOCAL_LLM_MODEL = os.getenv("LOCAL_LLM_MODEL", "llama3.2:1b")
+
+    # Nhà cung cấp LLM cho Generator: "local" (Ollama) | "gemini" (Google) | "claude" (Anthropic).
+    # Nếu KHÔNG set LLM_PROVIDER, suy ra từ USE_LOCAL_LLM cũ để giữ tương thích ngược
+    # (.env hiện tại không cần sửa): USE_LOCAL_LLM=true → local, false → gemini.
+    LLM_PROVIDER = os.getenv("LLM_PROVIDER", "").strip().lower() or (
+        "local" if USE_LOCAL_LLM else "gemini"
+    )
+
+    # Anthropic (Claude) — chỉ dùng khi LLM_PROVIDER=claude. Mặc định Haiku 4.5 (rẻ nhất).
+    ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
+    ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-haiku-4-5")
     
     CHROMA_MODE = os.getenv("CHROMA_MODE", "persistent")
     CHROMA_PERSIST_PATH = os.getenv("CHROMA_PERSIST_PATH", os.path.join(os.path.dirname(__file__), "..", "chromadb_data"))

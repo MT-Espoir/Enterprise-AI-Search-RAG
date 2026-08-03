@@ -49,7 +49,9 @@ from tests.benchmark.ragas_metrics import (
     score_answer_relevancy,
     is_refusal_answer,
     GEMINI_JUDGE_MODEL_DEFAULT,
+    CLAUDE_JUDGE_MODEL_DEFAULT,
 )
+from tests.benchmark.latency import StageTimer, summarize_latency, warm_up_pipeline
 from tests.benchmark.build_benchmark_db_legal import TEST_FILES
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "benchmark_chromadb_legal")
@@ -74,14 +76,23 @@ def _mean(values: list[float]) -> float | None:
 
 
 def run():
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        print("❌ Thiếu GOOGLE_API_KEY trong .env (chỉ cần cho judge, không cần cho generator/embedding)")
-        sys.exit(1)
+    judge_provider = os.getenv("JUDGE_PROVIDER", "gemini").strip().lower()
+    if judge_provider == "claude":
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            print("❌ Thiếu ANTHROPIC_API_KEY trong .env (cần cho judge Claude — xem JUDGE_PROVIDER=claude)")
+            sys.exit(1)
+        judge_model = os.getenv("ANTHROPIC_JUDGE_MODEL", CLAUDE_JUDGE_MODEL_DEFAULT)
+    else:
+        api_key = os.getenv("GOOGLE_API_KEY")
+        if not api_key:
+            print("❌ Thiếu GOOGLE_API_KEY trong .env (chỉ cần cho judge, không cần cho generator/embedding)")
+            sys.exit(1)
+        judge_model = os.getenv("GEMINI_JUDGE_MODEL", GEMINI_JUDGE_MODEL_DEFAULT)
+    print(f"⚖️  Judge: provider={judge_provider}, model={judge_model}\n")
 
     ollama_base_url = os.getenv("OLLAMA_BASE_URL", OLLAMA_BASE_URL_DEFAULT)
     local_llm_model = os.getenv("LOCAL_LLM_MODEL", LOCAL_GENERATOR_MODEL_DEFAULT)
-    judge_model = os.getenv("GEMINI_JUDGE_MODEL", GEMINI_JUDGE_MODEL_DEFAULT)
 
     try:
         requests.get(f"{ollama_base_url.rstrip('/')}/api/tags", timeout=5).raise_for_status()
@@ -129,6 +140,13 @@ def run():
     with open(dataset_path, "r", encoding="utf-8") as f:
         dataset = json.load(f)
 
+    print("🔥 Warm-up (nạp model, KHÔNG tính vào số đo)...")
+    warm_secs = warm_up_pipeline(
+        query_processor, retriever, reranker, generator,
+        warm_question="Nội dung chính của văn bản này là gì?",
+    )
+    print(f"   Warm-up xong trong {warm_secs}s.\n")
+
     print(f"🚀 Chạy full benchmark (corpus luật) trên {len(dataset)} câu hỏi...\n")
 
     detailed_results = []
@@ -141,26 +159,32 @@ def run():
         print(f"[{idx + 1}/{len(dataset)}] ({category}) Q: {question}")
 
         record = {"question": question, "category": category}
+        timer = StageTimer()
 
         if category == "summary":
             # Khác bản gốc: doc_id lấy theo filename của CÂU HỎI NÀY, không phải 1 hằng số cố định
             doc_id = FILENAME_TO_DOC_ID[expected[0]["filename"]]
-            result = rag.run(question, doc_id=doc_id)
+            with timer.stage("generation_ms"):
+                result = rag.run(question, doc_id=doc_id)
             answer = result["answer"]
             raw_summary_chunks = retriever.ops.get_first_chunks_of_doc(doc_id, limit=10)
             top_chunk_texts = [c["text"] for c in raw_summary_chunks]
             record.update({"answer": answer, "retrieval_metrics": None})
         else:
-            plan = query_processor.process(question)
+            with timer.stage("preprocessing_ms"):
+                plan = query_processor.process(question)
             vector_query = plan.rewritten_query if plan.rewrite else None
-            candidates = retriever.retrieve(question, vector_query=vector_query)
+            with timer.stage("retrieval_ms"):
+                candidates = retriever.retrieve(question, vector_query=vector_query)
 
             if not candidates:
                 answer = "Tôi không tìm thấy tài liệu nào liên quan đến câu hỏi của bạn."
                 top_chunks = []
             else:
-                top_chunks = reranker.rerank(question, candidates)
-                gen_result = generator.generate(question, top_chunks)
+                with timer.stage("rerank_ms"):
+                    top_chunks = reranker.rerank(question, candidates)
+                with timer.stage("generation_ms"):
+                    gen_result = generator.generate(question, top_chunks)
                 answer = gen_result.answer
 
             top_chunk_texts = [c.text for c in top_chunks] if candidates else []
@@ -188,6 +212,8 @@ def run():
                 }
             )
 
+        record["latency_ms"] = timer.as_record()
+
         refusal = is_refusal_answer(answer)
         record["is_refusal"] = refusal
 
@@ -207,10 +233,12 @@ def run():
             }
         else:
             faithfulness = score_faithfulness(
-                question, answer, top_chunk_texts, api_key=api_key, model_name=judge_model
+                question, answer, top_chunk_texts, api_key=api_key,
+                model_name=judge_model, provider=judge_provider,
             )
             relevancy = score_answer_relevancy(
-                question, answer, api_key=api_key, is_negative_expected=False, model_name=judge_model
+                question, answer, api_key=api_key, is_negative_expected=False,
+                model_name=judge_model, provider=judge_provider,
             )
             record["ragas"] = {
                 "faithfulness": faithfulness.get("score"),
@@ -229,7 +257,8 @@ def run():
         rm_str = f"Hit={rm['hit_rate']} MRR={rm['mrr']:.2f}" if rm else "Hit=N/A (summary)"
         faith_score = record["ragas"]["faithfulness"]
         rel_score = record["ragas"]["answer_relevancy"]
-        print(f"    {rm_str} | Faithfulness={faith_score} | Relevancy={rel_score}")
+        e2e = record["latency_ms"]["end_to_end_ms"]
+        print(f"    {rm_str} | Faithfulness={faith_score} | Relevancy={rel_score} | {e2e}ms")
 
         if faith_score is None or faith_score < 0.5:
             print(f"       ⚠️  Faithfulness reasoning: {record['ragas']['faithfulness_reasoning']}")
@@ -260,6 +289,7 @@ def run():
             "faithfulness": _mean([r["ragas"]["faithfulness"] for r in detailed_results]),
             "answer_relevancy": _mean([r["ragas"]["answer_relevancy"] for r in detailed_results]),
         },
+        "latency": summarize_latency([r["latency_ms"] for r in detailed_results]),
         "refusal": {
             "refusal_rate_overall": round(
                 sum(r["is_refusal"] for r in detailed_results) / len(detailed_results), 3
@@ -275,11 +305,13 @@ def run():
 
     for cat in sorted(set(r["category"] for r in detailed_results)):
         cat_records = [r for r in detailed_results if r["category"] == cat]
+        cat_e2e = summarize_latency([r["latency_ms"] for r in cat_records])["end_to_end_ms"]
         summary["by_category"][cat] = {
             "count": len(cat_records),
             "faithfulness": _mean([r["ragas"]["faithfulness"] for r in cat_records]),
             "answer_relevancy": _mean([r["ragas"]["answer_relevancy"] for r in cat_records]),
             "refusal_rate": round(sum(r["is_refusal"] for r in cat_records) / len(cat_records), 3),
+            "latency_end_to_end_ms": {"mean": cat_e2e["mean"], "p95": cat_e2e["p95"]} if cat_e2e else None,
         }
 
     print("\n" + "=" * 50)
@@ -298,6 +330,12 @@ def run():
         f"  refuse dù hit_rate=1        : {summary['refusal']['refusal_count_despite_hit']}"
         f"/{summary['refusal']['refusal_count_despite_hit_total_non_negative_qa']}"
     )
+    print("\n-- Hiệu năng / Response time (ms, đã warm-up, KHÔNG tính judge) --")
+    print(f"  {'stage':<18}{'mean':>9}{'p50':>9}{'p95':>9}{'p99':>9}{'max':>9}   n")
+    for k in ("preprocessing_ms", "retrieval_ms", "rerank_ms", "generation_ms", "end_to_end_ms"):
+        s = summary["latency"].get(k)
+        if s:
+            print(f"  {k:<18}{s['mean']:>9}{s['p50']:>9}{s['p95']:>9}{s['p99']:>9}{s['max']:>9}{s['n']:>4}")
     print("\n-- Theo category --")
     for cat, stats in summary["by_category"].items():
         print(
@@ -306,11 +344,28 @@ def run():
         )
     print("=" * 50)
 
+    run_config = {
+        "corpus": "legal_vn",
+        "retrieval_strategy": strategy,
+        "generator_model": local_llm_model,
+        "embedding_model": os.getenv("LOCAL_EMBEDDING_MODEL") or "BAAI/bge-m3 (default)",
+        "reranker_top_k": 3,
+        "slm_enabled": slm_enabled,
+        "judge_provider": judge_provider,
+        "judge_model": judge_model,
+        "warm_up_seconds": warm_secs,
+        "device_note": "CPU-only (không GPU) — latency phản ánh cấu hình phần cứng máy chạy benchmark",
+        "latency_excludes": "Không tính thời gian Gemini judge; đã warm-up model trước khi đo",
+    }
+
     os.makedirs(REPORTS_DIR, exist_ok=True)
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     report_path = os.path.join(REPORTS_DIR, f"report_legal_{timestamp}.json")
     with open(report_path, "w", encoding="utf-8") as f:
-        json.dump({"summary": summary, "details": detailed_results}, f, ensure_ascii=False, indent=2)
+        json.dump(
+            {"run_config": run_config, "summary": summary, "details": detailed_results},
+            f, ensure_ascii=False, indent=2,
+        )
     print(f"\n💾 Báo cáo chi tiết đã lưu: {report_path}")
 
 

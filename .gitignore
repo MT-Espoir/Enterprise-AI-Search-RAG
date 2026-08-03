@@ -61,6 +61,9 @@ backend/uploads/*
 # =====================
 backend/tests/Test_subject/*
 !backend/tests/Test_subject/.gitkeep
+# Test dataset 2 (50 file BCTC scan + Excel, ~159MB — giữ local, không đẩy lên repo)
+backend/tests/Test_subject2/*
+!backend/tests/Test_subject2/.gitkeep
 
 # =====================
 # Databases / Local data

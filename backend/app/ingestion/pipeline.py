@@ -120,15 +120,16 @@ class IngestionPipeline:
         except Exception as exc:
             logger.error(f"[{doc_id}] Ingestion thất bại: {exc}", exc_info=True)
             self.doc_service.update_status(doc_id, "failed", error=str(exc))
-            return False
-
-        finally:
-            # Dọn dẹp file vật lý sau khi xử lý xong
+            # Dọn file vật lý CHỈ khi ingest THẤT BẠI. Khi thành công phải GIỮ LẠI file
+            # gốc (trong upload_folder, tên = uuid_filename) để phục vụ tính năng
+            # tìm & tải file (GET /api/documents/<id>/download). delete_document() sẽ
+            # dọn file này khi user chủ động xóa tài liệu.
             if os.path.exists(file_path):
                 try:
                     os.remove(file_path)
                 except Exception:
                     pass
+            return False
 
     def ingest_batch(self, files: list[dict]) -> list[bool]:
         """

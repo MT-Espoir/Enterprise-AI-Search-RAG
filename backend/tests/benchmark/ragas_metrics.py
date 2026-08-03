@@ -26,12 +26,14 @@ import logging
 import re
 import time
 
-from google import genai
-from google.genai import types
-
 logger = logging.getLogger(__name__)
 
 GEMINI_JUDGE_MODEL_DEFAULT = "gemini-3.1-flash-lite"
+CLAUDE_JUDGE_MODEL_DEFAULT = "claude-haiku-4-5"
+
+# Import google.genai / anthropic LAZY (trong từng hàm judge) thay vì ở top-level:
+# cho phép chạy benchmark với JUDGE_PROVIDER=claude mà KHÔNG cần cài/cấu hình Google,
+# và ngược lại — không ép cả 2 SDK phải import được cùng lúc.
 
 # Free tier gemini-3.1-flash-lite: 15 RPM. Benchmark gọi ~2 request/câu hỏi (faithfulness
 # + answer_relevancy), với 46 câu = ~92 request — chắc chắn vượt 15 RPM nếu chạy dồn dập.
@@ -111,15 +113,36 @@ Trả về JSON với đúng các key sau:
 """
 
 
+def _parse_judge_json(raw_text: str) -> dict:
+    """Bóc tách + parse JSON từ output judge (dùng chung cho Gemini và Claude).
+    Chuẩn hóa score string→float. Trả về dict an-toàn nếu parse hỏng."""
+    if not raw_text:
+        return {"score": None, "reasoning": "Judge trả về rỗng."}
+    match = re.search(r"\{.*\}", raw_text, re.DOTALL)
+    json_str = match.group(0) if match else raw_text
+    try:
+        parsed = json.loads(json_str)
+    except json.JSONDecodeError:
+        logger.warning(f"Không parse được JSON từ judge output: {raw_text[:200]}")
+        return {"score": None, "reasoning": "Không parse được output của judge.", "raw": raw_text}
+
+    # Một số model trả score dạng string ("0.8") thay vì float.
+    if isinstance(parsed.get("score"), str):
+        try:
+            parsed["score"] = float(parsed["score"])
+        except ValueError:
+            parsed["score"] = None
+    return parsed
+
+
 def _call_judge_gemini(api_key: str, model_name: str, prompt: str, max_retries: int = 4) -> dict:
     """
     Gọi Gemini làm judge, ép JSON output qua response_mime_type (constrained decoding
-    ở tầng API, không chỉ dựa vào prompt instruction). Trả về dict rỗng-an-toàn nếu lỗi.
-
-    Có giãn cách chủ động (_rate_limit_wait) + retry với backoff nếu vẫn dính 429
-    (rate limit free tier) hoặc lỗi mạng khác — cùng pattern với generator.py/
-    google_embedder.py.
+    ở tầng API). Có giãn cách chủ động (_rate_limit_wait) + retry backoff nếu dính 429.
     """
+    from google import genai  # import lazy — chỉ cần khi thực sự dùng judge Gemini
+    from google.genai import types
+
     raw_text = None
     for attempt in range(max_retries):
         _rate_limit_wait()
@@ -147,25 +170,39 @@ def _call_judge_gemini(api_key: str, model_name: str, prompt: str, max_retries: 
             )
             time.sleep(wait_time)
 
-    # response_mime_type="application/json" thường trả JSON sạch, nhưng vẫn giữ
-    # fallback bóc tách phòng trường hợp model in kèm text thừa.
-    match = re.search(r"\{.*\}", raw_text, re.DOTALL)
-    json_str = match.group(0) if match else raw_text
+    return _parse_judge_json(raw_text)
+
+
+def _call_judge_claude(api_key: str, model_name: str, prompt: str, max_retries: int = 3) -> dict:
+    """
+    Gọi Claude (Anthropic API) làm judge. SDK tự retry 429/5xx nên không cần vòng lặp
+    thủ công. Haiku 4.5 là model pre-4.6 → KHÔNG truyền `thinking`. Yêu cầu JSON qua
+    prompt + system, rồi parse bằng _parse_judge_json (cùng fallback với Gemini).
+    """
+    import anthropic  # import lazy — chỉ cần khi thực sự dùng judge Claude
 
     try:
-        parsed = json.loads(json_str)
-    except json.JSONDecodeError:
-        logger.warning(f"Không parse được JSON từ judge output: {raw_text[:200]}")
-        return {"score": None, "reasoning": "Không parse được output của judge.", "raw": raw_text}
+        client = anthropic.Anthropic(api_key=api_key, max_retries=max_retries)
+        response = client.messages.create(
+            model=model_name,
+            max_tokens=500,
+            temperature=0.0,
+            system="Bạn là giám khảo chấm điểm hệ thống RAG. CHỈ trả về một JSON hợp lệ, không kèm text nào khác.",
+            messages=[{"role": "user", "content": prompt}],
+        )
+        raw_text = "".join(b.text for b in response.content if b.type == "text").strip()
+    except Exception as exc:
+        logger.error(f"Judge (Claude) call thất bại: {exc}")
+        return {"score": None, "reasoning": f"Judge (Claude) call lỗi: {exc}"}
 
-    # Chuẩn hóa: một số model trả score dạng string ("0.8") thay vì float.
-    if isinstance(parsed.get("score"), str):
-        try:
-            parsed["score"] = float(parsed["score"])
-        except ValueError:
-            parsed["score"] = None
+    return _parse_judge_json(raw_text)
 
-    return parsed
+
+def _call_judge(provider: str, api_key: str, model_name: str, prompt: str) -> dict:
+    """Điều phối judge theo provider ("gemini" | "claude")."""
+    if provider == "claude":
+        return _call_judge_claude(api_key, model_name, prompt)
+    return _call_judge_gemini(api_key, model_name, prompt)
 
 
 def score_faithfulness(
@@ -174,6 +211,7 @@ def score_faithfulness(
     contexts: list[str],
     api_key: str,
     model_name: str = GEMINI_JUDGE_MODEL_DEFAULT,
+    provider: str = "gemini",
 ) -> dict:
     """
     Đo mức độ câu trả lời bám sát context (không hallucinate).
@@ -181,7 +219,7 @@ def score_faithfulness(
     """
     context_str = "\n\n---\n\n".join(contexts) if contexts else "(không có context nào được retrieve)"
     prompt = _FAITHFULNESS_PROMPT.format(question=question, context=context_str, answer=answer)
-    return _call_judge_gemini(api_key, model_name, prompt)
+    return _call_judge(provider, api_key, model_name, prompt)
 
 
 def score_answer_relevancy(
@@ -190,6 +228,7 @@ def score_answer_relevancy(
     api_key: str,
     is_negative_expected: bool = False,
     model_name: str = GEMINI_JUDGE_MODEL_DEFAULT,
+    provider: str = "gemini",
 ) -> dict:
     """
     Đo mức độ câu trả lời có thực sự giải quyết đúng câu hỏi.
@@ -200,4 +239,4 @@ def score_answer_relevancy(
         is_negative_expected=str(is_negative_expected).lower(),
         answer=answer,
     )
-    return _call_judge_gemini(api_key, model_name, prompt)
+    return _call_judge(provider, api_key, model_name, prompt)
