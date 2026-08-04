@@ -31,7 +31,7 @@ def upload_document():
     doc_service = DocumentService(vector_ops, upload_folder=current_app.config['UPLOAD_FOLDER'])
     
     # LUÔN DÙNG LOCAL EMBEDDER (BGE-M3, offline, không phụ thuộc quota API)
-    embedder = LocalEmbedder(model_name=current_app.config.get('LOCAL_EMBEDDING_MODEL'))
+    embedder = LocalEmbedder.get_instance(model_name=current_app.config.get('LOCAL_EMBEDDING_MODEL'))
 
     ocr_engine = None
     if current_app.config.get('OCR_ENABLED', True):
@@ -125,7 +125,7 @@ def search_documents():
     # ACL áp ngay ở tầng retrieve. Fail-open: lỗi semantic KHÔNG chặn, vẫn còn match tên file.
     semantic_doc_ids = []
     try:
-        embedder = LocalEmbedder(model_name=current_app.config.get('LOCAL_EMBEDDING_MODEL'))
+        embedder = LocalEmbedder.get_instance(model_name=current_app.config.get('LOCAL_EMBEDDING_MODEL'))
         strategy = current_app.config.get('RETRIEVAL_STRATEGY', 'hybrid')
         bm25_index = get_bm25_index() if strategy == "hybrid" else None
         retriever = build_retriever(strategy, ops=vector_ops, embedder=embedder, bm25_index=bm25_index, top_k=20)

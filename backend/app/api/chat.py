@@ -32,8 +32,9 @@ def get_rag_pipeline():
     
     provider = current_app.config.get('LLM_PROVIDER', 'local')
 
-    # LUÔN SỬ DỤNG LOCAL EMBEDDER (BGE-M3, offline, khớp với embedder dùng lúc ingest)
-    embedder = LocalEmbedder(model_name=current_app.config.get('LOCAL_EMBEDDING_MODEL'))
+    # LUÔN SỬ DỤNG LOCAL EMBEDDER (BGE-M3, offline, khớp với embedder dùng lúc ingest).
+    # get_instance(): singleton, tránh nạp lại model mỗi request (xem LocalEmbedder).
+    embedder = LocalEmbedder.get_instance(model_name=current_app.config.get('LOCAL_EMBEDDING_MODEL'))
 
     if provider == 'claude':
         generator = ClaudeGenerator(
