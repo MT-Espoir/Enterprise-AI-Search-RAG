@@ -3,16 +3,6 @@ batch_upload_documents.py — Upload HÀNG LOẠT tài liệu qua API app đang 
 sinh BÁO CÁO VERIFY per-file (đúng luồng production: dedup SHA-256 + OCR + ocr_stats
 + ACL — không re-wire pipeline, không bỏ qua bước nào).
 
-Vì sao đi qua API thật thay vì gọi pipeline trực tiếp: đây là cách TRUNG THỰC nhất
-để biết 35 file BCTC (scan + Excel) có nhúng được trong điều kiện thật hay không —
-gồm cả dedup (file trùng → 409) và OCR (PDF scan tiếng Việt). Báo cáo verify tự động
-gắn cờ file NGHI NGỜ (OCR fail cao / chunk quá ít) để soi tay tiếp — quan trọng với
-BCTC vì OCR đọc nhầm chữ số trong bảng là "garbage-in" nguy hiểm hơn cả file fail.
-
-Chạy (app phải đang chạy ở port 5000, Mongo + Chroma sẵn sàng):
-  ml_env/Scripts/python.exe backend/scripts/batch_upload_documents.py \
-      --dir "C:/path/to/35_files" --email you@example.com --password ***
-
 Yêu cầu: chỉ dùng `requests` (đã có sẵn trong project).
 """
 import argparse
@@ -34,17 +24,41 @@ _SUSPECT_MIN_CHUNKS = 2       # done mà < 2 chunk → khả năng rỗng/parse 
 _SUSPECT_OCR_FAIL_RATE = 0.10  # >10% trang OCR thất bại → chất lượng scan kém
 
 
-def login(base_url: str, email: str, password: str) -> str:
-    resp = requests.post(f"{base_url}/api/auth/login", json={"email": email, "password": password}, timeout=30)
-    if resp.status_code != 200:
-        print(f"❌ Đăng nhập thất bại ({resp.status_code}): {resp.text[:300]}")
-        sys.exit(1)
-    token = resp.json().get("data", {}).get("access_token")
-    if not token:
-        print(f"❌ Không lấy được access_token từ phản hồi login: {resp.text[:300]}")
-        sys.exit(1)
-    print(f"✅ Đăng nhập OK ({email})")
-    return token
+class Auth:
+    """Giữ token + TỰ ĐĂNG NHẬP LẠI khi token hết hạn (401). Access token mặc định
+    sống 1 giờ (JWT_ACCESS_TOKEN_EXPIRES=3600), nhưng batch ingest tuần tự file scan
+    có thể chạy NHIỀU GIỜ — nếu không re-login giữa chừng, mọi request sau 1h sẽ 401."""
+
+    def __init__(self, base_url: str, email: str, password: str):
+        self.base_url = base_url
+        self.email = email
+        self.password = password
+        self.token = None
+
+    def login(self, quiet: bool = False):
+        resp = requests.post(f"{self.base_url}/api/auth/login",
+                             json={"email": self.email, "password": self.password}, timeout=30)
+        if resp.status_code != 200:
+            print(f"❌ Đăng nhập thất bại ({resp.status_code}): {resp.text[:300]}")
+            sys.exit(1)
+        self.token = resp.json().get("data", {}).get("access_token")
+        if not self.token:
+            print(f"❌ Không lấy được access_token: {resp.text[:300]}")
+            sys.exit(1)
+        if not quiet:
+            print(f"✅ Đăng nhập OK ({self.email})")
+
+    def headers(self) -> dict:
+        return {"Authorization": f"Bearer {self.token}"}
+
+    def get(self, path: str):
+        """GET có tự re-login 1 lần nếu 401 (token hết hạn giữa chừng)."""
+        resp = requests.get(f"{self.base_url}{path}", headers=self.headers(), timeout=30)
+        if resp.status_code == 401:
+            print("   🔑 Token hết hạn — đăng nhập lại...")
+            self.login(quiet=True)
+            resp = requests.get(f"{self.base_url}{path}", headers=self.headers(), timeout=30)
+        return resp
 
 
 def collect_files(directory: str, recursive: bool) -> list[str]:
@@ -62,18 +76,23 @@ def collect_files(directory: str, recursive: bool) -> list[str]:
     return sorted(paths)
 
 
-def upload_one(base_url: str, token: str, path: str, upload_delay: float) -> dict:
-    """Upload 1 file. Xử lý 202 (nhận), 409 (trùng), 429 (rate limit → chờ + thử lại)."""
+def upload_one(auth: "Auth", path: str, upload_delay: float) -> dict:
+    """Upload 1 file. Xử lý 202 (nhận), 409 (trùng), 429 (rate limit → chờ), 401 (token
+    hết hạn → đăng nhập lại + thử lại)."""
     filename = os.path.basename(path)
-    headers = {"Authorization": f"Bearer {token}"}
-    for attempt in range(4):
+    resp = None
+    for attempt in range(5):
         with open(path, "rb") as fh:
             resp = requests.post(
-                f"{base_url}/api/documents/upload",
-                headers=headers,
+                f"{auth.base_url}/api/documents/upload",
+                headers=auth.headers(),
                 files={"file": (filename, fh)},
                 timeout=120,
             )
+        if resp.status_code == 401:
+            print(f"   🔑 Token hết hạn khi upload '{filename}' — đăng nhập lại...")
+            auth.login(quiet=True)
+            continue
         if resp.status_code == 429:
             wait = 60
             print(f"   ⏳ 429 rate-limit ở '{filename}', chờ {wait}s rồi thử lại...")
@@ -98,12 +117,24 @@ def upload_one(base_url: str, token: str, path: str, upload_delay: float) -> dic
             "outcome": "upload_error", "note": (body.get("error") if body else resp.text[:200])}
 
 
-def poll_status(base_url: str, token: str, doc_id: str) -> dict:
-    resp = requests.get(f"{base_url}/api/documents/{doc_id}",
-                        headers={"Authorization": f"Bearer {token}"}, timeout=30)
+def poll_status(auth: "Auth", doc_id: str) -> dict:
+    resp = auth.get(f"/api/documents/{doc_id}")  # tự re-login nếu 401
     if resp.status_code != 200:
         return {"status": "unknown", "_http": resp.status_code}
     return resp.json()
+
+
+def wait_for_doc(auth: "Auth", doc_id: str, poll_interval: int, timeout: int) -> dict:
+    """Chờ 1 document ingest xong (done/failed) hoặc tới timeout. Trả trạng thái cuối.
+    Dùng cho chế độ TUẦN TỰ — chỉ 1 file ingest tại một thời điểm, tránh quá tải CPU."""
+    deadline = time.time() + timeout
+    doc = {}
+    while time.time() < deadline:
+        doc = poll_status(auth, doc_id)
+        if doc.get("status") in ("done", "failed"):
+            return doc
+        time.sleep(poll_interval)
+    return doc  # timeout -> trạng thái cuối cùng
 
 
 def build_verify_record(up: dict, doc: dict) -> dict:
@@ -157,8 +188,15 @@ def run():
     parser.add_argument("--recursive", action="store_true", help="Duyệt cả thư mục con")
     parser.add_argument("--upload-delay", type=float, default=6.5,
                         help="Giãn cách giữa 2 upload (giây) — tránh rate-limit 10/phút. Mặc định 6.5s.")
-    parser.add_argument("--poll-timeout", type=int, default=2400, help="Tổng thời gian chờ ingestion (giây)")
+    parser.add_argument("--poll-timeout", type=int, default=2400,
+                        help="[--parallel] Tổng thời gian chờ ingestion cả batch (giây)")
     parser.add_argument("--poll-interval", type=int, default=5)
+    parser.add_argument("--parallel", action="store_true",
+                        help="Upload TẤT CẢ rồi mới poll (hành vi cũ). MẶC ĐỊNH là TUẦN TỰ: "
+                             "chờ từng file ingest xong mới upload file kế — tránh dồn nhiều "
+                             "thread OCR/embedding cùng lúc làm quá tải CPU và sập tiến trình.")
+    parser.add_argument("--file-timeout", type=int, default=900,
+                        help="[tuần tự] Thời gian chờ tối đa cho 1 file ingest (giây). Mặc định 900s.")
     parser.add_argument("--report", default=None, help="Đường dẫn lưu report JSON")
     args = parser.parse_args()
 
@@ -174,34 +212,52 @@ def run():
         sys.exit(1)
     print(f"📁 Tìm thấy {len(files)} file hỗ trợ trong {args.dir}\n")
 
-    token = login(base_url, args.email, args.password)
+    auth = Auth(base_url, args.email, args.password)
+    auth.login()
 
-    # ── Bước 1: Upload tuần tự ──────────────────────────────────
     uploads = []
-    for i, path in enumerate(files, 1):
-        print(f"[{i}/{len(files)}] Upload: {os.path.basename(path)}")
-        up = upload_one(base_url, token, path, args.upload_delay)
-        print(f"     → http={up['http']} outcome={up['outcome']} doc_id={up.get('doc_id')}")
-        uploads.append(up)
-
-    # ── Bước 2: Poll ingestion (async) tới khi done/failed hoặc timeout ──
-    pending = {u["doc_id"] for u in uploads if u["outcome"] == "accepted" and u["doc_id"]}
     docs_final = {}
-    deadline = time.time() + args.poll_timeout
-    print(f"\n⏳ Chờ ingestion cho {len(pending)} file (timeout {args.poll_timeout}s)...")
-    while pending and time.time() < deadline:
-        time.sleep(args.poll_interval)
-        for doc_id in list(pending):
-            doc = poll_status(base_url, token, doc_id)
-            status = doc.get("status")
-            if status in ("done", "failed"):
-                docs_final[doc_id] = doc
-                pending.discard(doc_id)
-                print(f"   {status.upper():<6} {doc.get('filename', doc_id)} "
-                      f"(chunks={doc.get('chunk_count')})")
-    # File còn pending sau timeout: lấy trạng thái cuối cùng để báo cáo
-    for doc_id in pending:
-        docs_final[doc_id] = poll_status(base_url, token, doc_id)
+
+    if args.parallel:
+        # ── Chế độ SONG SONG (cũ): upload hết rồi mới poll ──
+        for i, path in enumerate(files, 1):
+            print(f"[{i}/{len(files)}] Upload: {os.path.basename(path)}")
+            up = upload_one(auth, path, args.upload_delay)
+            print(f"     → http={up['http']} outcome={up['outcome']} doc_id={up.get('doc_id')}")
+            uploads.append(up)
+
+        pending = {u["doc_id"] for u in uploads if u["outcome"] == "accepted" and u["doc_id"]}
+        deadline = time.time() + args.poll_timeout
+        print(f"\n⏳ Chờ ingestion cho {len(pending)} file (timeout {args.poll_timeout}s)...")
+        while pending and time.time() < deadline:
+            time.sleep(args.poll_interval)
+            for doc_id in list(pending):
+                doc = poll_status(auth, doc_id)
+                if doc.get("status") in ("done", "failed"):
+                    docs_final[doc_id] = doc
+                    pending.discard(doc_id)
+                    print(f"   {doc.get('status').upper():<6} {doc.get('filename', doc_id)} "
+                          f"(chunks={doc.get('chunk_count')})")
+        for doc_id in pending:
+            docs_final[doc_id] = poll_status(auth, doc_id)
+    else:
+        # ── Chế độ TUẦN TỰ (mặc định): upload 1 file -> CHỜ ingest xong -> file kế ──
+        # Chỉ 1 file OCR/embedding tại một thời điểm -> không dồn thread làm quá tải CPU
+        # (nguyên nhân sập tiến trình khi ingest hàng loạt PDF scan trên máy CPU-only).
+        print("🔁 Chế độ TUẦN TỰ — chờ từng file ingest xong mới upload file kế.\n")
+        for i, path in enumerate(files, 1):
+            print(f"[{i}/{len(files)}] Upload: {os.path.basename(path)}")
+            # upload_delay=0: tuần tự đã tự giãn (mỗi upload cách nhau cả lần ingest,
+            # không thể dính rate-limit 10/phút).
+            up = upload_one(auth, path, upload_delay=0)
+            print(f"     → http={up['http']} outcome={up['outcome']} doc_id={up.get('doc_id')}")
+            uploads.append(up)
+
+            if up["outcome"] == "accepted" and up["doc_id"]:
+                doc = wait_for_doc(auth, up["doc_id"], args.poll_interval, args.file_timeout)
+                docs_final[up["doc_id"]] = doc
+                st = (doc.get("status") or "timeout").upper()
+                print(f"     ⏳ ingest: {st} (chunks={doc.get('chunk_count')})")
 
     # ── Bước 3: Báo cáo verify ──────────────────────────────────
     records = [build_verify_record(up, docs_final.get(up.get("doc_id"), {})) for up in uploads]
