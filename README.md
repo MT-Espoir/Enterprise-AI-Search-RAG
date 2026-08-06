@@ -218,7 +218,7 @@ RAG/
 Dự án được phát triển theo bản đồ kiến trúc đích 6 layer + 6 phase,
 
 - ✅ Ingestion · Query Processing · Retrieval · Generation · Production Hardening (Auth, Guardrails, ACL, Rate-limit, Multi-worker sync, Dedup)
-- 🔬 **Nghiên cứu quy mô lớn (PoC, chưa production):** unified engine OpenSearch + ingestion queue Celery/Redis cho giả định 100k+ tài liệu.
+- 🔬 **Nghiên cứu quy mô lớn (PoC, chưa đưa vào):** unified engine OpenSearch + ingestion queue Celery/Redis cho giả định 100k+ tài liệu.
 
 
 ---

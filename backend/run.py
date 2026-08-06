@@ -1,10 +1,6 @@
 import sys
 import os
 
-# Console Windows mặc định dùng codepage (vd cp1252), không encode được ký tự
-# có dấu tiếng Việt — crash structlog PrintLogger (request_tracer.py) khi log
-# JSON câu hỏi/nội dung tiếng Việt (ensure_ascii=False). Reconfigure trước khi
-# import bất kỳ module nào có thể ghi log.
 sys.stdout.reconfigure(encoding="utf-8")
 sys.stderr.reconfigure(encoding="utf-8")
 
