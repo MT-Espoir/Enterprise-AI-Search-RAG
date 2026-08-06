@@ -27,9 +27,22 @@ class BaseConfig:
     # Anthropic (Claude) — chỉ dùng khi LLM_PROVIDER=claude. Mặc định Haiku 4.5 (rẻ nhất).
     ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
     ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-haiku-4-5")
+
+    # Endpoint chuẩn OpenAI — chỉ dùng khi LLM_PROVIDER=openai. Đổi OPENAI_BASE_URL
+    # để trỏ sang nhà cung cấp khác cùng giao thức (DeepSeek, GLM, Groq...) mà
+    # KHÔNG cần sửa code — xem core/generation/openai_generator.py.
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+    OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
     
     CHROMA_MODE = os.getenv("CHROMA_MODE", "persistent")
     CHROMA_PERSIST_PATH = os.getenv("CHROMA_PERSIST_PATH", os.path.join(os.path.dirname(__file__), "..", "chromadb_data"))
+    # CHROMA_HOST/PORT: chỉ dùng khi CHROMA_MODE=http (bắt buộc cho deploy multi-worker).
+    # FIX: client.py vẫn đọc app.config["CHROMA_HOST"]/["CHROMA_PORT"] nhưng config.py
+    # trước đây KHÔNG nạp 2 biến này -> đặt trong .env là vô tác dụng, luôn rơi về
+    # localhost:8000 (cùng loại bug với GEMINI_MODEL bị bỏ qua).
+    CHROMA_HOST = os.getenv("CHROMA_HOST", "localhost")
+    CHROMA_PORT = int(os.getenv("CHROMA_PORT", 8000))
     CHROMA_API_KEY = os.getenv("CHROMA_API_KEY")
     CHROMA_TENANT = os.getenv("CHROMA_TENANT")
     CHROMA_DATABASE = os.getenv("CHROMA_DATABASE")

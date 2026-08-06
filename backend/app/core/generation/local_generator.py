@@ -4,11 +4,12 @@ import requests
 from typing import List
 
 from ..schemas import GenerationResult, RetrievedChunk
+from .base_generator import BaseGenerator
 from .prompts import GENERATOR_SYSTEM_INSTRUCTION_LOCAL
 
 logger = logging.getLogger(__name__)
 
-class LocalGenerator:
+class LocalGenerator(BaseGenerator):
     """
     Sử dụng Ollama (Local LLM) để sinh câu trả lời.
     Chạy hoàn toàn offline, tốc độ phụ thuộc vào cấu hình máy tính (CPU/GPU).
@@ -26,41 +27,11 @@ class LocalGenerator:
         self.model_name = model_name
         logger.info(f"Khởi tạo Local Generator với Ollama (Model: {self.model_name}) tại {self.base_url}")
 
-    def _format_context(self, chunks: List[RetrievedChunk]) -> str:
-        if not chunks:
-            return "Không có tài liệu tham khảo nào."
-        
-        context_parts = []
-        for i, c in enumerate(chunks, 1):
-            page_info = f" (Trang {c.page})" if c.page else ""
-            context_parts.append(
-                f"--- Tài liệu {i} | Nguồn: {c.filename}{page_info} ---\n{c.text}\n"
-            )
-        return "\n".join(context_parts)
-
-    def _extract_sources(self, chunks: List[RetrievedChunk]) -> List[dict]:
-        sources = []
-        for c in chunks:
-            sources.append({
-                "doc_id": c.doc_id,
-                "filename": c.filename,
-                "page": c.page,
-            })
-        return sources
-
     def generate(self, question: str, chunks: List[RetrievedChunk], history: list[dict] = None, max_retries: int = 1) -> GenerationResult:
         """
         Sinh câu trả lời từ câu hỏi và danh sách chunks đã rerank thông qua Ollama.
         """
-        context = self._format_context(chunks)
-        sources = self._extract_sources(chunks)
-
-        user_prompt = (
-            f"[TÀI LIỆU THAM KHẢO]\n\n{context}\n\n"
-            f"---\n\n"
-            f"Câu hỏi: {question}\n\n"
-            f"Câu trả lời:"
-        )
+        user_prompt, sources = self._prepare(question, chunks)
 
         # Xây dựng Messages (Chat format)
         messages = [

@@ -1,50 +1,27 @@
 import logging
 from google import genai
 from google.genai import types
-# RetrievedChunk/GenerationResult nay ở core/schemas.py — re-export để các import cũ
-# (`from ..schemas import GenerationResult, RetrievedChunk`) vẫn hoạt động.
+
 from ..schemas import RetrievedChunk, GenerationResult
+from .base_generator import BaseGenerator
 from .prompts import GENERATOR_SYSTEM_INSTRUCTION_GEMINI
 
 logger = logging.getLogger(__name__)
 
+GEMINI_MODEL_DEFAULT = "gemini-3.1-flash-lite"
 
-class Generator:
+
+class GeminiGenerator(BaseGenerator):
     """
-    Bước cuối trong RAG pipeline: Sinh câu trả lời bằng Google Gemini.
-    Nhận câu hỏi + top chunks → build prompt → gọi LLM → trả về câu trả lời.
+    Sinh câu trả lời bằng Google Gemini.
+    Phần ghép context / trích nguồn / dựng prompt dùng chung ở BaseGenerator.
     """
 
     SYSTEM_INSTRUCTION = GENERATOR_SYSTEM_INSTRUCTION_GEMINI
 
-    def __init__(self, api_key: str, model_name: str = "gemini-3.1-flash-lite"):
+    def __init__(self, api_key: str, model_name: str = None):
         self.client     = genai.Client(api_key=api_key)
-        self.model_name = model_name
-
-    def _format_context(self, chunks: list[RetrievedChunk]) -> str:
-        """Định dạng danh sách chunks thành chuỗi context cho prompt."""
-        parts = []
-        for i, chunk in enumerate(chunks, start=1):
-            source_info = f"Nguồn: {chunk.filename}"
-            if chunk.page:
-                source_info += f", Trang {chunk.page}"
-            parts.append(f"[{i}] ({source_info})\n{chunk.text}")
-        return "\n\n---\n\n".join(parts)
-
-    def _extract_sources(self, chunks: list[RetrievedChunk]) -> list[dict]:
-        """Trích xuất thông tin nguồn từ các chunks để trả về cùng câu trả lời."""
-        seen = set()
-        sources = []
-        for chunk in chunks:
-            key = (chunk.doc_id, chunk.page)
-            if key not in seen:
-                seen.add(key)
-                sources.append({
-                    "doc_id":   chunk.doc_id,
-                    "filename": chunk.filename,
-                    "page":     chunk.page,
-                })
-        return sources
+        self.model_name = model_name or GEMINI_MODEL_DEFAULT
 
     def generate(self, question: str, chunks: list[RetrievedChunk], history: list[dict] = None, max_retries: int = 3) -> GenerationResult:
         """
@@ -52,15 +29,7 @@ class Generator:
         Hỗ trợ lịch sử trò chuyện (history).
         """
         import time
-        context = self._format_context(chunks)
-        sources = self._extract_sources(chunks)
-
-        user_prompt = (
-            f"[TÀI LIỆU THAM KHẢO]\n\n{context}\n\n"
-            f"---\n\n"
-            f"Câu hỏi: {question}\n\n"
-            f"Câu trả lời:"
-        )
+        user_prompt, sources = self._prepare(question, chunks)
 
         # Xây dựng danh sách contents (history + current turn)
         contents = []

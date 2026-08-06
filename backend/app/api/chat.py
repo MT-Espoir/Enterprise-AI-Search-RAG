@@ -11,7 +11,7 @@ from ..core.retrieval import build_retriever
 from ..core.retrieval import get_bm25_index
 from ..core.query import QueryProcessor
 from ..core.ranking import Reranker
-from ..core.generation import Generator
+from ..core.generation import build_generator
 from ..core.rag_pipeline import RAGPipeline
 from ..core.guardrails import check_input
 from ..vectorstore.operations import VectorStoreOps
@@ -22,33 +22,20 @@ logger = logging.getLogger(__name__)
 chat_bp = Blueprint('chat', __name__, url_prefix='/api/chat')
 
 from ..ingestion.embedder.local_embedder import LocalEmbedder
-from ..core.generation import LocalGenerator
-from ..core.generation import ClaudeGenerator
 
 def get_rag_pipeline():
     """Khởi tạo RAG Pipeline từ app config."""
     vector_ops = VectorStoreOps()
-    api_key = current_app.config['GOOGLE_API_KEY']
     
-    provider = current_app.config.get('LLM_PROVIDER', 'local')
-
     # LUÔN SỬ DỤNG LOCAL EMBEDDER (BGE-M3, offline, khớp với embedder dùng lúc ingest).
     # get_instance(): singleton, tránh nạp lại model mỗi request (xem LocalEmbedder).
     embedder = LocalEmbedder.get_instance(model_name=current_app.config.get('LOCAL_EMBEDDING_MODEL'))
 
-    if provider == 'claude':
-        generator = ClaudeGenerator(
-            api_key=current_app.config.get('ANTHROPIC_API_KEY'),
-            model_name=current_app.config.get('ANTHROPIC_MODEL'),
-        )
-    elif provider == 'gemini':
-        generator = Generator(api_key=api_key)
-    else:  # "local" (mặc định)
-        generator = LocalGenerator(
-            base_url=current_app.config.get('OLLAMA_BASE_URL'),
-            model_name=current_app.config.get('LOCAL_LLM_MODEL')
-        )
-        
+    # Chọn nhà cung cấp LLM theo config (local/gemini/claude/openai) — mọi logic
+    # khởi tạo nằm trong factory, thêm nhà cung cấp mới không phải sửa file này.
+    generator = build_generator(current_app.config)
+
+
     strategy = current_app.config.get('RETRIEVAL_STRATEGY', 'hybrid')
     bm25_index = get_bm25_index() if strategy == "hybrid" else None
     retriever = build_retriever(

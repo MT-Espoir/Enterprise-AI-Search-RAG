@@ -4,6 +4,7 @@ from typing import List
 import anthropic
 
 from ..schemas import GenerationResult, RetrievedChunk
+from .base_generator import BaseGenerator
 from .prompts import GENERATOR_SYSTEM_INSTRUCTION_LOCAL
 
 logger = logging.getLogger(__name__)
@@ -14,11 +15,11 @@ logger = logging.getLogger(__name__)
 CLAUDE_MODEL_DEFAULT = "claude-haiku-4-5"
 
 
-class ClaudeGenerator:
+class ClaudeGenerator(BaseGenerator):
     """
     Sinh câu trả lời bằng Claude (Anthropic API), qua SDK chính thức `anthropic`.
-    Cùng interface (GenerationResult) với Generator (Gemini) và LocalGenerator (Ollama)
-    nên là drop-in thay thế ở composition root (chat.py) — chọn qua LLM_PROVIDER=claude.
+    Kế thừa BaseGenerator nên dùng chung cách ghép context/trích nguồn với mọi
+    nhà cung cấp khác — chọn qua LLM_PROVIDER=claude.
 
     Haiku 4.5 là model pre-4.6: KHÔNG truyền tham số `thinking` (bỏ trống = không suy
     luận mở rộng, nhanh + rẻ, đúng nhu cầu RAG trả lời bám context). temperature vẫn
@@ -36,28 +37,8 @@ class ClaudeGenerator:
         self.max_tokens = max_tokens
         logger.info(f"Khởi tạo ClaudeGenerator (Anthropic API, model={self.model_name})")
 
-    def _format_context(self, chunks: List[RetrievedChunk]) -> str:
-        if not chunks:
-            return "Không có tài liệu tham khảo nào."
-        parts = []
-        for i, c in enumerate(chunks, 1):
-            page_info = f" (Trang {c.page})" if c.page else ""
-            parts.append(f"--- Tài liệu {i} | Nguồn: {c.filename}{page_info} ---\n{c.text}\n")
-        return "\n".join(parts)
-
-    def _extract_sources(self, chunks: List[RetrievedChunk]) -> List[dict]:
-        return [{"doc_id": c.doc_id, "filename": c.filename, "page": c.page} for c in chunks]
-
     def generate(self, question: str, chunks: List[RetrievedChunk], history: list[dict] = None) -> GenerationResult:
-        context = self._format_context(chunks)
-        sources = self._extract_sources(chunks)
-
-        user_prompt = (
-            f"[TÀI LIỆU THAM KHẢO]\n\n{context}\n\n"
-            f"---\n\n"
-            f"Câu hỏi: {question}\n\n"
-            f"Câu trả lời:"
-        )
+        user_prompt, sources = self._prepare(question, chunks)
 
         # Anthropic: system là tham số top-level RIÊNG (không nằm trong messages).
         messages = []

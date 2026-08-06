@@ -19,7 +19,7 @@ if not API_KEY:
 # ── Import ─────────────────────────────────────────────────────
 from app.core.schemas import RetrievedChunk
 from app.core.ranking import Reranker
-from app.core.generation import Generator
+from app.core.generation import GeminiGenerator
 
 # ══════════════════════════════════════════════════════════════
 # TEST 1: Reranker
@@ -61,7 +61,7 @@ print("\n  ✅ PASS — Reranker hoạt động đúng\n")
 print("=" * 60)
 print("TEST 2: Generator — Gemini sinh câu trả lời từ context")
 
-generator = Generator(api_key=API_KEY)
+generator = GeminiGenerator(api_key=API_KEY)
 
 # Dùng top 3 chunks sau rerank làm context
 result = generator.generate(question, reranked)

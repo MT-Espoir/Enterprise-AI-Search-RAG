@@ -5,7 +5,7 @@ import uuid
 from .retrieval import Retriever
 from .schemas import RetrievedChunk
 from .ranking import Reranker
-from .generation import Generator
+from .generation import BaseGenerator
 from .schemas import GenerationResult
 from .query import QueryProcessor
 from .observability.request_tracer import log_rag_request
@@ -43,7 +43,7 @@ class RAGPipeline:
         self,
         retriever: Retriever,
         reranker: Reranker,
-        generator: Generator,
+        generator: BaseGenerator,
         query_processor: QueryProcessor = None,
         observability_enabled: bool = True,
         decomposition_enabled: bool = True,
