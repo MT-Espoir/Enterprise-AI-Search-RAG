@@ -4,7 +4,7 @@
 
 **Hệ thống tra cứu và hỏi đáp tài liệu nội bộ doanh nghiệp trên nền Retrieval-Augmented Generation**
 
-Suy luận **100% local** · Hybrid Retrieval (Vector + BM25 + RRF) · Query Processing đa nhánh · Guardrails · Document-level ACL
+Hỗ trợ suy luận 100% Local (cho các mô hình mã nguồn mở) kết hợp kết nối API Cloud (cho OpenAI, Gemini, Claude) · Hybrid Retrieval (Vector + BM25 + RRF) · Query Processing đa nhánh · Guardrails · Document-level ACL
 
 <br/>
 
@@ -47,41 +47,6 @@ Hệ thống được thiết kế cho **mọi loại tài liệu doanh nghiệp
 Kiến trúc **Layered / Clean Architecture** trên nền monolith Flask, gồm các tầng logic (Ingestion · Query Processing · Retrieval · Generation · Observability) và một tầng Production Hardening cross-cutting.
 
 ![Kiến trúc pipeline RAG Enterprise Search](architecture.png)
-
-<details>
-<summary>Sơ đồ khối rút gọn (mermaid)</summary>
-
-```mermaid
-graph TD
-    UI["React SPA (Vite)"]
-    subgraph Edge["Cross-cutting"]
-        RL["Rate-limit"] --> AUTH["JWT + ACL"] --> CORS["CORS"]
-    end
-    subgraph Core["RAG Core"]
-        QP["QueryProcessor (SLM)"] --> RET["HybridRetriever<br/>Vector + BM25 + RRF"] --> RK["Reranker"] --> GEN["Generator<br/>Ollama / Gemini"]
-        GRD["Guardrails Tier 1<br/>Input · Retrieval · Output"]
-    end
-    subgraph Ingest["Ingestion"]
-        PARSE["Parsers + OCR"] --> CHUNK["Legal/Table-aware Chunker"] --> EMB["BGE-M3 Embedder"]
-    end
-    subgraph Storage
-        CHROMA[("ChromaDB")]
-        MONGO[("MongoDB")]
-        REDIS[("Redis")]
-    end
-    UI --> RL
-    CORS --> Core
-    GRD -.->|input| QP
-    GRD -.->|retrieval| RK
-    GRD -.->|output| GEN
-    RET --> CHROMA
-    EMB --> CHROMA
-    Ingest --> MONGO
-    Core --> MONGO
-    RL --> REDIS
-```
-
-</details>
 
 ## 🧰 Tech Stack
 
