@@ -65,6 +65,14 @@ backend/tests/Test_subject/*
 backend/tests/Test_subject2/*
 !backend/tests/Test_subject2/.gitkeep
 
+# Benchmark tài chính (dữ liệu Simplize lấy trên mạng, CHƯA xin phép — rủi ro bản
+# quyền/dữ liệu; giữ local, KHÔNG commit dataset/DB/report/script liên quan)
+backend/tests/benchmark/evaluation_dataset_finance.json
+backend/tests/benchmark/build_benchmark_db_finance.py
+backend/tests/benchmark/run_finance_benchmark.py
+backend/tests/benchmark/benchmark_chromadb_finance/
+backend/tests/benchmark/reports/report_finance_*.json
+
 # =====================
 # Databases / Local data
 # =====================
