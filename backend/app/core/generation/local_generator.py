@@ -3,7 +3,7 @@ import json
 import requests
 from typing import List
 
-from .generator import GenerationResult, RetrievedChunk
+from ..schemas import GenerationResult, RetrievedChunk
 from .prompts import GENERATOR_SYSTEM_INSTRUCTION_LOCAL
 
 logger = logging.getLogger(__name__)

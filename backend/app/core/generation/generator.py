@@ -1,18 +1,12 @@
 import logging
-from dataclasses import dataclass
 from google import genai
 from google.genai import types
-from .retriever import RetrievedChunk
+# RetrievedChunk/GenerationResult nay ở core/schemas.py — re-export để các import cũ
+# (`from ..schemas import GenerationResult, RetrievedChunk`) vẫn hoạt động.
+from ..schemas import RetrievedChunk, GenerationResult
 from .prompts import GENERATOR_SYSTEM_INSTRUCTION_GEMINI
 
 logger = logging.getLogger(__name__)
-
-@dataclass
-class GenerationResult:
-    answer       : str
-    tokens_used  : int
-    finish_reason: str
-    sources      : list[dict]   # [{"filename": ..., "page": ..., "doc_id": ...}]
 
 
 class Generator:

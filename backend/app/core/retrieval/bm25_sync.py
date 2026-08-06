@@ -43,7 +43,7 @@ def mark_bm25_dirty(redis_client=None):
     redis_client=None -> tự lấy singleton dùng chung qua get_redis_client().
     """
     if redis_client is None:
-        from ..extensions import get_redis_client
+        from ...extensions import get_redis_client
         redis_client = get_redis_client()
     if redis_client is None:
         return
@@ -57,7 +57,7 @@ def _build_index_once(app):
     """Build BM25 từ toàn bộ chunk Chroma hiện có. Cần app context (Chroma client
     đọc current_app.config)."""
     from .bm25_index import get_bm25_index
-    from ..vectorstore.operations import VectorStoreOps
+    from ...vectorstore.operations import VectorStoreOps
     with app.app_context():
         rebuilt = get_bm25_index().refresh(VectorStoreOps())
     return rebuilt

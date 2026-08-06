@@ -1,19 +1,10 @@
 import time
-from dataclasses import dataclass, field
-from ..vectorstore.operations import VectorStoreOps, build_chroma_where, build_acl_where, combine_where
-from ..ingestion.embedder.base_embedder import BaseEmbedder
+from ...vectorstore.operations import VectorStoreOps, build_chroma_where, build_acl_where, combine_where
+from ...ingestion.embedder.base_embedder import BaseEmbedder
 from .base_retriever import BaseRetriever
-
-@dataclass
-class RetrievedChunk:
-    """Đại diện cho một chunk đã được tìm kiếm và có điểm similarity."""
-    chunk_id : str
-    doc_id   : str
-    filename : str
-    page     : int | None
-    text     : str
-    score    : float          # Cosine similarity (0~1) hoặc RRF score tùy strategy, càng cao càng liên quan
-    metadata : dict = field(default_factory=dict)
+# RetrievedChunk nay định nghĩa ở core/schemas.py (module lá dùng chung) — re-export
+# ở đây để mọi import cũ `from .retriever import RetrievedChunk` vẫn hoạt động.
+from ..schemas import RetrievedChunk
 
 
 class Retriever(BaseRetriever):

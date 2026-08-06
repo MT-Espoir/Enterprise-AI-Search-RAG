@@ -2,10 +2,12 @@ import logging
 import time
 import uuid
 
-from .retriever import Retriever, RetrievedChunk
-from .reranker import Reranker
-from .generator import Generator, GenerationResult
-from .query_processor import QueryProcessor
+from .retrieval import Retriever
+from .schemas import RetrievedChunk
+from .ranking import Reranker
+from .generation import Generator
+from .schemas import GenerationResult
+from .query import QueryProcessor
 from .observability.request_tracer import log_rag_request
 from .guardrails import sanitize_chunks, check_output
 from ..vectorstore.operations import build_acl_where

@@ -42,11 +42,11 @@ import requests
 
 from app.ingestion.embedder.local_embedder import LocalEmbedder
 from app.vectorstore.operations import VectorStoreOps
-from app.core.bm25_index import BM25Index
-from app.core.retriever_factory import build_retriever
-from app.core.query_processor import QueryProcessor
-from app.core.reranker import Reranker
-from app.core.local_generator import LocalGenerator
+from app.core.retrieval import BM25Index
+from app.core.retrieval import build_retriever
+from app.core.query import QueryProcessor
+from app.core.ranking import Reranker
+from app.core.generation import LocalGenerator
 
 from tests.benchmark.metrics import (
     calculate_hit_rate,

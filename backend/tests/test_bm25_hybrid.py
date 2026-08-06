@@ -9,8 +9,8 @@ import sys, os
 sys.stdout.reconfigure(encoding='utf-8')
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app.core.bm25_index import BM25Index, simple_tokenize
-from app.core.hybrid_retriever import HybridRetriever
+from app.core.retrieval import BM25Index, simple_tokenize
+from app.core.retrieval import HybridRetriever
 
 # ══════════════════════════════════════════════════════════════
 # TEST 1: simple_tokenize — giữ dấu tiếng Việt, lowercase, tách âm tiết
@@ -95,7 +95,11 @@ class FakeVectorOps:
 class FakeBM25Index:
     """Giả lập BM25Index.search() với kết quả cố định — cô lập test fusion logic
     khỏi hành vi tokenize/BM25Okapi thật."""
-    def search(self, question, top_k=20, doc_id=None, filters=None):
+    # Chữ ký phải khớp BM25Index.search() thật — HybridRetriever truyền cả
+    # acl_department/acl_bypass (thêm khi làm Document-level ACL). Stub thiếu 2
+    # tham số này khiến test fail TypeError (lỗi có sẵn, phát hiện khi refactor).
+    def search(self, question, top_k=20, doc_id=None, filters=None,
+               acl_department=None, acl_bypass=False):
         # BM25: chunk_B hạng 1 (trùng với vector), chunk_C hạng 2 (BM25-only, vector bỏ sót)
         return [
             {"id": "chunk_B", "text": "Nội dung B", "metadata": {"doc_id": "d1", "filename": "a.pdf"}, "score": 5.0},

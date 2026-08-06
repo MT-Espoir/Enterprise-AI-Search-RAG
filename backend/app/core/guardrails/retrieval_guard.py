@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass, replace
 
-from ..retriever import RetrievedChunk
+from ..schemas import RetrievedChunk
 from .patterns import _PROMPT_INJECTION_PATTERN, _JAILBREAK_PATTERN
 
 logger = logging.getLogger(__name__)

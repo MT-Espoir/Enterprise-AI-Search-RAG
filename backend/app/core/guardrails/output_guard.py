@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass, field
 
-from ..retriever import RetrievedChunk
+from ..schemas import RetrievedChunk
 from .patterns import _CITATION_PATTERN
 
 logger = logging.getLogger(__name__)

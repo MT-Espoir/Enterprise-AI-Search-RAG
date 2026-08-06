@@ -17,9 +17,9 @@ if not API_KEY:
     sys.exit(1)
 
 # ── Import ─────────────────────────────────────────────────────
-from app.core.retriever import RetrievedChunk
-from app.core.reranker import Reranker
-from app.core.generator import Generator
+from app.core.schemas import RetrievedChunk
+from app.core.ranking import Reranker
+from app.core.generation import Generator
 
 # ══════════════════════════════════════════════════════════════
 # TEST 1: Reranker

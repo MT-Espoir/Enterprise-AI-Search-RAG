@@ -12,9 +12,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import json
 
-import app.core.query_processor as qp_module
-from app.core.query_processor import QueryProcessor, QueryPlan
-from app.core.retriever import RetrievedChunk
+import app.core.query.query_processor as qp_module
+from app.core.query import QueryProcessor, QueryPlan
+from app.core.schemas import RetrievedChunk
 from app.core.rag_pipeline import RAGPipeline
 
 

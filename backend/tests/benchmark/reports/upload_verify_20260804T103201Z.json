@@ -1,0 +1,615 @@
+{
+  "generated_at": "2026-08-04T10:32:01.084210+00:00",
+  "dir": "C:/Users/Dell/Desktop/Study/AI_learning/RAG/backend/tests/Test_subject2",
+  "summary": {
+    "total": 50,
+    "done_clean": 33,
+    "done_flagged": 1,
+    "duplicate": 16,
+    "failed": 0,
+    "pending": 1,
+    "total_chunks": 4633
+  },
+  "records": [
+    {
+      "filename": "2016-0100105616-228690-BCTC-vinaconexpdf.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a718646bd298055cac4e8fd",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "2016-0100105616-228690-BCTC-vinaconexpdf.pdf"
+    },
+    {
+      "filename": "2016-0100105616-228721-BCTCR-vinaconex.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a7188b0bd298055cac4e8fe",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "2016-0100105616-228721-BCTCR-vinaconex.pdf"
+    },
+    {
+      "filename": "2017-0100105616-272261-BCTC-vinaconex.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a718a53bd298055cac4e8ff",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "2017-0100105616-272261-BCTC-vinaconex.pdf"
+    },
+    {
+      "filename": "2017-0100105616-272263-BCTCR-vinaconex.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a718cbcbd298055cac4e900",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "2017-0100105616-272263-BCTCR-vinaconex.pdf"
+    },
+    {
+      "filename": "2018-0100105616-319669-BCTCR-vinaconex.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a718e76bd298055cac4e901",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "2018-0100105616-319669-BCTCR-vinaconex.pdf"
+    },
+    {
+      "filename": "2018-0100105616-323537-BCTC-vinaconex.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a719067bd298055cac4e902",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "2018-0100105616-323537-BCTC-vinaconex.pdf"
+    },
+    {
+      "filename": "2019-0100105616-413021BCTCR-vinaconex.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a71923dbd298055cac4e903",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "2019-0100105616-413021BCTCR-vinaconex.pdf"
+    },
+    {
+      "filename": "2019-0100105616-413788-BCTCR-vinaconex.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a7193f3bd298055cac4e904",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "2019-0100105616-413788-BCTCR-vinaconex.pdf"
+    },
+    {
+      "filename": "2019-0100105616-414059-BCTC-vinaconex.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71970df95655c216dd7624",
+      "status": "done",
+      "page_count": 53,
+      "chunk_count": 192,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 52,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "2020-0100105616-20210330-590-BCTCR-vinaconex.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71990df95655c216dd7625",
+      "status": "done",
+      "page_count": 54,
+      "chunk_count": 158,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 53,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "2020-0100105616-20210331-363-BCTC-vinaconex.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a719ae8f95655c216dd7626",
+      "status": "done",
+      "page_count": 74,
+      "chunk_count": 224,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 73,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "2021-0100105616-20220331-370-BCTC-vinaconex.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a719d5af95655c216dd7627",
+      "status": "done",
+      "page_count": 73,
+      "chunk_count": 207,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 72,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "2021-0100105616-20220331-392-BCTCR-vinaconex.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a719f98f95655c216dd7628",
+      "status": "done",
+      "page_count": 61,
+      "chunk_count": 171,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 60,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "2021-0102294285-20220314-1730-BCTCvinahud.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71a16df95655c216dd7629",
+      "status": "done",
+      "page_count": 32,
+      "chunk_count": 92,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 31,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "2022-0100105616-20230327-1051-BCTC-vinaconex.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71a270f95655c216dd762a",
+      "status": "done",
+      "page_count": 78,
+      "chunk_count": 229,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 77,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "2022-0100105616-20230327-1056BCTCR-vinaconex.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71a48ef95655c216dd762b",
+      "status": "done",
+      "page_count": 66,
+      "chunk_count": 186,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 65,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "2022-0102294285-20230330-533-BCTCVinahud.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71a646f95655c216dd762c",
+      "status": "done",
+      "page_count": 46,
+      "chunk_count": 124,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 0,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "2023-0100105616-20240329-523-BCTC-vinaconex.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71a761f95655c216dd762d",
+      "status": "done",
+      "page_count": 79,
+      "chunk_count": 226,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 78,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "2023-0100105616-20240329-524-BCTCR-vinaconex.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71a981f95655c216dd762e",
+      "status": "done",
+      "page_count": 66,
+      "chunk_count": 200,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 65,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "2024-0100105616-20250328-706-BCTCR-vinaconex.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71ab38f95655c216dd762f",
+      "status": "done",
+      "page_count": 66,
+      "chunk_count": 177,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 65,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "3._Mau_hop_dong_QLDA.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a70d9a936c16df9e2e1df62",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "3._Mau_hop_dong_QLDA.pdf"
+    },
+    {
+      "filename": "356-QĐ-UBND.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a70d9c136c16df9e2e1df63",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "356-Q-UBND.pdf"
+    },
+    {
+      "filename": "37887.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a70d9dd36c16df9e2e1df64",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "37887.pdf"
+    },
+    {
+      "filename": "4.-1.005370.-ĐK-NCCB.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a70d9fc36c16df9e2e1df65",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "4.-1.005370.-K-NCCB.pdf"
+    },
+    {
+      "filename": "4431_qd_2023_22a46.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a70da1736c16df9e2e1df66",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "4431_qd_2023_22a46.pdf"
+    },
+    {
+      "filename": "5_QUY TRINH TONG HOP BAO CAO.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a70da3136c16df9e2e1df67",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "5_QUY_TRINH_TONG_HOP_BAO_CAO.pdf"
+    },
+    {
+      "filename": "6._Mau_hop_dong_thi_cong.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71ad43f95655c216dd7630",
+      "status": "done",
+      "page_count": 53,
+      "chunk_count": 164,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 0,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "BCTCvinahud-31-12-2023.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71ade6f95655c216dd7631",
+      "status": "done",
+      "page_count": 51,
+      "chunk_count": 160,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 0,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "Bản tin KHCN&DN số 6.2022.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71af42f95655c216dd7632",
+      "status": "done",
+      "page_count": 38,
+      "chunk_count": 146,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 0,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "Du-thao-Quy-che-Quan-tri-2018_TV (1).pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71afc1f95655c216dd7633",
+      "status": "done",
+      "page_count": 39,
+      "chunk_count": 160,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 0,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "Du-thao-Quy-che-Quan-tri-2018_TV.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a71afc1f95655c216dd7633",
+      "status": "done",
+      "page_count": 39,
+      "chunk_count": 160,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "Du-thao-Quy-che-Quan-tri-2018_TV_1.pdf",
+      "ocr": {
+        "pages_needing_ocr": 0,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "Signed.1.-Quy-trinh-quan-ly-de-tai-cac-cap.pdf",
+      "outcome": "duplicate",
+      "doc_id": "6a70db4336c16df9e2e1df6c",
+      "status": null,
+      "page_count": null,
+      "chunk_count": null,
+      "flags": [
+        "DUPLICATE"
+      ],
+      "note": "Signed.1.-Quy-trinh-quan-ly-de-tai-cac-cap.pdf"
+    },
+    {
+      "filename": "Simplize_FPT_FinancialIndicator_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b07cf95655c216dd7634",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 65,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_FPT_PriceHistory_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b111f95655c216dd7635",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 154,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_GAS_FinancialIndicator_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b217f95655c216dd7636",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 65,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_GAS_PriceHistory_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b2a5f95655c216dd7637",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 151,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_HPG_FinancialIndicator_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b3a2f95655c216dd7638",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 64,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_HPG_PriceHistory_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b436f95655c216dd7639",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 147,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_IMP_FinancialIndicator_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b537f95655c216dd763a",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 35,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_IMP_PriceHistory_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b57ef95655c216dd763b",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 148,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_MSN_FinancialIndicator_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b676f95655c216dd763c",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 65,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_MSN_PriceHistory_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b70af95655c216dd763d",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 124,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_MWG_FinancialIndicator_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b7e8f95655c216dd763e",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 66,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_MWG_PriceHistory_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b876f95655c216dd763f",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 148,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_VNM_FinancialIndicator_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71b974f95655c216dd7640",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 64,
+      "flags": []
+    },
+    {
+      "filename": "Simplize_VNM_PriceHistory_20250315.xlsx",
+      "outcome": "accepted",
+      "doc_id": "6a71ba0bf95655c216dd7641",
+      "status": "done",
+      "page_count": 1,
+      "chunk_count": 154,
+      "flags": []
+    },
+    {
+      "filename": "WFYJswVux0tHYmVJMUC LUC ISO.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71bb09f95655c216dd7642",
+      "status": "done",
+      "page_count": 2,
+      "chunk_count": 6,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 2,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "bc-quan-tri-cong-ty.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71bb26f95655c216dd7643",
+      "status": "done",
+      "page_count": 21,
+      "chunk_count": 188,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 0,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "bc-quan-tri-rui-ro.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71bbfcf95655c216dd7644",
+      "status": "done",
+      "page_count": 2,
+      "chunk_count": 13,
+      "flags": [],
+      "ocr": {
+        "pages_needing_ocr": 0,
+        "pages_ocr_failed": 0,
+        "ocr_fail_rate": 0.0
+      }
+    },
+    {
+      "filename": "phu-luc-bo-tieu-chi-danh-gia-ho-so-remotesigning-637812049658094044.pdf",
+      "outcome": "accepted",
+      "doc_id": "6a71bc19f95655c216dd7645",
+      "status": "processing",
+      "page_count": null,
+      "chunk_count": 0,
+      "flags": [
+        "TIMEOUT_OR_PENDING"
+      ]
+    }
+  ]
+}

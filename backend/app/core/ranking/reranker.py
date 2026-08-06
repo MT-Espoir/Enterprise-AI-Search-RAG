@@ -1,6 +1,6 @@
 import logging
 from sentence_transformers import CrossEncoder
-from .retriever import RetrievedChunk
+from ..schemas import RetrievedChunk
 
 logger = logging.getLogger(__name__)
 

@@ -21,9 +21,9 @@ from app.ingestion.parsers.markdown_parser import MarkdownParser
 from app.ingestion.chunker.recursive_chunker import RecursiveChunker
 from app.ingestion.embedder.local_embedder import LocalEmbedder
 from app.vectorstore.operations import VectorStoreOps
-from app.core.retriever import Retriever
-from app.core.reranker import Reranker
-from app.core.local_generator import LocalGenerator
+from app.core.retrieval import Retriever
+from app.core.ranking import Reranker
+from app.core.generation import LocalGenerator
 from app.core.rag_pipeline import RAGPipeline
 
 # ── Setup ChromaDB (PersistentClient — không cần server) ─────

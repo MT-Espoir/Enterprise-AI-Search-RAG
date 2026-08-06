@@ -165,7 +165,7 @@ class DocumentService:
 
         if self.bm25_index is not None:
             self.bm25_index.refresh(self.vector_ops)
-            from ..core.bm25_sync import mark_bm25_dirty
+            from ..core.retrieval import mark_bm25_dirty
             mark_bm25_dirty()
             logger.info(f"[{doc_id}] Đã refresh BM25 sau đổi metadata (đồng bộ ACL/filter).")
 
@@ -193,7 +193,7 @@ class DocumentService:
             self.bm25_index.refresh(self.vector_ops)
             # Báo các worker khác (multi-worker) tự refresh — fail-open nếu không
             # có Redis (xem core/bm25_sync.py). Worker này đã refresh cục bộ ở trên.
-            from ..core.bm25_sync import mark_bm25_dirty
+            from ..core.retrieval import mark_bm25_dirty
             mark_bm25_dirty()
             logger.info(f"[{doc_id}] Đã refresh BM25 index sau khi xóa.")
 

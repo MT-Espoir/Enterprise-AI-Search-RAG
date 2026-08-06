@@ -11,9 +11,9 @@ sys.stdout.reconfigure(encoding='utf-8')
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.core.guardrails import check_input, sanitize_chunks, check_output
-from app.core.retriever import RetrievedChunk
+from app.core.schemas import RetrievedChunk
 from app.core.rag_pipeline import RAGPipeline
-from app.core.query_processor import QueryPlan
+from app.core.query import QueryPlan
 
 # ══════════════════════════════════════════════════════════════
 # TEST 1: Input Guard — true positive (phải chặn)

@@ -33,7 +33,7 @@ from app.ingestion.embedder.local_embedder import LocalEmbedder
 from app.ingestion.pipeline import IngestionPipeline
 from app.ingestion.ocr.tesseract_ocr_engine import TesseractOCREngine
 from app.vectorstore.operations import VectorStoreOps
-from app.core.bm25_index import get_bm25_index
+from app.core.retrieval import get_bm25_index
 
 SUPPORTED_EXT = {".pdf", ".docx", ".md", ".txt"}
 

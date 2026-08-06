@@ -79,7 +79,7 @@ def test_rate_limit_killswitch():
 def test_bm25_sync_marker():
     print("=" * 60)
     print("GATE 2 — BM25 cross-worker sync marker")
-    from app.core.bm25_sync import mark_bm25_dirty
+    from app.core.retrieval import mark_bm25_dirty
 
     # (a) Fail-open: không có Redis -> KHÔNG raise.
     mark_bm25_dirty(None)
@@ -108,7 +108,7 @@ def test_bm25_sync_marker():
 def test_bm25_sync_worker_initial_build():
     print("=" * 60)
     print("GATE 2b — BM25 sync worker build index lần đầu lúc khởi động")
-    import app.core.bm25_sync as bm25_sync
+    import app.core.retrieval.bm25_sync as bm25_sync
 
     app = create_app("testing")
     built = {"called": False}
@@ -117,7 +117,7 @@ def test_bm25_sync_worker_initial_build():
     class FakeIndex:
         def refresh(self, ops): built["called"] = True; return True
     # Patch trong module bm25_sync (import cục bộ bên trong _build_index_once).
-    import app.core.bm25_index as bm25_index_mod
+    import app.core.retrieval.bm25_index as bm25_index_mod
     orig = bm25_index_mod.get_bm25_index
     bm25_index_mod.get_bm25_index = lambda: FakeIndex()
     # VectorStoreOps() được gọi trong app context — patch để không chạm Chroma.
@@ -223,7 +223,7 @@ def test_upload_dedup():
 def test_bm25_acl_metadata_rebuild():
     print("=" * 60)
     print("FIX 🔴#1 — BM25 rebuild khi đổi ACL/metadata (chống rò rỉ)")
-    from app.core.bm25_index import BM25Index
+    from app.core.retrieval import BM25Index
 
     idx = BM25Index()
     # v1: chunk MỞ (department="") -> mọi user thấy

@@ -10,7 +10,7 @@ load_dotenv(os.path.join(os.path.dirname(__file__), '..', '..', '.env'))
 import chromadb
 from app.ingestion.embedder.google_embedder import GoogleEmbedder
 from app.vectorstore.operations import VectorStoreOps
-from app.core.retriever import Retriever
+from app.core.retrieval import Retriever
 from tests.benchmark.metrics import calculate_hit_rate, calculate_mrr, calculate_recall_at_k, calculate_precision_at_k
 
 # ── Setup ChromaDB (Sử dụng DB từ E2E test) ─────

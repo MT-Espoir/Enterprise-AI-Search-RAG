@@ -23,7 +23,7 @@ from app.services.document_service import DocumentService
 from app.models.user import User
 from app.models.document import Document
 from app.vectorstore.operations import VectorStoreOps, build_acl_where, combine_where
-from app.core.bm25_index import BM25Index
+from app.core.retrieval import BM25Index
 
 
 def clean_db():

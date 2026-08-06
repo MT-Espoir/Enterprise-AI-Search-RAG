@@ -7,8 +7,8 @@ from ..ingestion.embedder.local_embedder import LocalEmbedder
 from ..ingestion.pipeline import IngestionPipeline
 from ..ingestion.ocr.tesseract_ocr_engine import TesseractOCREngine
 from ..vectorstore.operations import VectorStoreOps
-from ..core.bm25_index import get_bm25_index
-from ..core.retriever_factory import build_retriever
+from ..core.retrieval import get_bm25_index
+from ..core.retrieval import build_retriever
 from ..extensions import limiter, user_or_ip_key
 from ..services.document_service import DuplicateDocumentError
 

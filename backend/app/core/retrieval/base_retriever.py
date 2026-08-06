@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .retriever import RetrievedChunk
+    from ..schemas import RetrievedChunk
 
 
 class BaseRetriever(ABC):

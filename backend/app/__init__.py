@@ -91,7 +91,7 @@ def create_app(config_name: str = "development") -> Flask:
     # ── Redis dùng chung + BM25 cross-worker sync (Layer 6) ──────────────────
     redis_client = get_redis_client(app.config.get("REDIS_URL"))
     if app.config.get("BM25_SYNC_ENABLED"):
-        from .core.bm25_sync import start_bm25_sync_worker
+        from .core.retrieval import start_bm25_sync_worker
         start_bm25_sync_worker(app, redis_client, app.config.get("BM25_SYNC_INTERVAL", 30))
 
     # Đăng ký blueprints

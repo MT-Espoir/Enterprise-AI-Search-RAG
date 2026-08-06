@@ -7,11 +7,11 @@ from ..models.chat_session import ChatSession, Message, SourceRef
 from ..extensions import mongo
 from bson import ObjectId
 
-from ..core.retriever_factory import build_retriever
-from ..core.bm25_index import get_bm25_index
-from ..core.query_processor import QueryProcessor
-from ..core.reranker import Reranker
-from ..core.generator import Generator
+from ..core.retrieval import build_retriever
+from ..core.retrieval import get_bm25_index
+from ..core.query import QueryProcessor
+from ..core.ranking import Reranker
+from ..core.generation import Generator
 from ..core.rag_pipeline import RAGPipeline
 from ..core.guardrails import check_input
 from ..vectorstore.operations import VectorStoreOps
@@ -22,8 +22,8 @@ logger = logging.getLogger(__name__)
 chat_bp = Blueprint('chat', __name__, url_prefix='/api/chat')
 
 from ..ingestion.embedder.local_embedder import LocalEmbedder
-from ..core.local_generator import LocalGenerator
-from ..core.claude_generator import ClaudeGenerator
+from ..core.generation import LocalGenerator
+from ..core.generation import ClaudeGenerator
 
 def get_rag_pipeline():
     """Khởi tạo RAG Pipeline từ app config."""

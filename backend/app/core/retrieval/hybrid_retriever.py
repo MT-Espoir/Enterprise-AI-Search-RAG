@@ -2,7 +2,8 @@ import time
 
 from .base_retriever import BaseRetriever
 from .bm25_index import BM25Index
-from .retriever import RetrievedChunk, Retriever
+from ..schemas import RetrievedChunk
+from .retriever import Retriever
 
 
 class HybridRetriever(BaseRetriever):
