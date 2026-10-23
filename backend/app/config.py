@@ -69,6 +69,9 @@ class BaseConfig:
     # Gợi ý header: rule trước, SLM local (OLLAMA_BASE_URL + LOCAL_LLM_MODEL) khi rule không đủ
     # trường (quyết định D2 — dữ liệu không ra khỏi máy). Tắt → chỉ rule, tài liệu khác để trống.
     CONTEXT_HEADER_SLM_ENABLED = os.getenv("CONTEXT_HEADER_SLM_ENABLED", "true").lower() == "true"
+    # Job embed lại header (POST /api/admin/context-header/reembed): số chunk mỗi lô embed —
+    # lô nhỏ = heartbeat/hủy job phản hồi nhanh hơn, ít khác biệt tốc độ trên CPU.
+    CONTEXT_HEADER_REEMBED_BATCH_SIZE = int(os.getenv("CONTEXT_HEADER_REEMBED_BATCH_SIZE", "16"))
 
     # Minimal Observability — structured JSON request tracing (request_id, latency
     # breakdown, retrieval stats).

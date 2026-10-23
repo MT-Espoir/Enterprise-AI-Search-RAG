@@ -12,6 +12,7 @@ from .api.collections import collections_bp
 from .api.health import health_bp
 from .api.users import users_bp
 from .api.dashboard import dashboard_bp
+from .api.admin import admin_bp
 
 logger = logging.getLogger(__name__)
 
@@ -106,5 +107,6 @@ def create_app(config_name: str = "development") -> Flask:
     app.register_blueprint(health_bp, url_prefix="/api")
     app.register_blueprint(users_bp, url_prefix="/api/users")
     app.register_blueprint(dashboard_bp, url_prefix="/api/dashboard")
+    app.register_blueprint(admin_bp, url_prefix="/api/admin")
 
     return app
