@@ -87,6 +87,8 @@ backend/tests/benchmark/benchmark_sample_full.json
 backend/tests/benchmark/snapshot_manifest_full.json
 backend/tests/benchmark/poc_contextual_headers.json
 backend/tests/benchmark/reports/report_full_*.json
+# Gợi ý/duyệt header ngữ cảnh hàng loạt (tên + phần mở đầu tài liệu production) — giữ local
+backend/scripts/output/
 
 # =====================
 # Databases / Local data

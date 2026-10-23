@@ -142,6 +142,19 @@ assert s.header is None and s.source is None, "SLM không trích được tên �
 # Ca thật dry-run 2026-10-23: SLM trả lại tên file / "không rõ" / chép loại sai lên tiêu đề đã có loại
 sg.requests.post = lambda *a, **kw: FakeResponse('{"loai": "Quy trình", "ten": "45.signed.pdf", "don_vi": "không rõ"}')
 assert suggest_header("45.signed.pdf", ["a) Lao động ..."], slm_enabled=True).header is None
+for fn, slm_title in (("5_QUY_TRINH_TONG_HOP_BAO_CAO.pdf", "QUY_TRINH_TONG_HOP_BAO_CAO"),
+                      ("Signed.1.-Quy-trinh-quan-ly-de-tai-cac-cap.pdf", "Quy-trinh-quan-ly-de-tai-cac-cap"),
+                      ("quyet-dinh_1005174151_1_-_Copy.docx", "quyet-dinh_1005174151_1")):
+    sg.requests.post = lambda *a, t=slm_title, **kw: FakeResponse(json.dumps({"ten": t, "don_vi": "X"}))
+    assert suggest_header(fn, ["..."], slm_enabled=True).header is None, f"1 phần tên file không phải tiêu đề: {fn}"
+sg.requests.post = lambda *a, **kw: FakeResponse(
+    '{"ten": "System Design - Deep Feature Analysis (Top 5 Core Features)"}')
+s = suggest_header("System_Design_Deep_Feature_Analysis.md", ["..."], slm_enabled=True)
+assert s.header == "[System Design - Deep Feature Analysis (Top 5 Core Features)]", \
+    f"tên file đặt theo tiêu đề thật thì tiêu đề vẫn hợp lệ: {s.header}"
+sg.requests.post = lambda *a, **kw: FakeResponse('{"ten": "Điều lệ Công ty TNHH (Một Thành Viên)", "nam": ""}')
+s = suggest_header("dieu-le.docx", ["..."], slm_enabled=True)
+assert s.header == "[Điều lệ Công ty TNHH (Một Thành Viên)]", f"không được mất dấu đóng ngoặc: {s.header}"
 sg.requests.post = lambda *a, **kw: FakeResponse(
     '{"loai": "Quy trình", "ten": "Luật Thương mại 2005", "don_vi": "Quốc hội", "nam": "2005"}')
 s = suggest_header("luat-thuong-mai-2005.pdf", ["LUẬT THƯƠNG MẠI ..."], slm_enabled=True)

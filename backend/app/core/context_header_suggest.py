@@ -332,6 +332,18 @@ _DOC_TYPE_WORDS = ("luật", "bộ luật", "nghị định", "thông tư", "quy
                    "quy định", "mẫu", "điều lệ", "hợp đồng", "báo cáo", "thỏa ước", "dự thảo", "bài tập", "tài liệu")
 
 
+def _looks_like_filename(title: str, filename: str) -> bool:
+    """Tiêu đề trùng / là 1 phần tên file, hoặc có dạng tên file (dấu _ thay khoảng trắng, không khoảng trắng)."""
+    norm = lambda s: re.sub(r"[\s_\-.]+", " ", s.lower()).strip()
+    bare = re.sub(r"\.(pdf|docx?|xlsx|csv|md|txt)$", "", title.strip(), flags=re.IGNORECASE)
+    t, stem = norm(bare), norm(filename.rsplit(".", 1)[0])
+    if not t or t in stem:
+        return True
+    # Tiêu đề DÀI HƠN tên file (vd tên file đặt theo tiêu đề thật: "System_Design_..." → "System Design - ...
+    # (Top 5 Core Features)") vẫn hợp lệ; chỉ loại dạng tên file: không khoảng trắng mà có _ hoặc -
+    return " " not in bare and bool(re.search(r"[_\-]", bare))
+
+
 def _slm_suggest(filename: str, opening: str, base_url: str, model_name: str, timeout: int) -> HeaderSuggestion | None:
     payload = {
         "model": model_name,
@@ -352,13 +364,14 @@ def _slm_suggest(filename: str, opening: str, base_url: str, model_name: str, ti
         return None
 
     def get(key: str) -> str:
-        value = re.sub(r"\s+", " ", str(data.get(key) or "")).strip(" .,;:-–()")
+        # KHÔNG cắt "()" — cắt làm mất dấu đóng ngoặc: "Điều lệ Công ty TNHH (Một Thành Viên)" → "...(Một Thành Viên"
+        value = re.sub(r"\s+", " ", str(data.get(key) or "")).strip(" .,;:-–")
         return "" if value.lower() in _EMPTY_VALUES or "không rõ" in value.lower() else value
 
     kind, title, org, year = get("loai"), get("ten"), get("don_vi"), get("nam")
-    stem = filename.rsplit(".", 1)[0].lower()
-    if not title or stem in title.lower():
-        # SLM không chắc thường trả lại chính tên file ("[45.signed.pdf]") — vô ích, để người duyệt nhập
+    if not title or _looks_like_filename(title, filename):
+        # SLM không chắc thường trả lại tên file hoặc 1 phần tên file ("[45.signed.pdf]",
+        # "QUY_TRINH_TONG_HOP_BAO_CAO") — vô ích, để người duyệt nhập
         return None
     if not re.fullmatch(r"(19|20)\d{2}", year):
         year = ""
