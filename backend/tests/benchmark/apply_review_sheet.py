@@ -6,8 +6,9 @@ bỏ nhãn pooled). Chỉ đọc 4 cột người duyệt điền, bỏ qua mọ
 Kiểm tra trước khi ghi (sai thì KHÔNG ghi gì): ID phải khớp đúng tập câu trong JSON,
 trạng thái phải là approved/rejected/pending.
 
-Chạy: python backend/tests/benchmark/apply_review_sheet.py
+Chạy: python backend/tests/benchmark/apply_review_sheet.py [--set full|vague]
 """
+import argparse
 import json
 import os
 import sys
@@ -18,18 +19,19 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 
 from openpyxl import load_workbook
 
-from tests.benchmark.export_review_sheet import CANDIDATES_PATH, COLUMNS, REVIEW_SHEET, SHEET_PATH, STATUSES
+from tests.benchmark.export_review_sheet import REVIEW_SHEET, SETS, STATUSES, columns_for
 
 
 def _text(value) -> str:
     return "" if value is None else str(value).strip()
 
 
-def read_sheet(path: str) -> dict[str, dict]:
+def read_sheet(path: str, kind: str = "full") -> dict[str, dict]:
+    columns = columns_for(kind)
     ws = load_workbook(path, read_only=True, data_only=True)[REVIEW_SHEET]
-    keys = [key for _, _, key in COLUMNS]
+    keys = [key for _, _, key in columns]
     headers = [_text(c) for c in next(ws.iter_rows(min_row=1, max_row=1, values_only=True))]
-    expected = [header for header, _, _ in COLUMNS]
+    expected = [header for header, _, _ in columns]
     if headers[:len(expected)] != expected:
         sys.exit("❌ Tiêu đề cột trong sheet đã bị đổi — không xác định được cột người duyệt điền.")
 
@@ -46,6 +48,7 @@ def read_sheet(path: str) -> dict[str, dict]:
             "question_edit": _text(row["question_edit"]),
             "drop_pooled": _text(row["drop_pooled"]).lower() in ("x", "yes", "có", "1", "true"),
             "note": _text(row["note"]),
+            "extra_files": [f.strip() for f in _text(row.get("extra_files")).splitlines() if f.strip()],
         }
     return reviews
 
@@ -64,6 +67,9 @@ def apply(candidates: list[dict], reviews: dict[str, dict]) -> Counter:
         r = reviews[c["id"]]
         c["review"] = {"status": r["status"], "note": r["note"]}
         stats[r["status"]] += 1
+        if r["extra_files"] or c.get("extra_relevant_files"):
+            c["extra_relevant_files"] = r["extra_files"]
+            stats["extra_files"] += len(r["extra_files"])
         if r["question_edit"] and r["question_edit"] != c["question"]:
             c.setdefault("question_original", c["question"])
             c["question"] = r["question_edit"]
@@ -79,17 +85,20 @@ def apply(candidates: list[dict], reviews: dict[str, dict]) -> Counter:
     return stats
 
 
-def run():
-    with open(CANDIDATES_PATH, encoding="utf-8") as f:
+def run(kind: str = "full"):
+    candidates_path = SETS[kind]["candidates"]
+    with open(candidates_path, encoding="utf-8") as f:
         data = json.load(f)
-    stats = apply(data["candidates"], read_sheet(SHEET_PATH))
-    with open(CANDIDATES_PATH, "w", encoding="utf-8") as f:
+    stats = apply(data["candidates"], read_sheet(SETS[kind]["sheet"], kind))
+    with open(candidates_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    print(f"✅ Đã cập nhật {CANDIDATES_PATH}")
+    print(f"✅ Đã cập nhật {candidates_path}")
     print(f"   {dict(stats)}")
     if stats["pending"]:
         print(f"⚠️  Còn {stats['pending']} câu pending — finalize sẽ BỎ QUA các câu này.")
 
 
 if __name__ == "__main__":
-    run()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--set", dest="kind", choices=sorted(SETS), default="full", help="Bộ câu hỏi")
+    run(kind=parser.parse_args().kind)

@@ -17,8 +17,10 @@ Xử lý khi chốt:
   3. Chia dev/test PHÂN TẦNG theo stratum (seed cố định): dev để tinh chỉnh hệ thống,
      test chỉ dùng cho lần đánh giá cuối — tránh overfit vào chính bộ đo.
 
-Chạy: python backend/tests/benchmark/finalize_benchmark_dataset.py
+Chạy: python backend/tests/benchmark/finalize_benchmark_dataset.py [--set full|vague]
+  (--set vague → evaluation_dataset_vague.json; chạy benchmark với --dataset ... --split all)
 """
+import argparse
 import hashlib
 import json
 import os
@@ -30,6 +32,9 @@ from collections import Counter, defaultdict
 sys.stdout.reconfigure(encoding="utf-8")
 
 import chromadb
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+from tests.benchmark.export_review_sheet import SETS
 
 BENCH_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BENCH_DIR, "benchmark_chromadb_full")
@@ -72,12 +77,13 @@ def stratified_split(items: list[dict]) -> dict[str, str]:
     return split
 
 
-def run():
+def run(kind: str = "full"):
+    candidates_path, output_path = SETS[kind]["candidates"], SETS[kind]["output"]
     with open(MANIFEST_PATH, encoding="utf-8") as f:
         manifest = json.load(f)
     with open(SAMPLE_PATH, encoding="utf-8") as f:
         sample = json.load(f)
-    with open(CANDIDATES_PATH, encoding="utf-8") as f:
+    with open(candidates_path, encoding="utf-8") as f:
         candidates = json.load(f)
     if candidates["snapshot_fingerprint"] != manifest["fingerprint"]:
         sys.exit("❌ Candidates được sinh từ snapshot khác snapshot hiện tại.")
@@ -99,6 +105,7 @@ def run():
         twins[h].append(cid)
         filename_of[cid] = meta["filename"]
 
+    known_files = set(filename_of.values())
     group_of = {}
     for group in sample["equivalence_groups"] + MANUAL_EQUIVALENT_DOCS:
         for f in group:
@@ -113,6 +120,11 @@ def run():
             expanded.update(twins[hash_of[cid]])
         added_twins += len(expanded) - len(relevant)
         groups = {group_of.get(filename_of[cid], (filename_of[cid],)) for cid in expanded}
+        # Bộ mơ hồ: tài liệu người duyệt bổ sung — chỉ tính ở mức tài liệu (không có chunk_id)
+        unknown = [f for f in c.get("extra_relevant_files", []) if f not in known_files]
+        if unknown:
+            sys.exit(f"❌ {c['id']}: tên file không có trong snapshot: {unknown}")
+        groups |= {group_of.get(f, (f,)) for f in c.get("extra_relevant_files", [])}
         items.append({
             "id": c["id"],
             "question": c["question"],
@@ -141,13 +153,15 @@ def run():
         },
         "questions": items,
     }
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     print(f"✅ {len(items)} câu hỏi — {output['counts']}")
     print(f"   Bổ sung {added_twins} chunk trùng nguyên văn từ tài liệu trùng lặp")
-    print(f"💾 {OUTPUT_PATH}")
+    print(f"💾 {output_path}")
 
 
 if __name__ == "__main__":
-    run()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--set", dest="kind", choices=sorted(SETS), default="full", help="Bộ câu hỏi")
+    run(kind=parser.parse_args().kind)

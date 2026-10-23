@@ -6,7 +6,9 @@ apply_review_sheet.py để đưa kết quả về lại file JSON.
 Cột người duyệt điền (nền vàng): Trạng thái (approved/rejected), Câu hỏi sửa lại,
 Bỏ nhãn pooled, Ghi chú. Các cột còn lại chỉ để đọc — sửa ở đó KHÔNG có tác dụng.
 
-Chạy: python backend/tests/benchmark/export_review_sheet.py [--force]
+--set vague: bộ câu hỏi "mơ hồ" (generate_vague_questions.py) — file riêng, tiêu chí duyệt riêng.
+
+Chạy: python backend/tests/benchmark/export_review_sheet.py [--force] [--set full|vague]
 """
 import argparse
 import json
@@ -25,6 +27,15 @@ DB_PATH = os.path.join(BENCH_DIR, "benchmark_chromadb_full")
 COLLECTION_NAME = "benchmark_full"
 CANDIDATES_PATH = os.path.join(BENCH_DIR, "evaluation_dataset_full_candidates.json")
 SHEET_PATH = os.path.join(BENCH_DIR, "review_candidates_full.xlsx")
+# Bộ câu hỏi: full = 131 câu tự đủ nghĩa (nêu rõ văn bản/năm); vague = câu ngắn KHÔNG nêu năm/loại/
+# số hiệu (contextual_header_rollout_plan.md §4.4) — đo header có làm câu mơ hồ tệ đi không
+SETS = {
+    "full": {"candidates": CANDIDATES_PATH, "sheet": SHEET_PATH,
+             "output": os.path.join(BENCH_DIR, "evaluation_dataset_full.json")},
+    "vague": {"candidates": os.path.join(BENCH_DIR, "evaluation_dataset_vague_candidates.json"),
+              "sheet": os.path.join(BENCH_DIR, "review_candidates_vague.xlsx"),
+              "output": os.path.join(BENCH_DIR, "evaluation_dataset_vague.json")},
+}
 
 REVIEW_SHEET = "Duyệt"
 STATUSES = ("approved", "rejected", "pending")
@@ -47,7 +58,14 @@ COLUMNS = [
     ("Tài liệu khác cũng đúng (pooled)", 30, "pooled_files"),
     ("Nội dung chunk nguồn", 80, "source_text"),
 ]
-EDITABLE = {"status", "question_edit", "drop_pooled", "note"}
+# Bộ mơ hồ: câu không nêu năm → BCTC các năm khác cũng trả lời được nhưng pooling (top-10 mỗi hệ
+# thống) có thể không thấy hết → người duyệt bổ sung tên file, tính đúng ở MỨC TÀI LIỆU khi chấm
+EXTRA_COLUMNS = {"vague": [("Thêm tài liệu cũng đúng (tên file, mỗi dòng 1 file)", 38, "extra_files")]}
+EDITABLE = {"status", "question_edit", "drop_pooled", "note", "extra_files"}
+
+
+def columns_for(kind: str) -> list[tuple]:
+    return COLUMNS + EXTRA_COLUMNS.get(kind, [])
 
 FONT = "Arial"
 EDIT_FILL = PatternFill("solid", start_color="FFF2CC")
@@ -59,6 +77,29 @@ BORDER = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
 FLAG_LABELS = {
     "source_not_confirmed": "Judge không xác nhận chunk nguồn (thường do judge bỏ sót — xem kỹ)",
     "answer_also_in_other_document": "Tài liệu khác cũng chứa đáp án — kiểm tra cột pooled",
+    "mentions_year_type_or_number": "Câu hỏi lỡ nêu năm / loại báo cáo / số hiệu — bộ mơ hồ: sửa bỏ hoặc reject",
+}
+
+CRITERIA = {
+    "full": [
+        "  1. Câu hỏi tự đủ nghĩa (nêu rõ văn bản/công ty/năm) — không phải \"văn bản này\".",
+        "  2. Trả lời được từ chunk nguồn (cột cuối) — đáp án tham chiếu khớp nội dung chunk.",
+        "  3. Giống câu một nhân viên thật sẽ hỏi; không hỏi về chữ ký, số trang, mục lục.",
+        "  4. Không mơ hồ về thời điểm (vd \"giai đoạn gần nhất\" → nên sửa thành năm cụ thể hoặc reject).",
+    ],
+    "vague": [
+        "  Bộ này CỐ Ý mơ hồ: câu ngắn kiểu người dùng gõ vội, KHÔNG nêu năm / loại báo cáo (riêng, hợp nhất) /",
+        "  số hiệu / tên đầy đủ văn bản. Đừng sửa câu cho rõ ràng hơn — đó chính là thứ cần đo.",
+        "  1. Câu NGẮN, tự nhiên, không nêu năm/loại/số hiệu. Câu nào lỡ nêu → sửa bỏ đi hoặc reject.",
+        "  2. Trả lời được từ chunk nguồn (cột cuối) — đáp án tham chiếu khớp nội dung chunk.",
+        "  3. Cột \"Tài liệu khác cũng đúng\": tài liệu mà câu hỏi NHƯ ĐÃ ĐẶT cũng trả lời được (vd cùng chỉ tiêu",
+        "     ở BCTC năm khác) — khi chấm, hệ thống lấy được BẤT KỲ tài liệu nào trong đó đều tính ĐÚNG.",
+        "     Nếu các tài liệu đó thực ra không trả lời được → điền x ở cột \"Bỏ nhãn pooled\".",
+        "  4. Reject nếu mơ hồ tới mức không ai trả lời được (vd \"quy định là gì?\"), hoặc hỏi chữ ký/số trang/mục lục.",
+        "  5. Cột cuối \"Thêm tài liệu cũng đúng\": nếu biết tài liệu khác cũng trả lời được câu hỏi như đã đặt mà",
+        "     chưa có ở cột pooled (vd BCTC Vinaconex các năm khác cho câu không nêu năm) → ghi TÊN FILE, mỗi dòng",
+        "     1 file (đúng tên trong trang Tài liệu). Chỉ tính ở mức tài liệu; tên sai sẽ bị báo lỗi khi chốt.",
+    ],
 }
 
 
@@ -92,11 +133,12 @@ def build_rows(candidates: list[dict]) -> list[dict]:
             "source_file": "\n".join(source_files),
             "pooled_files": "\n".join(pooled_files),
             "source_text": source_text,
+            "extra_files": "\n".join(c.get("extra_relevant_files", [])),
         })
     return rows
 
 
-def write_guide(wb: Workbook):
+def write_guide(wb: Workbook, kind: str = "full"):
     ws = wb.create_sheet("Hướng dẫn", 0)
     lines = [
         ("Cách duyệt benchmark — sheet \"Duyệt\"", True),
@@ -104,27 +146,27 @@ def write_guide(wb: Workbook):
         ("Chỉ điền ở 4 cột NỀN VÀNG. Các cột khác chỉ để đọc, sửa ở đó không có tác dụng.", False),
         ("", False),
         ("Trạng thái: approved = đưa vào benchmark · rejected = loại · pending = chưa duyệt (sẽ bị BỎ QUA khi chốt).", False),
-        ("Câu hỏi sửa lại: để trống nếu giữ nguyên. Điền câu mới nếu muốn sửa câu hỏi (vd làm rõ tên văn bản/năm).", False),
+        ("Câu hỏi sửa lại: để trống nếu giữ nguyên. Điền câu mới nếu muốn sửa câu hỏi "
+         + ("(vd làm rõ tên văn bản/năm)." if kind == "full" else "(vd bỏ năm/số hiệu lỡ nêu — KHÔNG thêm cho rõ hơn)."), False),
         ("Bỏ nhãn pooled: điền x nếu các tài liệu ở cột \"Tài liệu khác cũng đúng\" thực ra KHÔNG trả lời được câu hỏi.", False),
         ("Ghi chú: tùy ý, được lưu lại cùng câu hỏi.", False),
         ("", False),
         ("Tiêu chí approved:", True),
-        ("  1. Câu hỏi tự đủ nghĩa (nêu rõ văn bản/công ty/năm) — không phải \"văn bản này\".", False),
-        ("  2. Trả lời được từ chunk nguồn (cột cuối) — đáp án tham chiếu khớp nội dung chunk.", False),
-        ("  3. Giống câu một nhân viên thật sẽ hỏi; không hỏi về chữ ký, số trang, mục lục.", False),
-        ("  4. Không mơ hồ về thời điểm (vd \"giai đoạn gần nhất\" → nên sửa thành năm cụ thể hoặc reject).", False),
+    ] + [(line, False) for line in CRITERIA[kind]] + [
         ("", False),
         ("Ví dụ một dòng đã duyệt:", True),
         ("  Trạng thái = approved · Câu hỏi sửa lại = (trống) · Bỏ nhãn pooled = (trống) · Ghi chú = (trống)", False),
-        ("  Trạng thái = approved · Câu hỏi sửa lại = \"Tỷ lệ tăng trưởng EPS năm 2024 của Vinamilk là bao nhiêu?\"", False),
+        (("  Trạng thái = approved · Câu hỏi sửa lại = \"Tỷ lệ tăng trưởng EPS năm 2024 của Vinamilk là bao nhiêu?\""
+          if kind == "full" else
+          "  Trạng thái = approved · Câu hỏi sửa lại = \"Vinaconex chia cổ tức bao nhiêu?\" (bỏ năm khỏi câu gốc)"), False),
         ("  Trạng thái = rejected · Ghi chú = \"chunk nguồn lỗi font, câu hỏi chung chung\"", False),
         ("", False),
         ("Cờ cảnh báo (cột F, nền cam):", True),
     ] + [(f"  • {label}", False) for label in FLAG_LABELS.values()] + [
         ("", False),
         ("Duyệt xong: lưu file, rồi chạy", True),
-        ("  python backend/tests/benchmark/apply_review_sheet.py", False),
-        ("  python backend/tests/benchmark/finalize_benchmark_dataset.py", False),
+        (f"  python backend/tests/benchmark/apply_review_sheet.py --set {kind}", False),
+        (f"  python backend/tests/benchmark/finalize_benchmark_dataset.py --set {kind}", False),
     ]
     for i, (text, bold) in enumerate(lines, 1):
         cell = ws.cell(row=i, column=1, value=text)
@@ -132,9 +174,10 @@ def write_guide(wb: Workbook):
     ws.column_dimensions["A"].width = 120
 
 
-def write_review(wb: Workbook, rows: list[dict]):
+def write_review(wb: Workbook, rows: list[dict], kind: str = "full"):
+    columns = columns_for(kind)
     ws = wb.create_sheet(REVIEW_SHEET)
-    for col, (header, width, _) in enumerate(COLUMNS, 1):
+    for col, (header, width, _) in enumerate(columns, 1):
         cell = ws.cell(row=1, column=col, value=header)
         cell.font = Font(name=FONT, bold=True, color="FFFFFF")
         cell.fill = HEADER_FILL
@@ -143,7 +186,7 @@ def write_review(wb: Workbook, rows: list[dict]):
         ws.column_dimensions[cell.column_letter].width = width
 
     for r, row in enumerate(rows, 2):
-        for col, (_, _, key) in enumerate(COLUMNS, 1):
+        for col, (_, _, key) in enumerate(columns, 1):
             cell = ws.cell(row=r, column=col, value=row[key])
             cell.font = Font(name=FONT, size=10)
             cell.alignment = Alignment(wrap_text=True, vertical="top")
@@ -162,7 +205,7 @@ def write_review(wb: Workbook, rows: list[dict]):
     dv.add(f"{letter}2:{letter}{len(rows) + 1}")
 
     ws.freeze_panes = "C2"
-    ws.auto_filter.ref = f"A1:{ws.cell(row=1, column=len(COLUMNS)).column_letter}{len(rows) + 1}"
+    ws.auto_filter.ref = f"A1:{ws.cell(row=1, column=len(columns)).column_letter}{len(rows) + 1}"
 
 
 def write_summary(wb: Workbook, rows: list[dict]):
@@ -191,26 +234,29 @@ def write_summary(wb: Workbook, rows: list[dict]):
     ws.column_dimensions["A"].width = 20
 
 
-def run(force: bool):
-    if os.path.exists(SHEET_PATH) and not force:
-        sys.exit(f"❌ {SHEET_PATH} đã tồn tại — có thể chứa kết quả duyệt dở. Dùng --force để ghi đè.")
-    with open(CANDIDATES_PATH, encoding="utf-8") as f:
+def run(force: bool, kind: str = "full"):
+    sheet_path, candidates_path = SETS[kind]["sheet"], SETS[kind]["candidates"]
+    if os.path.exists(sheet_path) and not force:
+        sys.exit(f"❌ {sheet_path} đã tồn tại — có thể chứa kết quả duyệt dở. Dùng --force để ghi đè.")
+    with open(candidates_path, encoding="utf-8") as f:
         candidates = json.load(f)["candidates"]
 
     rows = build_rows(candidates)
     wb = Workbook()
     wb.remove(wb.active)
-    write_guide(wb)
-    write_review(wb, rows)
+    write_guide(wb, kind)
+    write_review(wb, rows, kind)
     write_summary(wb, rows)
     wb.active = 1
     # openpyxl không lưu giá trị đã tính của công thức → buộc Excel tính lại khi mở file
     wb.calculation.fullCalcOnLoad = True
-    wb.save(SHEET_PATH)
-    print(f"✅ {len(rows)} câu → {SHEET_PATH}")
+    wb.save(sheet_path)
+    print(f"✅ {len(rows)} câu → {sheet_path}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--force", action="store_true", help="Ghi đè file Excel đã có")
-    run(force=parser.parse_args().force)
+    parser.add_argument("--set", dest="kind", choices=sorted(SETS), default="full", help="Bộ câu hỏi")
+    args = parser.parse_args()
+    run(force=args.force, kind=args.kind)
