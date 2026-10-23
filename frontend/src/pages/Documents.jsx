@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Upload, Trash2, Search, Download, FileText } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { apiFetch, apiJson } from "../api/client";
+import ContextHeaderCell from "../components/ContextHeaderCell";
 
 const PAGE_SIZE = 20;
 
@@ -66,6 +67,11 @@ export default function Documents() {
     } catch (err) {
       setError(err.message);
     }
+  }
+
+  // Cập nhật tại chỗ 1 dòng sau khi duyệt/sửa header (không tải lại cả trang)
+  function handleHeaderChanged(docId, fields) {
+    setDocuments((docs) => docs.map((d) => (d._id === docId ? { ...d, ...fields } : d)));
   }
 
   async function handleUpload(e) {
@@ -230,11 +236,20 @@ export default function Documents() {
       {loading ? (
         <div className="mt-6 text-sm text-slate">Đang tải...</div>
       ) : (
-        <div className="mt-6 overflow-hidden rounded-xl border border-ice-200 bg-white">
+        // overflow-x-auto (không phải hidden): màn hẹp thì cuộn ngang, không cắt mất cột Xóa
+        <div className="mt-6 overflow-x-auto rounded-xl border border-ice-200 bg-white">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-ice-200 bg-ice-50 text-left text-navy">
-                <th className="px-4 py-3 font-semibold">Tên file</th>
+                <th className="px-4 py-3 font-semibold">
+                  Tên file{" "}
+                  <span
+                    className="font-normal text-slate"
+                    title="Dòng nhận diện tài liệu (loại, số hiệu/năm, đơn vị) ghép vào khi tìm kiếm để phân biệt các tài liệu giống nhau"
+                  >
+                    · header ngữ cảnh
+                  </span>
+                </th>
                 <th className="px-4 py-3 font-semibold">Trạng thái</th>
                 <th className="px-4 py-3 font-semibold">Số chunk</th>
                 <th className="px-4 py-3 font-semibold">Phòng ban</th>
@@ -246,7 +261,19 @@ export default function Documents() {
                 const canDelete = isAdmin || doc.uploaded_by === user?._id;
                 return (
                   <tr key={doc._id} className="border-b border-ice-100 last:border-0 hover:bg-ice-50">
-                    <td className="px-4 py-3 text-navy">{doc.original_name}</td>
+                    <td className="px-4 py-3">
+                      <div className="text-navy">{doc.original_name}</div>
+                      {/* Header ngữ cảnh ngay dưới tên file (không thêm cột — bảng đã chật ở màn 1024px).
+                          Cùng quyền với xóa/sửa metadata: chủ sở hữu hoặc admin */}
+                      <div className="mt-1.5">
+                        <ContextHeaderCell
+                          doc={doc}
+                          canEdit={canDelete}
+                          onChanged={handleHeaderChanged}
+                          onError={setError}
+                        />
+                      </div>
+                    </td>
                     <td className="px-4 py-3">
                       <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_STYLE[doc.status] || "bg-gray-100 text-slate"}`}>
                         {doc.status}
@@ -258,7 +285,7 @@ export default function Documents() {
                         <select
                           value={doc.department || ""}
                           onChange={(e) => handleDepartmentChange(doc._id, e.target.value)}
-                          className="rounded-lg border border-ice-200 px-2 py-1 text-sm text-navy focus:border-navy focus:outline-none"
+                          className="max-w-[12rem] rounded-lg border border-ice-200 px-2 py-1 text-sm text-navy focus:border-navy focus:outline-none"
                         >
                           <option value="">-- Chưa gán --</option>
                           {departments.map((d) => (
