@@ -29,12 +29,15 @@ class IngestionPipeline:
     }
 
     def __init__(self, vector_ops: VectorStoreOps, doc_service, embedder,
-                 chunk_size: int = 1000, chunk_overlap: int = 200, bm25_index=None, ocr_engine=None):
+                 chunk_size: int = 1000, chunk_overlap: int = 200, bm25_index=None, ocr_engine=None,
+                 header_service=None):
         self.vector_ops  = vector_ops
         self.doc_service = doc_service
         self.embedder    = embedder
         self.bm25_index  = bm25_index
         self.ocr_engine  = ocr_engine
+        # ContextHeaderService (tùy chọn): gợi ý header ngữ cảnh lúc ingest — xem Bước 2b
+        self.header_service = header_service
         self.chunker     = RecursiveChunker(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     # PUBLIC API
     def ingest(self, file_path: str, doc_id: str, filename: str, refresh_bm25: bool = True,
@@ -68,6 +71,17 @@ class IngestionPipeline:
             if not raw_chunks:
                 raise ValueError("Chunker không tạo ra chunk nào.")
             logger.info(f"[{doc_id}] Chunks: {len(raw_chunks)}")
+
+            # ── Bước 2b: Gợi ý header ngữ cảnh (D1-B: dùng ngay bản gợi ý) ──
+            suggestion = None
+            if self.header_service is not None:
+                try:
+                    suggestion = self.header_service.suggest_from_chunks(filename, raw_chunks)
+                    logger.info(f"[{doc_id}] Header gợi ý ({suggestion.source}): {suggestion.header}")
+                except Exception as exc:  # noqa: BLE001 — gợi ý lỗi không được làm hỏng ingest
+                    logger.warning(f"[{doc_id}] Gợi ý header lỗi ({exc}) — ingest tiếp không header.")
+                if context_header is None and suggestion is not None:
+                    context_header = suggestion.header
 
             # ── Bước 3: Embed + Build ChromaDB records ─────
             header     = (context_header or "").strip() if ctx.is_enabled() else ""
@@ -104,6 +118,10 @@ class IngestionPipeline:
             # ── Bước 4: Lưu vào ChromaDB ───────────────────
             self.vector_ops.add_chunks(chroma_chunks)
             logger.info(f"[{doc_id}] Đã lưu {total} chunks vào ChromaDB.")
+
+            if self.header_service is not None:
+                # Ghi gợi ý + embedding đã phản ánh header nào (killswitch tắt → "" → chờ embed lại)
+                self.header_service.record_ingest(doc_id, suggestion, header or None)
 
             if self.bm25_index is not None and refresh_bm25:
                 self.bm25_index.refresh(self.vector_ops)

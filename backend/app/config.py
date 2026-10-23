@@ -66,6 +66,9 @@ class BaseConfig:
     # mọi tài liệu có header + đo lại benchmark (contextual_header_rollout_plan.md S7):
     # bật khi chỉ một phần tài liệu có header gây mất cân bằng (PoC 2026-10-23, câu q066).
     CONTEXT_HEADER_ENABLED = os.getenv("CONTEXT_HEADER_ENABLED", "false").lower() == "true"
+    # Gợi ý header: rule trước, SLM local (OLLAMA_BASE_URL + LOCAL_LLM_MODEL) khi rule không đủ
+    # trường (quyết định D2 — dữ liệu không ra khỏi máy). Tắt → chỉ rule, tài liệu khác để trống.
+    CONTEXT_HEADER_SLM_ENABLED = os.getenv("CONTEXT_HEADER_SLM_ENABLED", "true").lower() == "true"
 
     # Minimal Observability — structured JSON request tracing (request_id, latency
     # breakdown, retrieval stats).

@@ -27,6 +27,7 @@ class Document:
 
     def __init__(self, filename, original_name, file_type, file_size_kb, uploaded_by, _id=None, status=STATUS_PENDING, error_message=None, chunk_count=0, page_count=None, chroma_ids=None, created_at=None, updated_at=None, document_status=DOC_STATUS_CHUA_XAC_DINH, document_type=None, department=None, ocr_stats=None, file_hash=None,
                  context_header=None, context_header_suggested=None, context_header_source=None,
+                 context_header_suggested_source=None, context_header_needs_review=False,
                  context_header_version=0, embedded_header_version=0):
         self._id = _id or ObjectId()
         self.filename = filename
@@ -51,11 +52,14 @@ class Document:
         # SHA-256 nội dung file — chống ingest
         self.file_hash = file_hash
         # Header ngữ cảnh (app/core/context_header.py): context_header = bản ĐÃ DUYỆT,
-        # _suggested = bản hệ thống gợi ý, _source = rule | slm | user. Hai version lệch
-        # nhau (context_header_version != embedded_header_version) = tài liệu CẦN EMBED LẠI.
+        # _suggested = bản hệ thống gợi ý (nguồn: _suggested_source = rule | slm), header HIỆU
+        # LỰC = bản duyệt nếu có, ngược lại bản gợi ý (D1-B); _source = nguồn của header hiệu
+        # lực (rule | slm | user). Hai version lệch nhau = tài liệu CẦN EMBED LẠI.
         self.context_header = context_header
         self.context_header_suggested = context_header_suggested
         self.context_header_source = context_header_source
+        self.context_header_suggested_source = context_header_suggested_source
+        self.context_header_needs_review = bool(context_header_needs_review)
         self.context_header_version = context_header_version or 0
         self.embedded_header_version = embedded_header_version or 0
 
@@ -91,6 +95,8 @@ class Document:
             "context_header": self.context_header,
             "context_header_suggested": self.context_header_suggested,
             "context_header_source": self.context_header_source,
+            "context_header_suggested_source": self.context_header_suggested_source,
+            "context_header_needs_review": self.context_header_needs_review,
             "context_header_version": self.context_header_version,
             "embedded_header_version": self.embedded_header_version,
         }
@@ -121,6 +127,8 @@ class Document:
             context_header=data.get("context_header"),
             context_header_suggested=data.get("context_header_suggested"),
             context_header_source=data.get("context_header_source"),
+            context_header_suggested_source=data.get("context_header_suggested_source"),
+            context_header_needs_review=data.get("context_header_needs_review", False),
             context_header_version=data.get("context_header_version", 0),
             embedded_header_version=data.get("embedded_header_version", 0),
         )

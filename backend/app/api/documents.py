@@ -11,6 +11,7 @@ from ..core.retrieval import get_bm25_index
 from ..core.retrieval import build_retriever
 from ..extensions import limiter, user_or_ip_key
 from ..services.document_service import DuplicateDocumentError
+from ..services.context_header_service import ContextHeaderService, header_state
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +47,8 @@ def upload_document():
         vector_ops=vector_ops,
         doc_service=doc_service,
         bm25_index=get_bm25_index(),
-        ocr_engine=ocr_engine
+        ocr_engine=ocr_engine,
+        header_service=ContextHeaderService.from_config(current_app.config, vector_ops=vector_ops),
     )
 
     try:
@@ -232,6 +234,74 @@ def update_document_metadata(doc_id):
         return jsonify({"error": "Không có trường nào để cập nhật (cần document_status, document_type hoặc department)."}), 400
 
     return jsonify({"message": f"Đã cập nhật metadata cho document {doc_id}."})
+
+
+def _header_service(vector_ops=None) -> ContextHeaderService:
+    return ContextHeaderService.from_config(current_app.config, vector_ops=vector_ops)
+
+
+def _authorize_header_edit(doc_service: DocumentService, doc_id: str):
+    """Cùng quy tắc với PATCH .../metadata: chủ sở hữu hoặc admin. Trả (response, status) khi bị chặn."""
+    doc = doc_service.get_document_by_id(doc_id)
+    if not doc:
+        return jsonify({"error": "Document not found"}), 404
+    if get_jwt().get("role") != "admin" and doc.get("uploaded_by") != get_jwt_identity():
+        return jsonify({"error": "Bạn không có quyền sửa tài liệu này."}), 403
+    return None
+
+
+@documents_bp.route('/<doc_id>/context-header', methods=['GET'])
+@jwt_required()
+def get_context_header(doc_id):
+    """Header ngữ cảnh: bản duyệt, bản gợi ý, header hiệu lực, có cần embed lại không."""
+    doc_service = DocumentService(VectorStoreOps(), upload_folder=current_app.config['UPLOAD_FOLDER'])
+    # Đọc = chống rò rỉ: khác phòng ban → 404 giống GET /<doc_id> (không xác nhận tài liệu tồn tại)
+    doc = doc_service.get_document_by_id(
+        doc_id, acl_department=get_jwt().get("department"), acl_bypass=get_jwt().get("role") == "admin",
+    )
+    if not doc:
+        return jsonify({"error": "Document not found"}), 404
+    return jsonify(header_state(doc))
+
+
+@documents_bp.route('/<doc_id>/context-header', methods=['PATCH'])
+@jwt_required()
+def update_context_header(doc_id):
+    """Body: {"context_header": "..."} = duyệt bản tự nhập · {"context_header": null} = bỏ bản duyệt
+    (quay về bản gợi ý) · {"approve": true} = duyệt nguyên văn bản gợi ý.
+    Chỉ đổi MongoDB — embedding được cập nhật bởi job embed lại (needs_reembed trong response)."""
+    vector_ops = VectorStoreOps()
+    denied = _authorize_header_edit(DocumentService(vector_ops, upload_folder=current_app.config['UPLOAD_FOLDER']), doc_id)
+    if denied:
+        return denied
+
+    data = request.json or {}
+    service = _header_service(vector_ops)
+    try:
+        if data.get("approve") is True:
+            state = service.approve_suggestion(doc_id)
+        elif "context_header" in data:
+            state = service.set_approved(doc_id, data["context_header"])
+        else:
+            return jsonify({"error": "Cần 'context_header' (chuỗi hoặc null) hoặc 'approve': true."}), 400
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400
+    return jsonify(state)
+
+
+@documents_bp.route('/<doc_id>/context-header/suggest', methods=['POST'])
+@jwt_required()
+def suggest_context_header(doc_id):
+    """Gợi ý lại header từ chunk đã lưu (rule → SLM local). Không đổi bản đã duyệt."""
+    vector_ops = VectorStoreOps()
+    denied = _authorize_header_edit(DocumentService(vector_ops, upload_folder=current_app.config['UPLOAD_FOLDER']), doc_id)
+    if denied:
+        return denied
+    try:
+        state = _header_service(vector_ops).refresh_suggestion(doc_id)
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400
+    return jsonify(state)
 
 
 @documents_bp.route('/<doc_id>', methods=['DELETE'])
