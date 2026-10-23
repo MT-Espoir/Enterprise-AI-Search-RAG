@@ -78,6 +78,7 @@ backend/tests/benchmark/reports/report_finance_*.json
 backend/tests/benchmark/benchmark_chromadb_full/
 backend/tests/benchmark/benchmark_chromadb_full_ctx/
 backend/tests/benchmark/benchmark_chromadb_full_ctx_all/
+backend/tests/benchmark/benchmark_chromadb_full_prod_header/
 # File Excel duyệt câu hỏi (chứa nội dung chunk Simplize/BCTC — tái tạo bằng export_review_sheet.py)
 backend/tests/benchmark/review_candidates_full.xlsx
 # Dữ liệu benchmark tổng quát: câu hỏi/đáp án/trích dẫn từ tài liệu Simplize/BCTC (chưa xin phép,
@@ -86,6 +87,7 @@ backend/tests/benchmark/evaluation_dataset_full.json
 backend/tests/benchmark/evaluation_dataset_full_candidates.json
 backend/tests/benchmark/benchmark_sample_full.json
 backend/tests/benchmark/snapshot_manifest_full.json
+backend/tests/benchmark/snapshot_manifest_benchmark_chromadb_full_*.json
 backend/tests/benchmark/poc_contextual_headers.json
 backend/tests/benchmark/poc_contextual_headers_all.json
 backend/tests/benchmark/reports/report_full_*.json

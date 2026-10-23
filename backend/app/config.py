@@ -46,6 +46,9 @@ class BaseConfig:
     CHROMA_API_KEY = os.getenv("CHROMA_API_KEY")
     CHROMA_TENANT = os.getenv("CHROMA_TENANT")
     CHROMA_DATABASE = os.getenv("CHROMA_DATABASE")
+    # HNSW ef_search của collection (vectorstore/client.py) — mặc định Chroma 100 bỏ sót vài
+    # câu hỏi (đo 2026-10-24: ANN recall@10 0.965 → 0.998 ở 500, +~1ms/truy vấn). 0 = không đổi.
+    CHROMA_HNSW_EF_SEARCH = int(os.getenv("CHROMA_HNSW_EF_SEARCH", "500"))
     RERANKER_MODEL = os.getenv("RERANKER_MODEL", "BAAI/bge-reranker-v2-m3")
     RERANKER_TOP_K = int(os.getenv("RERANKER_TOP_K", 5))
     RETRIEVER_TOP_K = int(os.getenv("RETRIEVER_TOP_K", 20))

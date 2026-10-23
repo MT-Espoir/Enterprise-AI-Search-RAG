@@ -106,7 +106,7 @@ def main():
             all_ok &= ok
             print("\n".join(lines))
     print(f"\n{'✅ ĐẠT' if all_ok else '❌ CHƯA ĐẠT'} tiêu chí §4.3 — "
-          f"{'có thể sang S6' if all_ok else 'DỪNG, không đụng production'}")
+          f"{'header không làm nhóm nào tệ đi' if all_ok else 'DỪNG, không triển khai tiếp'}")
     sys.exit(0 if all_ok else 1)
 
 

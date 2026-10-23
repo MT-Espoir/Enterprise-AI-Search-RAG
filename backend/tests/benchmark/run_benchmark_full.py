@@ -20,6 +20,8 @@ Chạy:
   python backend/tests/benchmark/run_benchmark_full.py                 # split=dev, mọi chế độ
   python backend/tests/benchmark/run_benchmark_full.py --split test --modes none,slm
   python backend/tests/benchmark/run_benchmark_full.py --db .../benchmark_chromadb_full_ctx_all --context-header
+  python backend/tests/benchmark/run_benchmark_full.py --db chromadb_data --collection enterprise_documents --context-header
+    (chạy THẲNG trên ChromaDB production — chỉ đọc, server phải TẮT; fingerprint phải khớp manifest)
     (--context-header: bật killswitch CONTEXT_HEADER_ENABLED để BM25/Reranker thấy metadata
      context_header — dùng cho snapshot lưu header kiểu production, poc_contextual_headers_all.py)
 """
@@ -223,8 +225,11 @@ def describe_context_headers(collection) -> dict:
 
 
 def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path: str = DB_PATH,
-        use_context_header: bool = False):
-    with open(MANIFEST_PATH, encoding="utf-8") as f:
+        use_context_header: bool = False, collection_name: str = COLLECTION_NAME):
+    # Snapshot chụp bằng build_benchmark_db_full.py --out có manifest riêng; bản sao PoC dùng manifest gốc
+    own_manifest = os.path.join(BENCH_DIR, f"snapshot_manifest_{os.path.basename(os.path.normpath(db_path))}.json")
+    manifest_path = own_manifest if os.path.exists(own_manifest) else MANIFEST_PATH
+    with open(manifest_path, encoding="utf-8") as f:
         manifest = json.load(f)
     with open(dataset_path, encoding="utf-8") as f:
         dataset = json.load(f)
@@ -242,8 +247,11 @@ def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path:
         except Exception:
             sys.exit(f"❌ Chế độ slm cần Ollama tại {ollama_base_url} — chạy `ollama serve` hoặc bỏ slm khỏi --modes.")
 
-    collection = chromadb.PersistentClient(path=db_path).get_collection(COLLECTION_NAME)
+    collection = chromadb.PersistentClient(path=db_path).get_collection(collection_name)
     ops = SnapshotOps(collection)
+    db_fingerprint = hashlib.sha256("\n".join(sorted(collection.get(include=[])["ids"])).encode("utf-8")).hexdigest()
+    if db_fingerprint != manifest["fingerprint"]:
+        sys.exit(f"❌ Chunk trong {db_path} không khớp fingerprint của {os.path.basename(manifest_path)}.")
     header_info = None
     if use_context_header:
         header_info = describe_context_headers(collection)
@@ -266,6 +274,11 @@ def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path:
             "modes": modes,
             "snapshot_fingerprint": manifest["fingerprint"],
             "db_path": os.path.relpath(db_path, BENCH_DIR),
+            "collection": collection_name,
+            "manifest": os.path.basename(manifest_path),
+            "hnsw": {k: ((collection.configuration or {}).get("hnsw") or {}).get(k)
+                     for k in ("space", "ef_construction", "ef_search", "max_neighbors")},
+            "snapshot_created_at": manifest.get("created_at"),
             "corpus": f"{manifest['total_documents']} tài liệu / {manifest['total_chunks']} chunk",
             "retrieval_strategy": strategy,
             "retriever_top_k": RETRIEVER_TOP_K,
@@ -349,6 +362,8 @@ if __name__ == "__main__":
     parser.add_argument("--dataset", default=DATASET_PATH, help="Đường dẫn dataset (mặc định evaluation_dataset_full.json)")
     parser.add_argument("--db", default=DB_PATH,
                         help="ChromaDB snapshot (mặc định benchmark_chromadb_full; PoC: benchmark_chromadb_full_ctx)")
+    parser.add_argument("--collection", default=COLLECTION_NAME,
+                        help="Tên collection (mặc định benchmark_full; ChromaDB production: enterprise_documents)")
     parser.add_argument("--context-header", action="store_true",
                         help="Bật killswitch header ngữ cảnh (BM25/Reranker thấy metadata context_header)")
     args = parser.parse_args()
@@ -357,4 +372,4 @@ if __name__ == "__main__":
     if unknown:
         parser.error(f"Chế độ không hợp lệ: {unknown}")
     run(split=args.split, modes=selected, dataset_path=args.dataset, db_path=args.db,
-        use_context_header=args.context_header)
+        use_context_header=args.context_header, collection_name=args.collection)
