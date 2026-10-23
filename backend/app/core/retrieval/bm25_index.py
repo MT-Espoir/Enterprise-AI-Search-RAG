@@ -4,6 +4,8 @@ import threading
 
 from rank_bm25 import BM25Okapi
 
+from .. import context_header as ctx
+
 _TOKEN_RE = re.compile(r"\w+", re.UNICODE)
 
 
@@ -22,6 +24,9 @@ def _compute_checksum(chunks: list[dict]) -> str:
         parts.append(
             f'{c["id"]}\x1f{m.get("department", "")}\x1f'
             f'{m.get("document_status", "")}\x1f{m.get("document_type", "")}'
+            # Header ĐANG ÁP DỤNG (rỗng khi killswitch tắt): đổi header hoặc bật/tắt
+            # killswitch phải kích hoạt rebuild, giống ACL/metadata ở trên.
+            f'\x1f{ctx.header_of(m)}'
         )
     joined = "|".join(sorted(parts))
     return hashlib.md5(joined.encode("utf-8")).hexdigest()
@@ -46,7 +51,8 @@ class BM25Index:
         if not force and checksum == self._checksum:
             return False
 
-        tokenized = [simple_tokenize(c["text"]) for c in chunks]
+        # Đánh chỉ mục trên header + nội dung; _texts vẫn giữ nội dung GỐC (trả về cho Generator)
+        tokenized = [simple_tokenize(ctx.context_text_for(c["text"], c.get("metadata"))) for c in chunks]
         new_bm25 = BM25Okapi(tokenized) if tokenized else None
 
         with self._lock:

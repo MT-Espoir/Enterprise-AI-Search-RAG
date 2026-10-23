@@ -25,7 +25,9 @@ class Document:
     DOC_TYPE_KHAC = "khac"
     VALID_DOC_TYPES = (DOC_TYPE_LUAT, DOC_TYPE_NGHI_DINH, DOC_TYPE_BIEU_MAU, DOC_TYPE_QUY_CHE, DOC_TYPE_KHAC)
 
-    def __init__(self, filename, original_name, file_type, file_size_kb, uploaded_by, _id=None, status=STATUS_PENDING, error_message=None, chunk_count=0, page_count=None, chroma_ids=None, created_at=None, updated_at=None, document_status=DOC_STATUS_CHUA_XAC_DINH, document_type=None, department=None, ocr_stats=None, file_hash=None):
+    def __init__(self, filename, original_name, file_type, file_size_kb, uploaded_by, _id=None, status=STATUS_PENDING, error_message=None, chunk_count=0, page_count=None, chroma_ids=None, created_at=None, updated_at=None, document_status=DOC_STATUS_CHUA_XAC_DINH, document_type=None, department=None, ocr_stats=None, file_hash=None,
+                 context_header=None, context_header_suggested=None, context_header_source=None,
+                 context_header_version=0, embedded_header_version=0):
         self._id = _id or ObjectId()
         self.filename = filename
         self.original_name = original_name
@@ -48,10 +50,23 @@ class Document:
         self.ocr_stats = ocr_stats
         # SHA-256 nội dung file — chống ingest
         self.file_hash = file_hash
+        # Header ngữ cảnh (app/core/context_header.py): context_header = bản ĐÃ DUYỆT,
+        # _suggested = bản hệ thống gợi ý, _source = rule | slm | user. Hai version lệch
+        # nhau (context_header_version != embedded_header_version) = tài liệu CẦN EMBED LẠI.
+        self.context_header = context_header
+        self.context_header_suggested = context_header_suggested
+        self.context_header_source = context_header_source
+        self.context_header_version = context_header_version or 0
+        self.embedded_header_version = embedded_header_version or 0
 
         now = datetime.now(timezone.utc)
         self.created_at = created_at or now
         self.updated_at = updated_at or now
+
+    @property
+    def needs_reembed(self) -> bool:
+        """Header đã duyệt/sửa nhưng embedding chưa phản ánh phiên bản đó."""
+        return self.context_header_version != self.embedded_header_version
 
     def to_dict(self) -> dict:
         return {
@@ -73,6 +88,11 @@ class Document:
             "department": self.department,
             "ocr_stats": self.ocr_stats,
             "file_hash": self.file_hash,
+            "context_header": self.context_header,
+            "context_header_suggested": self.context_header_suggested,
+            "context_header_source": self.context_header_source,
+            "context_header_version": self.context_header_version,
+            "embedded_header_version": self.embedded_header_version,
         }
 
     @classmethod
@@ -98,4 +118,9 @@ class Document:
             department=data.get("department", DEFAULT_DEPARTMENT),
             ocr_stats=data.get("ocr_stats"),
             file_hash=data.get("file_hash"),
+            context_header=data.get("context_header"),
+            context_header_suggested=data.get("context_header_suggested"),
+            context_header_source=data.get("context_header_source"),
+            context_header_version=data.get("context_header_version", 0),
+            embedded_header_version=data.get("embedded_header_version", 0),
         )

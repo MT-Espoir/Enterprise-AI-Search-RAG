@@ -9,6 +9,7 @@ from .chunker.recursive_chunker import RecursiveChunker
 from .embedder.google_embedder import GoogleEmbedder
 from ..vectorstore.operations import VectorStoreOps
 from ..models.document import Document
+from ..core import context_header as ctx
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,8 @@ class IngestionPipeline:
         self.ocr_engine  = ocr_engine
         self.chunker     = RecursiveChunker(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     # PUBLIC API
-    def ingest(self, file_path: str, doc_id: str, filename: str, refresh_bm25: bool = True) -> bool:
+    def ingest(self, file_path: str, doc_id: str, filename: str, refresh_bm25: bool = True,
+               context_header: str = None) -> bool:
         """
         Chạy pipeline đồng bộ (blocking).
         Trả về True nếu thành công, False nếu thất bại.
@@ -45,6 +47,10 @@ class IngestionPipeline:
         refresh_bm25: mặc định True (hành vi cũ, dùng cho upload đơn lẻ qua API).
         Đặt False khi gọi từ ingest_batch() — refresh BM25 rebuild TOÀN BỘ index
         (O(N) theo tổng số chunk hệ thống).
+
+        context_header: header ngữ cảnh của tài liệu (app/core/context_header.py) — chỉ
+        được ghép vào EMBEDDING khi killswitch CONTEXT_HEADER_ENABLED bật; nội dung chunk
+        lưu vào ChromaDB luôn là bản gốc.
         """
         try:
             self.doc_service.update_status(doc_id, "processing")
@@ -64,7 +70,8 @@ class IngestionPipeline:
             logger.info(f"[{doc_id}] Chunks: {len(raw_chunks)}")
 
             # ── Bước 3: Embed + Build ChromaDB records ─────
-            texts      = [c["text"] for c in raw_chunks]
+            header     = (context_header or "").strip() if ctx.is_enabled() else ""
+            texts      = [ctx.build_context_text(header, c["text"]) for c in raw_chunks]
             embeddings = self.embedder.embed_batch(texts)
 
             total = len(raw_chunks)
@@ -89,6 +96,8 @@ class IngestionPipeline:
                         "department":      "",
                         **{k: v for k, v in meta.items()
                            if k not in ("page_num", "chunk_index")},
+                        # Chỉ ghi khi embedding THẬT SỰ có header (bất biến của context_header.py)
+                        **({"context_header": header} if header else {}),
                     },
                 })
 
@@ -137,11 +146,12 @@ class IngestionPipeline:
         refresh BM25 index MỘT LẦN sau khi toàn bộ batch xong — thay vì mỗi
         tài liệu 
 
-        files: list[{"file_path": str, "doc_id": str, "filename": str}]
+        files: list[{"file_path": str, "doc_id": str, "filename": str, "context_header"?: str}]
         Trả về list[bool] kết quả từng file, đúng thứ tự với `files`.
         """
         results = [
-            self.ingest(f["file_path"], f["doc_id"], f["filename"], refresh_bm25=False)
+            self.ingest(f["file_path"], f["doc_id"], f["filename"], refresh_bm25=False,
+                        context_header=f.get("context_header"))
             for f in files
         ]
 
@@ -153,7 +163,8 @@ class IngestionPipeline:
 
         return results
 
-    def ingest_async(self, file_path: str, doc_id: str, filename: str) -> threading.Thread:
+    def ingest_async(self, file_path: str, doc_id: str, filename: str,
+                     context_header: str = None) -> threading.Thread:
         """
         Chạy pipeline trong background thread (non-blocking).
         API endpoint gọi hàm này để trả về HTTP 202 ngay lập tức.
@@ -161,6 +172,7 @@ class IngestionPipeline:
         thread = threading.Thread(
             target=self.ingest,
             args=(file_path, doc_id, filename),
+            kwargs={"context_header": context_header},
             daemon=True,   # Tự kết thúc khi main process dừng
             name=f"ingest-{doc_id}",
         )

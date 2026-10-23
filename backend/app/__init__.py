@@ -88,6 +88,10 @@ def create_app(config_name: str = "development") -> Flask:
             }
         }), 429
 
+    # Header ngữ cảnh — đặt TRƯỚC BM25 sync worker vì worker build index ngay lúc khởi động.
+    from .core import context_header
+    context_header.set_enabled(app.config.get("CONTEXT_HEADER_ENABLED", False))
+
     # ── Redis dùng chung + BM25 cross-worker sync (Layer 6) ──────────────────
     redis_client = get_redis_client(app.config.get("REDIS_URL"))
     if app.config.get("BM25_SYNC_ENABLED"):

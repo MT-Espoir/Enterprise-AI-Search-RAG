@@ -18,6 +18,7 @@ Thêm một nhà cung cấp mới = tạo 1 file kế thừa lớp này + cài `
 from abc import ABC, abstractmethod
 
 from ..schemas import GenerationResult, RetrievedChunk
+from .. import context_header as ctx
 
 
 class BaseGenerator(ABC):
@@ -42,7 +43,10 @@ class BaseGenerator(ABC):
         parts = []
         for i, c in enumerate(chunks, 1):
             page_info = f" (Trang {c.page})" if c.page else ""
-            parts.append(f"--- Tài liệu {i} | Nguồn: {c.filename}{page_info} ---\n{c.text}\n")
+            # Header ngữ cảnh chỉ ở NHÃN nguồn (năm/loại báo cáo của đoạn), nội dung đoạn giữ nguyên
+            header = ctx.header_of(c.metadata)
+            header_info = f" | {header}" if header else ""
+            parts.append(f"--- Tài liệu {i} | Nguồn: {c.filename}{page_info}{header_info} ---\n{c.text}\n")
         return "\n".join(parts)
 
     def _extract_sources(self, chunks: list[RetrievedChunk]) -> list[dict]:

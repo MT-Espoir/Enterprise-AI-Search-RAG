@@ -62,6 +62,11 @@ class BaseConfig:
     # Killswitch RIÊNG cho Decomposition/Multi-Query 
     DECOMPOSITION_ENABLED = os.getenv("DECOMPOSITION_ENABLED", "true").lower() == "true"
 
+    # Header ngữ cảnh tài liệu (app/core/context_header.py). Mặc định TẮT cho tới khi
+    # mọi tài liệu có header + đo lại benchmark (contextual_header_rollout_plan.md S7):
+    # bật khi chỉ một phần tài liệu có header gây mất cân bằng (PoC 2026-10-23, câu q066).
+    CONTEXT_HEADER_ENABLED = os.getenv("CONTEXT_HEADER_ENABLED", "false").lower() == "true"
+
     # Minimal Observability — structured JSON request tracing (request_id, latency
     # breakdown, retrieval stats).
     OBSERVABILITY_ENABLED = os.getenv("OBSERVABILITY_ENABLED", "true").lower() == "true"

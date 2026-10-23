@@ -1,6 +1,7 @@
 import logging
 from sentence_transformers import CrossEncoder
 from ..schemas import RetrievedChunk
+from .. import context_header as ctx
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,9 @@ class Reranker:
         if not chunks:
             return []
 
-        pairs = [(question, chunk.text) for chunk in chunks]
+        # Header ngữ cảnh (khi bật) giúp cross-encoder phân biệt tài liệu gần giống nhau
+        # (cùng công ty khác năm / riêng–hợp nhất); chunk.text giữ nguyên cho Generator.
+        pairs = [(question, ctx.context_text_for(chunk.text, chunk.metadata)) for chunk in chunks]
         scores = self.model.predict(pairs)
 
         for chunk, score in zip(chunks, scores):
