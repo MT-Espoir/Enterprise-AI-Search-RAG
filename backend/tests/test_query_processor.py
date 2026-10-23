@@ -52,6 +52,39 @@ print(f"  {plan}")
 print("  ✅ PASS\n")
 
 # ══════════════════════════════════════════════════════════════
+# TEST 1b: "tổng hợp" chỉ là SUMMARY khi đi kèm cụm tóm lược
+# (benchmark 2026-10-22: câu tra cứu có "tổng hợp" bị bypass retrieval nhầm)
+# ══════════════════════════════════════════════════════════════
+print("=" * 60)
+print("TEST 1b: 'tổng hợp' — không nhận nhầm câu tra cứu là tóm tắt")
+
+summary_requests = [
+    "Tổng hợp lại nội dung tài liệu này giúp tôi",
+    "Hãy tổng hợp các ý chính của Nghị định 145/2020/NĐ-CP",
+    "tổng hợp giúp mình những điểm chính của luật doanh nghiệp",
+    "Tổng hợp nội dung văn bản này",
+]
+lookup_questions = [
+    # 2 câu thật trong benchmark từng bị bypass nhầm
+    "Làm thế nào để nhận biết các phần nội dung đã được cập nhật trong quy trình tổng hợp "
+    "báo cáo ĐHYD-HCTH/QT.05 của Đại học Y Dược TP.HCM?",
+    "Theo Thông tư 44/2026/TT-BTC, khi tổng hợp tình hình thực hiện dự án đầu tư, nhà đầu tư "
+    "cần phân loại nguồn vốn như thế nào?",
+    "Báo cáo tổng hợp năm 2023 của Vinaconex ghi nhận doanh thu bao nhiêu?",
+    "Bảng tổng hợp lương phòng kế toán tháng 3 có bao nhiêu nhân viên?",
+]
+for q in summary_requests:
+    plan = qp.process(q)
+    assert plan.bypass_retrieval is True and plan.query_type == "summary", f"❌ phải là SUMMARY: {q!r} → {plan}"
+qp_module.requests.post = lambda *a, **kw: FakeResponse(json.dumps({"query_type": "simple"}))
+for q in lookup_questions:
+    plan = qp.process(q)
+    assert plan.bypass_retrieval is False and plan.query_type != "summary", f"❌ KHÔNG được là SUMMARY: {q!r} → {plan}"
+qp_module.requests.post = _refuse_llm_call
+print(f"  {len(summary_requests)} yêu cầu tóm tắt → summary; {len(lookup_questions)} câu tra cứu → retrieval")
+print("  ✅ PASS\n")
+
+# ══════════════════════════════════════════════════════════════
 # TEST 2: Fast path — câu rõ ràng, không đại từ/history, KHÔNG gọi LLM
 # ══════════════════════════════════════════════════════════════
 print("=" * 60)

@@ -18,7 +18,13 @@ logger = logging.getLogger(__name__)
 SUMMARY_KEYWORDS = [
     r"tóm tắt",
     r"tổng quan",
-    r"tổng hợp",
+    # "tổng hợp" trần là từ thường gặp trong câu hỏi tra cứu ("quy trình tổng hợp báo cáo",
+    # "báo cáo tổng hợp", "khi tổng hợp tình hình dự án") — match trần từng khiến các câu đó
+    # bị coi là yêu cầu tóm tắt → bỏ qua retrieval (benchmark 2026-10-22, q014/q092). Chỉ
+    # nhận khi đi kèm cụm chỉ hành động tóm lược: báo nhầm "tóm tắt" làm MẤT câu trả lời,
+    # còn bỏ sót chỉ khiến câu đi qua retrieval bình thường.
+    r"tổng hợp\s+(lại|giúp|giùm|hộ|cho\s+(tôi|mình|em)|(các\s+|những\s+)?"
+    r"(nội dung|ý chính|điểm chính|thông tin chính))",
     r"nội dung chính",
     r"nói về cái gì",
     r"nói về vấn đề gì",
