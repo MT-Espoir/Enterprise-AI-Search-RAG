@@ -19,8 +19,12 @@ không đo phân quyền.
 Chạy:
   python backend/tests/benchmark/run_benchmark_full.py                 # split=dev, mọi chế độ
   python backend/tests/benchmark/run_benchmark_full.py --split test --modes none,slm
+  python backend/tests/benchmark/run_benchmark_full.py --db .../benchmark_chromadb_full_ctx_all --context-header
+    (--context-header: bật killswitch CONTEXT_HEADER_ENABLED để BM25/Reranker thấy metadata
+     context_header — dùng cho snapshot lưu header kiểu production, poc_contextual_headers_all.py)
 """
 import argparse
+import hashlib
 import json
 import os
 import statistics
@@ -44,6 +48,7 @@ from app.core.retrieval import BM25Index, build_retriever
 from app.core.query import QueryProcessor
 from app.core.ranking import Reranker
 from app.core.rag_pipeline import RAGPipeline
+from app.core import context_header
 
 from tests.benchmark.metrics import (
     bootstrap_ci,
@@ -195,7 +200,30 @@ def print_summary(mode: str, s: dict):
         print(f"  {name:<18} n={st['n']:<4} {st['doc_hit@3_reranked']}  /  {st['chunk_hit@3_reranked']}")
 
 
-def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path: str = DB_PATH):
+def describe_context_headers(collection) -> dict:
+    """Bộ header có trong snapshot — ghi vào run_config (fingerprint chỉ băm chunk_id, không
+    phân biệt được embedding có header hay chưa). Chặn snapshot kiểu PoC cũ (header đã nằm
+    trong document text) vì bật killswitch sẽ ghép header 2 lần."""
+    data = collection.get(include=["documents", "metadatas"])
+    header_of, doubled = {}, 0
+    for text, meta in zip(data["documents"], data["metadatas"]):
+        header = (meta.get("context_header") or "").strip()
+        if header:
+            header_of[meta["doc_id"]] = header
+            doubled += text.startswith(header)
+    if doubled:
+        sys.exit(f"❌ {doubled} chunk đã có header trong document text (snapshot kiểu PoC cũ) — "
+                 "bỏ --context-header, nếu không header bị ghép 2 lần.")
+    payload = "\n".join(f"{doc_id}\x1f{header_of[doc_id]}" for doc_id in sorted(header_of))
+    return {
+        "chunks_with_header": sum(bool(m.get("context_header")) for m in data["metadatas"]),
+        "documents_with_header": len(header_of),
+        "headers_hash": hashlib.sha256(payload.encode("utf-8")).hexdigest(),
+    }
+
+
+def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path: str = DB_PATH,
+        use_context_header: bool = False):
     with open(MANIFEST_PATH, encoding="utf-8") as f:
         manifest = json.load(f)
     with open(dataset_path, encoding="utf-8") as f:
@@ -216,6 +244,12 @@ def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path:
 
     collection = chromadb.PersistentClient(path=db_path).get_collection(COLLECTION_NAME)
     ops = SnapshotOps(collection)
+    header_info = None
+    if use_context_header:
+        header_info = describe_context_headers(collection)
+        context_header.set_enabled(True)  # trước BM25 refresh: index tokenize "header + nội dung"
+        print(f"🏷️  Header ngữ cảnh BẬT: {header_info['documents_with_header']} tài liệu / "
+              f"{header_info['chunks_with_header']} chunk có header\n")
     embedder = LocalEmbedder(model_name=os.getenv("LOCAL_EMBEDDING_MODEL"))
     strategy = os.getenv("RETRIEVAL_STRATEGY", "hybrid")
     bm25_index = None
@@ -240,6 +274,8 @@ def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path:
             "decomposition_enabled": decomposition_enabled,
             "production_rerank_top_k": PRODUCTION_RERANK_TOP_K,
             "acl_bypass": True,
+            "context_header_enabled": use_context_header,
+            "context_headers": header_info,
             "device_note": "CPU-only — latency phản ánh phần cứng máy chạy benchmark",
         },
         "modes": {},
@@ -313,9 +349,12 @@ if __name__ == "__main__":
     parser.add_argument("--dataset", default=DATASET_PATH, help="Đường dẫn dataset (mặc định evaluation_dataset_full.json)")
     parser.add_argument("--db", default=DB_PATH,
                         help="ChromaDB snapshot (mặc định benchmark_chromadb_full; PoC: benchmark_chromadb_full_ctx)")
+    parser.add_argument("--context-header", action="store_true",
+                        help="Bật killswitch header ngữ cảnh (BM25/Reranker thấy metadata context_header)")
     args = parser.parse_args()
     selected = [m.strip() for m in args.modes.split(",") if m.strip()]
     unknown = set(selected) - set(MODES)
     if unknown:
         parser.error(f"Chế độ không hợp lệ: {unknown}")
-    run(split=args.split, modes=selected, dataset_path=args.dataset, db_path=args.db)
+    run(split=args.split, modes=selected, dataset_path=args.dataset, db_path=args.db,
+        use_context_header=args.context_header)
