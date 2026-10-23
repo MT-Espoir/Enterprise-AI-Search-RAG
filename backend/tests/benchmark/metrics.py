@@ -84,3 +84,57 @@ def _find_match_idx(retrieved_doc, expected_docs):
             if exp_page is None or exp_page == ret_page:
                 return idx
     return None
+
+
+# ── Benchmark tổng quát (run_benchmark_full.py) ────────────────────────────────
+# Nhãn đúng ở 2 mức, đo trên CÙNG danh sách retrieved đã xếp hạng:
+#   - chunk: relevant_chunk_ids — các chunk chứa đủ thông tin trả lời.
+#   - doc  : relevant_doc_groups — mỗi nhóm là 1 "đơn vị" tài liệu đúng; các bản trùng
+#            nội dung (vd 45.signed.pdf / Boluatlaodong2019.pdf) gom chung 1 nhóm để
+#            Recall không đòi retriever phải lấy cả 2 bản sao.
+# Không có câu negative ở đây: retriever luôn trả top-k nên metric retrieval của câu
+# negative vô nghĩa (luôn 0 theo calculate_hit_rate ở trên) — đo riêng bằng refusal.
+
+
+def chunk_level_metrics(retrieved_ids: list[str], relevant_ids: set[str], k: int) -> dict:
+    top_k = retrieved_ids[:k]
+    found = sum(1 for cid in top_k if cid in relevant_ids)
+    return {
+        f"hit@{k}": 1.0 if found else 0.0,
+        f"recall@{k}": found / len(relevant_ids),
+        f"precision@{k}": found / k,
+    }
+
+
+def doc_level_metrics(retrieved_files: list[str], relevant_groups: list[set[str]], k: int) -> dict:
+    top_k = retrieved_files[:k]
+    covered = sum(1 for group in relevant_groups if any(f in group for f in top_k))
+    relevant_files = set().union(*relevant_groups)
+    return {
+        f"hit@{k}": 1.0 if covered else 0.0,
+        f"recall@{k}": covered / len(relevant_groups),
+        f"precision@{k}": sum(1 for f in top_k if f in relevant_files) / k,
+    }
+
+
+def reciprocal_rank(retrieved: list[str], is_relevant) -> float:
+    for idx, item in enumerate(retrieved):
+        if is_relevant(item):
+            return 1.0 / (idx + 1)
+    return 0.0
+
+
+def bootstrap_ci(values: list[float], n_resamples: int = 2000, confidence: float = 0.95,
+                 seed: int = 0) -> tuple[float, float] | None:
+    """Khoảng tin cậy percentile bootstrap cho giá trị trung bình — để biết chênh lệch
+    giữa 2 lần chạy có vượt nhiễu do cỡ mẫu không."""
+    import random
+
+    clean = [v for v in values if v is not None]
+    if len(clean) < 2:
+        return None
+    rng = random.Random(seed)
+    n = len(clean)
+    means = sorted(sum(rng.choices(clean, k=n)) / n for _ in range(n_resamples))
+    alpha = (1 - confidence) / 2
+    return (round(means[int(alpha * n_resamples)], 3), round(means[int((1 - alpha) * n_resamples) - 1], 3))

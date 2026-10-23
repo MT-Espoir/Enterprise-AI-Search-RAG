@@ -23,8 +23,10 @@ của 2 hàm bên dưới.
 """
 import json
 import logging
+import os
 import re
 import time
+from collections import deque
 
 logger = logging.getLogger(__name__)
 
@@ -35,23 +37,43 @@ CLAUDE_JUDGE_MODEL_DEFAULT = "claude-haiku-4-5"
 # cho phép chạy benchmark với JUDGE_PROVIDER=claude mà KHÔNG cần cài/cấu hình Google,
 # và ngược lại — không ép cả 2 SDK phải import được cùng lúc.
 
-# Free tier gemini-3.1-flash-lite: 15 RPM. Benchmark gọi ~2 request/câu hỏi (faithfulness
-# + answer_relevancy), với 46 câu = ~92 request — chắc chắn vượt 15 RPM nếu chạy dồn dập.
-# Giãn cách chủ động (thay vì chỉ retry khi đã bị 429) để tránh bị tạm khóa quota giữa chừng.
-_MIN_SECONDS_BETWEEN_CALLS = 4.2  # 60s / 15 RPM = 4.0s, cộng thêm biên an toàn
-_last_call_start = 0.0
+# Free tier gemini-3.1-flash-lite: 15 RPM + 250k TPM. Chủ động chờ TRƯỚC khi gọi (thay vì
+# chỉ retry khi đã bị 429) để tránh bị tạm khóa quota giữa chừng. Cửa sổ trượt 60s: gửi
+# tối đa 15 request rồi chờ tới khi request cũ nhất ra khỏi cửa sổ; đồng thời giữ tổng
+# token trong cửa sổ dưới TPM — prompt pooling (~20 đoạn × 1000 ký tự) nặng hơn hẳn judge.
+GEMINI_RPM = int(os.getenv("GEMINI_RPM", "15"))
+GEMINI_TPM = int(os.getenv("GEMINI_TPM", "250000"))
+_WINDOW_SECONDS = 60.0
+_WINDOW_MARGIN_SECONDS = 1.0
+_call_log: deque = deque()  # (thời điểm bắt đầu, số token) của các request trong cửa sổ
 
 
-def _rate_limit_wait() -> None:
-    """Đảm bảo khoảng cách tối thiểu giữa 2 lần gọi Gemini, tính từ lúc BẮT ĐẦU
-    request trước (không phải lúc kết thúc) — thời gian round-trip của request
-    trước cũng được tính vào khoảng giãn cách, tránh sleep thừa."""
-    global _last_call_start
-    now = time.monotonic()
-    elapsed = now - _last_call_start
-    if elapsed < _MIN_SECONDS_BETWEEN_CALLS:
-        time.sleep(_MIN_SECONDS_BETWEEN_CALLS - elapsed)
-    _last_call_start = time.monotonic()
+def _estimate_tokens(prompt: str, max_output_tokens: int) -> int:
+    """Ước lượng DƯ: tiếng Việt ~2 ký tự/token (dư so với thực tế), cộng trần output."""
+    return len(prompt) // 2 + max_output_tokens
+
+
+def _rate_limit_wait(estimated_tokens: int) -> None:
+    """Chờ tới khi gửi thêm 1 request (ước lượng estimated_tokens) vẫn nằm trong
+    GEMINI_RPM request và GEMINI_TPM token của 60s gần nhất, rồi ghi nhận request."""
+    while True:
+        now = time.monotonic()
+        while _call_log and now - _call_log[0][0] >= _WINDOW_SECONDS:
+            _call_log.popleft()
+        used_tokens = sum(tokens for _, tokens in _call_log)
+        if len(_call_log) < GEMINI_RPM and used_tokens + estimated_tokens <= GEMINI_TPM:
+            _call_log.append((now, estimated_tokens))
+            return
+        wait = _WINDOW_SECONDS - (now - _call_log[0][0]) + _WINDOW_MARGIN_SECONDS
+        logger.info(f"Gemini rate limit ({len(_call_log)} req, ~{used_tokens} token/60s) — chờ {wait:.1f}s")
+        time.sleep(wait)
+
+
+def _record_actual_tokens(actual_tokens: int | None) -> None:
+    """Thay số token ước lượng của request vừa gửi bằng số thật API trả về (nếu có)."""
+    if actual_tokens and _call_log:
+        started, _ = _call_log.pop()
+        _call_log.append((started, actual_tokens))
 
 # Câu mở đầu refusal chuẩn theo đúng SYSTEM_INSTRUCTION của Generator/LocalGenerator
 # (app/core/generator.py, app/core/local_generator.py). Dùng rule-based string match
@@ -135,7 +157,8 @@ def _parse_judge_json(raw_text: str) -> dict:
     return parsed
 
 
-def _call_judge_gemini(api_key: str, model_name: str, prompt: str, max_retries: int = 4) -> dict:
+def _call_judge_gemini(api_key: str, model_name: str, prompt: str, max_retries: int = 4,
+                       max_output_tokens: int = 500) -> dict:
     """
     Gọi Gemini làm judge, ép JSON output qua response_mime_type (constrained decoding
     ở tầng API). Có giãn cách chủ động (_rate_limit_wait) + retry backoff nếu dính 429.
@@ -145,7 +168,7 @@ def _call_judge_gemini(api_key: str, model_name: str, prompt: str, max_retries: 
 
     raw_text = None
     for attempt in range(max_retries):
-        _rate_limit_wait()
+        _rate_limit_wait(_estimate_tokens(prompt, max_output_tokens))
         try:
             client = genai.Client(api_key=api_key)
             response = client.models.generate_content(
@@ -153,10 +176,12 @@ def _call_judge_gemini(api_key: str, model_name: str, prompt: str, max_retries: 
                 contents=[{"role": "user", "parts": [{"text": prompt}]}],
                 config=types.GenerateContentConfig(
                     temperature=0.0,
-                    max_output_tokens=500,
+                    max_output_tokens=max_output_tokens,
                     response_mime_type="application/json",
                 ),
             )
+            usage = getattr(response, "usage_metadata", None)
+            _record_actual_tokens(getattr(usage, "total_token_count", None))
             raw_text = response.candidates[0].content.parts[0].text.strip()
             break
         except Exception as exc:
@@ -173,7 +198,8 @@ def _call_judge_gemini(api_key: str, model_name: str, prompt: str, max_retries: 
     return _parse_judge_json(raw_text)
 
 
-def _call_judge_claude(api_key: str, model_name: str, prompt: str, max_retries: int = 3) -> dict:
+def _call_judge_claude(api_key: str, model_name: str, prompt: str, max_retries: int = 3,
+                       max_output_tokens: int = 500) -> dict:
     """
     Gọi Claude (Anthropic API) làm judge. SDK tự retry 429/5xx nên không cần vòng lặp
     thủ công. Haiku 4.5 là model pre-4.6 → KHÔNG truyền `thinking`. Yêu cầu JSON qua
@@ -185,7 +211,7 @@ def _call_judge_claude(api_key: str, model_name: str, prompt: str, max_retries: 
         client = anthropic.Anthropic(api_key=api_key, max_retries=max_retries)
         response = client.messages.create(
             model=model_name,
-            max_tokens=500,
+            max_tokens=max_output_tokens,
             temperature=0.0,
             system="Bạn là giám khảo chấm điểm hệ thống RAG. CHỈ trả về một JSON hợp lệ, không kèm text nào khác.",
             messages=[{"role": "user", "content": prompt}],
@@ -198,11 +224,12 @@ def _call_judge_claude(api_key: str, model_name: str, prompt: str, max_retries: 
     return _parse_judge_json(raw_text)
 
 
-def _call_judge(provider: str, api_key: str, model_name: str, prompt: str) -> dict:
+def _call_judge(provider: str, api_key: str, model_name: str, prompt: str,
+                max_output_tokens: int = 500) -> dict:
     """Điều phối judge theo provider ("gemini" | "claude")."""
     if provider == "claude":
-        return _call_judge_claude(api_key, model_name, prompt)
-    return _call_judge_gemini(api_key, model_name, prompt)
+        return _call_judge_claude(api_key, model_name, prompt, max_output_tokens=max_output_tokens)
+    return _call_judge_gemini(api_key, model_name, prompt, max_output_tokens=max_output_tokens)
 
 
 def score_faithfulness(

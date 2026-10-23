@@ -1,6 +1,6 @@
 """
 latency.py — Tiện ích đo hiệu năng (response time) dùng CHUNG cho các script benchmark
-(run_full_benchmark.py, run_full_benchmark_legal.py).
+(run_full_benchmark_legal.py, run_benchmark_full.py).
 
 Vì sao tách riêng module này thay vì đo inline trong từng script:
   - Tránh lặp lại logic tính percentile/tổng hợp ở 2 (hoặc nhiều hơn) benchmark gần
