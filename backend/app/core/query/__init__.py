@@ -3,6 +3,6 @@
 Hợp nhất phân loại ý định, viết lại câu hỏi tỉnh lược, và tách câu hỏi phức tạp
 thành các câu con — đầu ra là một QueryPlan cho RAGPipeline thực thi.
 """
-from .query_processor import QueryProcessor, QueryPlan
+from .query_processor import QueryProcessor, QueryPlan, is_comparison_query
 
-__all__ = ["QueryProcessor", "QueryPlan"]
+__all__ = ["QueryProcessor", "QueryPlan", "is_comparison_query"]

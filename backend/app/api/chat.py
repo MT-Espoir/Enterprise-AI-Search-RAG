@@ -55,6 +55,7 @@ def get_rag_pipeline():
         default_strategy=strategy,
         default_top_k=10,
         slm_enabled=current_app.config.get('QUERY_PROCESSOR_SLM_ENABLED', True),
+        decompose_by_entity=current_app.config.get('DECOMPOSE_BY_ENTITY_ENABLED', False),
     )
 
     reranker = Reranker.get_instance(top_k=3)
@@ -68,6 +69,7 @@ def get_rag_pipeline():
         decomposition_enabled=current_app.config.get('DECOMPOSITION_ENABLED', True),
         retrieval_guardrails_enabled=current_app.config.get('RETRIEVAL_GUARDRAILS_ENABLED', True),
         output_guardrails_enabled=current_app.config.get('OUTPUT_GUARDRAILS_ENABLED', True),
+        diversity_enabled=current_app.config.get('RERANK_DIVERSITY_ENABLED', False),
     )
 
 @chat_bp.route('/message', methods=['POST'])

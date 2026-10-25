@@ -47,8 +47,8 @@ import requests
 from app.ingestion.embedder.local_embedder import LocalEmbedder
 from app.vectorstore.operations import VectorStoreOps
 from app.core.retrieval import BM25Index, build_retriever
-from app.core.query import QueryProcessor
-from app.core.ranking import Reranker
+from app.core.query import QueryProcessor, is_comparison_query
+from app.core.ranking import Reranker, select_diverse
 from app.core.rag_pipeline import RAGPipeline
 from app.core import context_header
 
@@ -90,23 +90,29 @@ def _mean(values: list[float]) -> float | None:
 
 
 def score_ranking(chunk_ids: list[str], filenames: list[str], relevant_ids: set[str],
-                  relevant_groups: list[set[str]], k_values: tuple[int, ...]) -> dict:
+                  relevant_groups: list[set[str]], k_values: tuple[int, ...],
+                  required_groups: list[set[str]] | None = None) -> dict:
     relevant_files = set().union(*relevant_groups)
     chunk = {"mrr": reciprocal_rank(chunk_ids, lambda cid: cid in relevant_ids)}
     doc = {"mrr": reciprocal_rank(filenames, lambda f: f in relevant_files)}
     for k in k_values:
         chunk.update(chunk_level_metrics(chunk_ids, relevant_ids, k))
         doc.update(doc_level_metrics(filenames, relevant_groups, k))
+        # Câu cần tổng hợp nhiều tài liệu: hit@k chỉ cần trúng 1 → đo thêm có lấy ĐỦ mọi tài liệu cần
+        # không. None với câu khác (summarize bỏ qua None).
+        covered = sum(1 for g in required_groups if any(f in g for f in filenames[:k])) if required_groups else None
+        doc[f"all_required@{k}"] = None if covered is None else float(covered == len(required_groups))
     return {"chunk": chunk, "doc": doc}
 
 
 def retrieve_like_production(mode: str, question: str, query_processor, pipeline: RAGPipeline,
-                             retriever, reranker, timer: StageTimer):
+                             retriever, reranker, timer: StageTimer, diversity_enabled: bool = False):
     """Tái hiện RAGPipeline.run() nhánh QA tới hết Rerank (app/core/rag_pipeline.py)."""
     info = {"query_type": None, "rewrite": False, "rewritten_query": None,
-            "sub_queries": [], "bypass_retrieval": False}
+            "sub_queries": [], "bypass_retrieval": False, "diverse_selection": False}
     vector_query = None
     sub_queries: list[str] = []
+    plan = None
 
     if mode != "none":
         with timer.stage("preprocessing_ms"):
@@ -134,6 +140,13 @@ def retrieve_like_production(mode: str, question: str, query_processor, pipeline
         return [], [], info
     with timer.stage("rerank_ms"):
         reranked = reranker.rerank(question, candidates)
+        # Như RAGPipeline._rerank_and_select: câu so sánh + killswitch → top-k production chọn đa dạng tài liệu;
+        # phần sau top-k giữ thứ tự điểm (chỉ số @5 vẫn đo được)
+        if diversity_enabled and is_comparison_query(question, plan):
+            top = select_diverse(reranked, PRODUCTION_RERANK_TOP_K)
+            chosen = {c.chunk_id for c in top}
+            reranked = top + [c for c in reranked if c.chunk_id not in chosen]
+            info["diverse_selection"] = True
     return candidates, reranked, info
 
 
@@ -154,6 +167,7 @@ def summarize(records: list[dict]) -> dict:
         "query_processor": {
             "rewrite_count": sum(r["query_plan"]["rewrite"] for r in records),
             "decomposed_count": sum(len(r["query_plan"]["sub_queries"]) >= 2 for r in records),
+            "diverse_selection_count": sum(bool(r["query_plan"].get("diverse_selection")) for r in records),
             "bypass_retrieval_count": sum(r["query_plan"]["bypass_retrieval"] for r in records),
         },
         "by_stratum": {},
@@ -170,6 +184,8 @@ def summarize(records: list[dict]) -> dict:
                 "chunk_hit@3_reranked": _mean([r["metrics"]["reranked"]["chunk"]["hit@3"] for r in group]),
                 "doc_mrr_retrieval": _mean([r["metrics"]["retrieval"]["doc"]["mrr"] for r in group]),
                 "chunk_recall@10_retrieval": _mean([r["metrics"]["retrieval"]["chunk"]["recall@10"] for r in group]),
+                "doc_all_required@3_reranked": _mean([r["metrics"]["reranked"]["doc"]["all_required@3"] for r in group]),
+                "doc_all_required@10_retrieval": _mean([r["metrics"]["retrieval"]["doc"]["all_required@10"] for r in group]),
             }
     return summary
 
@@ -225,7 +241,8 @@ def describe_context_headers(collection) -> dict:
 
 
 def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path: str = DB_PATH,
-        use_context_header: bool = False, collection_name: str = COLLECTION_NAME):
+        use_context_header: bool = False, collection_name: str = COLLECTION_NAME,
+        diversity_enabled: bool = False, decompose_by_entity: bool = False):
     # Snapshot chụp bằng build_benchmark_db_full.py --out có manifest riêng; bản sao PoC dùng manifest gốc
     own_manifest = os.path.join(BENCH_DIR, f"snapshot_manifest_{os.path.basename(os.path.normpath(db_path))}.json")
     manifest_path = own_manifest if os.path.exists(own_manifest) else MANIFEST_PATH
@@ -285,6 +302,8 @@ def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path:
             "embedding_model": os.getenv("LOCAL_EMBEDDING_MODEL") or "BAAI/bge-m3 (default)",
             "slm_model": local_llm_model,
             "decomposition_enabled": decomposition_enabled,
+            "diversity_enabled": diversity_enabled,
+            "decompose_by_entity": decompose_by_entity,
             "production_rerank_top_k": PRODUCTION_RERANK_TOP_K,
             "acl_bypass": True,
             "context_header_enabled": use_context_header,
@@ -305,6 +324,7 @@ def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path:
             query_processor = QueryProcessor(
                 base_url=ollama_base_url, model_name=local_llm_model,
                 default_strategy=strategy, default_top_k=RETRIEVER_TOP_K, slm_enabled=(mode == "slm"),
+                decompose_by_entity=decompose_by_entity,
             )
         pipeline = RAGPipeline(
             retriever=retriever, reranker=reranker, generator=None,
@@ -319,15 +339,16 @@ def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path:
         for idx, q in enumerate(questions, 1):
             timer = StageTimer()
             candidates, reranked, plan_info = retrieve_like_production(
-                mode, q["question"], query_processor, pipeline, retriever, reranker, timer,
+                mode, q["question"], query_processor, pipeline, retriever, reranker, timer, diversity_enabled,
             )
             relevant_ids = set(q["relevant_chunk_ids"])
             relevant_groups = [set(g) for g in q["relevant_doc_groups"]]
+            required_groups = [set(g) for g in q.get("required_doc_groups", [])] or None
             metrics = {
                 "retrieval": score_ranking([c.chunk_id for c in candidates], [c.filename for c in candidates],
-                                           relevant_ids, relevant_groups, K_VALUES),
+                                           relevant_ids, relevant_groups, K_VALUES, required_groups),
                 "reranked": score_ranking([c.chunk_id for c in reranked], [c.filename for c in reranked],
-                                          relevant_ids, relevant_groups, RERANK_K_VALUES),
+                                          relevant_ids, relevant_groups, RERANK_K_VALUES, required_groups),
             }
             records.append({
                 "id": q["id"],
@@ -366,10 +387,15 @@ if __name__ == "__main__":
                         help="Tên collection (mặc định benchmark_full; ChromaDB production: enterprise_documents)")
     parser.add_argument("--context-header", action="store_true",
                         help="Bật killswitch header ngữ cảnh (BM25/Reranker thấy metadata context_header)")
+    parser.add_argument("--diversity", action="store_true",
+                        help="Như RERANK_DIVERSITY_ENABLED: câu so sánh chọn top-3 đa dạng tài liệu")
+    parser.add_argument("--decompose-by-entity", action="store_true",
+                        help="Như DECOMPOSE_BY_ENTITY_ENABLED: prompt tách câu so sánh theo đối tượng/kỳ (chế độ slm)")
     args = parser.parse_args()
     selected = [m.strip() for m in args.modes.split(",") if m.strip()]
     unknown = set(selected) - set(MODES)
     if unknown:
         parser.error(f"Chế độ không hợp lệ: {unknown}")
     run(split=args.split, modes=selected, dataset_path=args.dataset, db_path=args.db,
-        use_context_header=args.context_header, collection_name=args.collection)
+        use_context_header=args.context_header, collection_name=args.collection,
+        diversity_enabled=args.diversity, decompose_by_entity=args.decompose_by_entity)

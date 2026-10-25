@@ -6,5 +6,6 @@ bi-encoder/BM25 để LỌC NHANH trên toàn corpus, còn ranking dùng cross-e
 Chi phí và mô hình khác hẳn nhau, có thể thay thế/tắt độc lập.
 """
 from .reranker import Reranker
+from .selection import dedupe_identical, select_diverse
 
-__all__ = ["Reranker"]
+__all__ = ["Reranker", "dedupe_identical", "select_diverse"]

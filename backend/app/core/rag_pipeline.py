@@ -4,10 +4,10 @@ import uuid
 
 from .retrieval import Retriever
 from .schemas import RetrievedChunk
-from .ranking import Reranker
+from .ranking import Reranker, select_diverse
 from .generation import BaseGenerator
 from .schemas import GenerationResult
-from .query import QueryProcessor
+from .query import QueryProcessor, is_comparison_query
 from .observability.request_tracer import log_rag_request
 from .guardrails import sanitize_chunks, check_output
 from ..vectorstore.operations import build_acl_where
@@ -37,6 +37,8 @@ class RAGPipeline:
       sub-query rồi merge trước khi Rerank. Fail-open về Retrieve đơn giản nếu
       decompose không tách được (xem rag_core_quality_roadmap.md mục 6i).
     - Ngược lại: Retrieve (top 10) → Rerank (top 3) → Generate.
+    - Câu SO SÁNH (is_comparison_query) + killswitch diversity_enabled: rerank TOÀN BỘ ứng viên rồi chọn top-k
+      đa dạng tài liệu (ranking/selection.py) thay vì top-k theo điểm — top-k theo điểm dồn vào 1 tài liệu.
     """
 
     def __init__(
@@ -49,6 +51,7 @@ class RAGPipeline:
         decomposition_enabled: bool = True,
         retrieval_guardrails_enabled: bool = True,
         output_guardrails_enabled: bool = True,
+        diversity_enabled: bool = False,
     ):
         self.retriever = retriever
         self.reranker = reranker
@@ -63,6 +66,8 @@ class RAGPipeline:
         # Tier 1 Security Guardrails — killswitch RIÊNG cho từng layer (xem
         # config.py RETRIEVAL_GUARDRAILS_ENABLED/OUTPUT_GUARDRAILS_ENABLED),
         # fail-open tuyệt đối bên trong sanitize_chunks()/check_output().
+        self.diversity_enabled = diversity_enabled
+        # Killswitch RERANK_DIVERSITY_ENABLED (config.py, mặc định tắt) — chọn top-k đa dạng cho câu so sánh.
 
     def run(self, question: str, doc_id: str = None, history: list[dict] = None, request_id: str = None, filters: dict = None,
             acl_department: str = None, acl_bypass: bool = False) -> dict:
@@ -163,7 +168,7 @@ class RAGPipeline:
                 }
 
             t0 = time.perf_counter()
-            top_chunks = self.reranker.rerank(question, candidates)
+            top_chunks, plan.diverse_selection = self._rerank_and_select(question, plan, candidates)
             rerank_ms = round((time.perf_counter() - t0) * 1000, 2)
             logger.info(f"Reranked: {len(candidates)} → {len(top_chunks)} chunks")
 
@@ -226,6 +231,14 @@ class RAGPipeline:
             "guardrail":     guardrail_summary,
         }
 
+    def _rerank_and_select(self, question: str, plan, candidates: list[RetrievedChunk]) -> tuple[list[RetrievedChunk], bool]:
+        """Rerank rồi chọn top-k. Câu so sánh (killswitch bật): chấm TOÀN BỘ ứng viên rồi chọn đa dạng tài liệu;
+        câu khác: top-k theo điểm như cũ. Trả (chunks, có chọn đa dạng không)."""
+        if self.diversity_enabled and is_comparison_query(question, plan):
+            ranked = self.reranker.rerank(question, candidates, top_k=len(candidates))
+            return select_diverse(ranked, self.reranker.top_k), True
+        return self.reranker.rerank(question, candidates), False
+
     def _retrieve_multi(self, sub_queries: list[str], doc_id: str = None, filters: dict = None,
                          acl_department: str = None, acl_bypass: bool = False) -> list[RetrievedChunk]:
         """Retrieve riêng từng sub-query (Decomposition/Multi-Query, xem docstring
@@ -257,6 +270,7 @@ class RAGPipeline:
                 "bypass_retrieval": plan.bypass_retrieval,
                 "unimplemented_operations": plan.unimplemented_operations,
                 "source": plan.source,
+                "diverse_selection": plan.diverse_selection,
             },
             latency={
                 "preprocessing_ms": preprocessing_ms,

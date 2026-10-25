@@ -75,6 +75,11 @@ class BaseConfig:
     # Job embed lại header (POST /api/admin/context-header/reembed): số chunk mỗi lô embed —
     # lô nhỏ = heartbeat/hủy job phản hồi nhanh hơn, ít khác biệt tốc độ trên CPU.
     CONTEXT_HEADER_REEMBED_BATCH_SIZE = int(os.getenv("CONTEXT_HEADER_REEMBED_BATCH_SIZE", "16"))
+    # Câu SO SÁNH / tổng hợp nhiều tài liệu (multi_doc_selection_plan.md) — mặc định TẮT tới khi benchmark A/B:
+    # RERANK_DIVERSITY_ENABLED: chọn top-k đa dạng tài liệu sau rerank (thay top-k theo điểm, dồn vào 1 tài liệu).
+    # DECOMPOSE_BY_ENTITY_ENABLED: prompt tách câu so sánh THEO đối tượng/kỳ (mỗi câu con 1 đối tượng).
+    RERANK_DIVERSITY_ENABLED = os.getenv("RERANK_DIVERSITY_ENABLED", "false").lower() == "true"
+    DECOMPOSE_BY_ENTITY_ENABLED = os.getenv("DECOMPOSE_BY_ENTITY_ENABLED", "false").lower() == "true"
 
     # Minimal Observability — structured JSON request tracing (request_id, latency
     # breakdown, retrieval stats).

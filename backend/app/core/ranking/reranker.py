@@ -25,7 +25,7 @@ class Reranker:
             cls._instance = cls(model_name=model_name, top_k=top_k)
         return cls._instance
 
-    def rerank(self, question: str, chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
+    def rerank(self, question: str, chunks: list[RetrievedChunk], top_k: int | None = None) -> list[RetrievedChunk]:
         """
         Re-rank các chunks dựa trên Cross-Encoder score.
 
@@ -33,8 +33,11 @@ class Reranker:
             question: Câu hỏi gốc của người dùng.
             chunks:   Danh sách chunks từ Retriever (top ~20).
 
+            top_k:    Ghi đè self.top_k cho lần gọi này (vd lấy TOÀN BỘ để chọn đa dạng tài liệu —
+                      ranking/selection.py).
+
         Returns:
-            Top self.top_k chunks sau khi rerank, sắp xếp theo score giảm dần.
+            Top top_k (mặc định self.top_k) chunks sau khi rerank, sắp xếp theo score giảm dần.
         """
         if not chunks:
             return []
@@ -48,4 +51,4 @@ class Reranker:
             chunk.metadata["rerank_score"] = float(score)
 
         reranked = sorted(chunks, key=lambda c: c.metadata["rerank_score"], reverse=True)
-        return reranked[:self.top_k]
+        return reranked[:self.top_k if top_k is None else top_k]

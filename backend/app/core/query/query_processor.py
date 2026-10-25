@@ -7,6 +7,7 @@ import requests
 
 from .prompts import (
     QUERY_CLASSIFY_SYSTEM_INSTRUCTION,
+    QUERY_DECOMPOSE_BY_ENTITY_SYSTEM_INSTRUCTION,
     QUERY_DECOMPOSE_SYSTEM_INSTRUCTION,
     QUERY_REWRITE_SYSTEM_INSTRUCTION,
 )
@@ -51,11 +52,20 @@ _COMPLEX_SIGNAL_PATTERN = re.compile(
 LONG_QUESTION_WORD_THRESHOLD = 20
 
 
+def is_comparison_query(question: str, plan: "QueryPlan | None" = None) -> bool:
+    """Câu SO SÁNH / đối chiếu nhiều tài liệu → chọn top-k đa dạng tài liệu (ranking/selection.py).
+    Chỉ `comparison` của SLM hoặc tín hiệu so sánh rõ ràng (chạy được cả khi SLM tắt) — KHÔNG dùng
+    reasoning/complex: SLM gắn 2 nhãn này cho 82/92 câu thường (benchmark 2026-10-22) và chọn đa dạng trên câu
+    chỉ cần 1 tài liệu làm 8/194 câu mất chunk chứa đáp án (đo 2026-10-25)."""
+    return (plan is not None and plan.query_type == "comparison") or bool(_COMPLEX_SIGNAL_PATTERN.search(question or ""))
+
+
 _UNIMPLEMENTED_OPERATIONS = ("expansion", "hyde", "decomposition")
 
 CLASSIFY_SYSTEM_INSTRUCTION = QUERY_CLASSIFY_SYSTEM_INSTRUCTION
 REWRITE_SYSTEM_INSTRUCTION = QUERY_REWRITE_SYSTEM_INSTRUCTION
 DECOMPOSE_SYSTEM_INSTRUCTION = QUERY_DECOMPOSE_SYSTEM_INSTRUCTION
+DECOMPOSE_BY_ENTITY_SYSTEM_INSTRUCTION = QUERY_DECOMPOSE_BY_ENTITY_SYSTEM_INSTRUCTION
 
 MIN_SUB_QUERIES = 2
 MAX_SUB_QUERIES = 4
@@ -73,6 +83,7 @@ class QueryPlan:
     top_k_hint: int | None = None
     unimplemented_operations: list[str] = field(default_factory=list)
     source: str = "fast_path"  # "fast_path" | "slm" | "fallback"
+    diverse_selection: bool = False  # RAGPipeline đã chọn top-k đa dạng tài liệu (ghi vào trace)
 
 
 def _default_plan(query_type: str = "simple", bypass_retrieval: bool = False, source: str = "fast_path") -> QueryPlan:
@@ -101,12 +112,15 @@ class QueryProcessor:
         default_strategy: str = "hybrid",
         default_top_k: int = 10,
         slm_enabled: bool = True,
+        decompose_by_entity: bool = False,
     ):
         self.base_url = base_url.rstrip("/")
         self.model_name = model_name
         self.default_strategy = default_strategy
         self.default_top_k = default_top_k
         self.slm_enabled = slm_enabled
+        # Killswitch DECOMPOSE_BY_ENTITY_ENABLED (config.py): prompt tách câu so sánh THEO đối tượng/kỳ
+        self.decompose_by_entity = decompose_by_entity
 
     def process(self, question: str, history: list[dict] = None) -> QueryPlan:
         fast_plan = self._try_fast_path(question, history)
@@ -245,8 +259,9 @@ class QueryProcessor:
         thành các sub-query độc lập để retrieve riêng từng phần.
         Trả về list rỗng nếu không cần tách (fail-open) hoặc lỗi — caller (RAGPipeline)
         tự xử lý fallback về flow retrieval đơn giản."""
+        instruction = DECOMPOSE_BY_ENTITY_SYSTEM_INSTRUCTION if self.decompose_by_entity else DECOMPOSE_SYSTEM_INSTRUCTION
         messages = [
-            {"role": "system", "content": DECOMPOSE_SYSTEM_INSTRUCTION},
+            {"role": "system", "content": instruction},
             {"role": "user", "content": question},
         ]
         payload = {
