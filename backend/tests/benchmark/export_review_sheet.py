@@ -35,6 +35,18 @@ SETS = {
     "vague": {"candidates": os.path.join(BENCH_DIR, "evaluation_dataset_vague_candidates.json"),
               "sheet": os.path.join(BENCH_DIR, "review_candidates_vague.xlsx"),
               "output": os.path.join(BENCH_DIR, "evaluation_dataset_vague.json")},
+    # 70 câu chia 4 nhóm (generate_ambiguous_questions.py) — mở rộng bộ "vague" 30 câu toàn câu ngắn
+    "vague70": {"candidates": os.path.join(BENCH_DIR, "evaluation_dataset_vague70_candidates.json"),
+                "sheet": os.path.join(BENCH_DIR, "review_candidates_vague70.xlsx"),
+                "output": os.path.join(BENCH_DIR, "evaluation_dataset_vague70.json")},
+}
+# Số câu mục tiêu mỗi nhóm câu hỏi (người duyệt chốt đúng số này) + nhãn hiển thị trong Excel
+SET_TARGETS = {"vague70": {"broad_short": 25, "paraphrase": 20, "underspecified": 10, "multi_doc": 15}}
+CATEGORY_LABELS = {
+    "broad_short": "1. Rộng, ngắn, không dùng thuật ngữ",
+    "paraphrase": "2. Gián tiếp / đồng nghĩa",
+    "underspecified": "3. Thiếu ngữ cảnh, xác định được đối tượng",
+    "multi_doc": "4. Tổng hợp nhiều tài liệu",
 }
 
 REVIEW_SHEET = "Duyệt"
@@ -60,7 +72,8 @@ COLUMNS = [
 ]
 # Bộ mơ hồ: câu không nêu năm → BCTC các năm khác cũng trả lời được nhưng pooling (top-10 mỗi hệ
 # thống) có thể không thấy hết → người duyệt bổ sung tên file, tính đúng ở MỨC TÀI LIỆU khi chấm
-EXTRA_COLUMNS = {"vague": [("Thêm tài liệu cũng đúng (tên file, mỗi dòng 1 file)", 38, "extra_files")]}
+_EXTRA_FILES_COLUMN = ("Thêm tài liệu cũng đúng (tên file, mỗi dòng 1 file)", 38, "extra_files")
+EXTRA_COLUMNS = {"vague": [_EXTRA_FILES_COLUMN], "vague70": [_EXTRA_FILES_COLUMN]}
 EDITABLE = {"status", "question_edit", "drop_pooled", "note", "extra_files"}
 
 
@@ -78,6 +91,8 @@ FLAG_LABELS = {
     "source_not_confirmed": "Judge không xác nhận chunk nguồn (thường do judge bỏ sót — xem kỹ)",
     "answer_also_in_other_document": "Tài liệu khác cũng chứa đáp án — kiểm tra cột pooled",
     "mentions_year_type_or_number": "Câu hỏi lỡ nêu năm / loại báo cáo / số hiệu — bộ mơ hồ: sửa bỏ hoặc reject",
+    "source_text_garbled": "Chunk nguồn khó đọc (OCR lỗi / chữ đảo ngược) — kiểm tra đáp án CÓ THẬT trong chunk, LLM có thể bịa",
+    "evidence_not_in_source": "Trích dẫn của LLM không khớp chunk nguồn — kiểm tra đáp án có căn cứ không",
 }
 
 CRITERIA = {
@@ -99,6 +114,20 @@ CRITERIA = {
         "  5. Cột cuối \"Thêm tài liệu cũng đúng\": nếu biết tài liệu khác cũng trả lời được câu hỏi như đã đặt mà",
         "     chưa có ở cột pooled (vd BCTC Vinaconex các năm khác cho câu không nêu năm) → ghi TÊN FILE, mỗi dòng",
         "     1 file (đúng tên trong trang Tài liệu). Chỉ tính ở mức tài liệu; tên sai sẽ bị báo lỗi khi chốt.",
+    ],
+    "vague70": [
+        "  Bộ 70 câu kiểu người dùng thật, chia 4 NHÓM (cột \"Loại\"). Mỗi nhóm sinh DƯ ~3 câu → chỉ approved ĐÚNG",
+        "  số mục tiêu: nhóm 1 = 25 · nhóm 2 = 20 · nhóm 3 = 10 · nhóm 4 = 15 (sheet \"Tổng hợp\" đếm sẵn). Đừng sửa câu",
+        "  cho rõ ràng hơn — độ mơ hồ là thứ cần đo.",
+        "  Nhóm 1 · Rộng, ngắn, KHÔNG dùng thuật ngữ trong tài liệu: câu ngắn kiểu gõ vội, dùng từ đời thường thay thuật ngữ.",
+        "  Nhóm 2 · Gián tiếp / đồng nghĩa: mô tả tình huống hoặc thay thuật ngữ bằng từ đồng nghĩa — không lặp từ khóa.",
+        "  Nhóm 3 · Thiếu ngữ cảnh nhưng XÁC ĐỊNH ĐƯỢC ĐỐI TƯỢNG: không nêu tên công ty/văn bản mà mô tả gián tiếp;",
+        "     cột \"Trích dẫn\" ghi [Đối tượng: ...] — reject nếu mô tả KHÔNG chỉ tới đúng 1 đối tượng đó.",
+        "  Nhóm 4 · Tổng hợp nhiều tài liệu: cần thông tin từ CẢ 2 tài liệu nguồn (cột \"Tài liệu nguồn\") — reject nếu",
+        "     chỉ đọc 1 tài liệu đã trả lời đủ. Khi chấm, ngoài hit@k còn đo hệ thống có lấy ĐỦ cả 2 tài liệu không.",
+        "  Chung: trả lời được từ chunk nguồn; nhóm 1–3 không nêu năm / loại báo cáo / số hiệu (cờ cam nếu lỡ nêu);",
+        "  cột \"Tài liệu khác cũng đúng\" + cột cuối \"Thêm tài liệu cũng đúng\" như bộ 30 câu (tài liệu bổ sung tính",
+        "  đúng ở mức tài liệu; tên file sai bị báo lỗi khi chốt). Reject câu hỏi chữ ký / số trang / mục lục.",
     ],
 }
 
@@ -126,7 +155,7 @@ def build_rows(candidates: list[dict]) -> list[dict]:
             "note": c["review"].get("note", ""),
             "flags": "\n".join(FLAG_LABELS.get(f, f) for f in c["flags"]),
             "stratum": c["stratum"],
-            "category": c["category"],
+            "category": CATEGORY_LABELS.get(c["category"], c["category"]),
             "question": c["question"],
             "reference_answer": c.get("reference_answer") or "",
             "evidence": c.get("evidence") or "",
@@ -208,7 +237,7 @@ def write_review(wb: Workbook, rows: list[dict], kind: str = "full"):
     ws.auto_filter.ref = f"A1:{ws.cell(row=1, column=len(columns)).column_letter}{len(rows) + 1}"
 
 
-def write_summary(wb: Workbook, rows: list[dict]):
+def write_summary(wb: Workbook, rows: list[dict], kind: str = "full"):
     ws = wb.create_sheet("Tổng hợp")
     status_letter = "B"
     stratum_letter = "G"
@@ -228,10 +257,24 @@ def write_summary(wb: Workbook, rows: list[dict]):
         ws[f"C{i}"] = f'=COUNTIFS({rng(stratum_letter)},A{i},{rng(status_letter)},"approved")'
         ws[f"D{i}"] = f'=COUNTIFS({rng(stratum_letter)},A{i},{rng(status_letter)},"rejected")'
 
+    bold_rows = {1, 5, 7}
+    targets = SET_TARGETS.get(kind)
+    if targets:
+        category_letter = "H"
+        top = 8 + len({r["stratum"] for r in rows}) + 1
+        bold_rows.add(top)
+        ws[f"A{top}"], ws[f"B{top}"], ws[f"C{top}"], ws[f"D{top}"], ws[f"E{top}"] = (
+            "Nhóm câu hỏi", "Tổng", "approved", "Mục tiêu", "Còn thiếu (+) / thừa (−)")
+        for i, (key, target) in enumerate(targets.items(), top + 1):
+            ws[f"A{i}"] = CATEGORY_LABELS.get(key, key)
+            ws[f"B{i}"] = f'=COUNTIF({rng(category_letter)},A{i})'
+            ws[f"C{i}"] = f'=COUNTIFS({rng(category_letter)},A{i},{rng(status_letter)},"approved")'
+            ws[f"D{i}"] = target
+            ws[f"E{i}"] = f"=D{i}-C{i}"
     for row in ws.iter_rows():
         for cell in row:
-            cell.font = Font(name=FONT, bold=cell.row in (1, 5, 7))
-    ws.column_dimensions["A"].width = 20
+            cell.font = Font(name=FONT, bold=cell.row in bold_rows)
+    ws.column_dimensions["A"].width = 42 if targets else 20
 
 
 def run(force: bool, kind: str = "full"):
@@ -246,7 +289,7 @@ def run(force: bool, kind: str = "full"):
     wb.remove(wb.active)
     write_guide(wb, kind)
     write_review(wb, rows, kind)
-    write_summary(wb, rows)
+    write_summary(wb, rows, kind)
     wb.active = 1
     # openpyxl không lưu giá trị đã tính của công thức → buộc Excel tính lại khi mở file
     wb.calculation.fullCalcOnLoad = True

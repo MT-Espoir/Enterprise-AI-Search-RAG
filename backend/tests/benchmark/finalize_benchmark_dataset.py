@@ -125,6 +125,8 @@ def run(kind: str = "full"):
         if unknown:
             sys.exit(f"❌ {c['id']}: tên file không có trong snapshot: {unknown}")
         groups |= {group_of.get(f, (f,)) for f in c.get("extra_relevant_files", [])}
+        # multi_doc: các tài liệu PHẢI lấy đủ (benchmark đo all_required@k ngoài hit@k)
+        required = sorted(sorted(group_of.get(f, (f,))) for f in c.get("required_files", []))
         items.append({
             "id": c["id"],
             "question": c["question"],
@@ -134,6 +136,7 @@ def run(kind: str = "full"):
             "relevant_chunk_ids": sorted(expanded),
             "relevant_doc_groups": sorted(sorted(g) for g in groups),
             "source_chunk_ids": [s["chunk_id"] for s in c["source_chunks"]],
+            **({"required_doc_groups": required} if required else {}),
         })
 
     split = stratified_split(items)
