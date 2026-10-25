@@ -244,6 +244,74 @@ def run_harm_check(db_path: str):
     print(f"💾 {out}")
 
 
+def run_m3(db_path: str, slm_report: str):
+    """M3: prompt tách câu theo đối tượng (H2, DECOMPOSE_BY_ENTITY_ENABLED) có đưa đủ tài liệu vào ứng viên tốt hơn
+    prompt cũ không? Câu con sinh MỚI qua đúng QueryProcessor.decompose() production cho cả 2 prompt × 2 mô hình (so
+    công bằng, temperature 0.1), cache theo model|prompt. Đo phễu + all_required@3 với S0 và V1 (= select_diverse)."""
+    from app.core.query import QueryProcessor
+
+    multi = [q for q in json.load(open(SETS["vague70"]["output"], encoding="utf-8"))["questions"] if q["category"] == "multi_doc"]
+    plan_3b = {d["id"]: d["query_plan"] for d in json.load(open(os.path.join(REPORTS_DIR, slm_report), encoding="utf-8"))["modes"]["slm"]["details"]}
+    triggered = {q["id"]: plan_3b[q["id"]]["query_type"] == "comparison" or bool(_COMPLEX_SIGNAL_PATTERN.search(q["question"]))
+                 for q in multi}
+    cache = json.load(open(SUBQUERY_CACHE, encoding="utf-8")) if os.path.exists(SUBQUERY_CACHE) else {}
+    configs = [(m, p) for m in ("qwen2.5:3b-instruct", LARGER_SLM) for p in ("cũ", "theo đối tượng")]
+    for model, prompt in configs:
+        key = f"{model}|{prompt}"
+        cache.setdefault(key, {})
+        qp = QueryProcessor(base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"), model_name=model,
+                            decompose_by_entity=(prompt == "theo đối tượng"))
+        for q in multi:
+            if q["id"] not in cache[key]:
+                t0 = time.perf_counter()
+                cache[key][q["id"]] = qp.decompose(q["question"])
+                cache.setdefault("latency_s", {}).setdefault(key, []).append(round(time.perf_counter() - t0, 1))
+                json.dump(cache, open(SUBQUERY_CACHE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+        print(f"✅ câu con {key}", flush=True)
+
+    retriever, _, pipeline, rank, ef = _setup(db_path)
+    n = len(multi)
+    print(f"\n=== M3: 17 câu multi_doc (kích hoạt D1: {sum(triggered.values())}), ef_search={ef} ===")
+    print(f"{'mô hình · prompt':<40}{'tách được':>10}{'câu con TB':>11}{'T1 câu con':>11}{'T2 ứng viên':>12}"
+          f"{'S0 top-3':>10}{'V1 mọi câu':>12}{'V1 theo D1':>12}{'latency TB':>11}")
+    summary = {}
+    for model, prompt in configs:
+        key = f"{model}|{prompt}"
+        agg = {"split": 0, "n_sub": 0, "T1": 0, "T2": 0, "S0": 0, "V1": 0, "V1_D1": 0}
+        for q in multi:
+            required = [set(g) for g in q["required_doc_groups"]]
+            covers = lambda files: all(any(f in g for f in files) for g in required)
+            subs = cache[key][q["id"]]
+            if len(subs) >= 2:
+                agg["split"] += 1
+                agg["n_sub"] += len(subs)
+                union = {c.filename for s in subs for c in retriever.retrieve(s, acl_bypass=True)}
+                pool = pipeline._retrieve_multi(subs, acl_bypass=True)
+            else:  # fail-open như production: retrieve câu gốc
+                pool = retriever.retrieve(q["question"], acl_bypass=True)
+                union = {c.filename for c in pool}
+            ranked = rank(q["question"], pool)
+            s0, v1 = select_s0(ranked), select_v1(ranked)
+            agg["T1"] += covers(union)
+            agg["T2"] += covers([c.filename for c, _ in ranked])
+            agg["S0"] += covers([c.filename for c in s0])
+            agg["V1"] += covers([c.filename for c in v1])
+            agg["V1_D1"] += covers([c.filename for c in (v1 if triggered[q["id"]] else s0)])
+        lat = cache.get("latency_s", {}).get(key, [])
+        summary[key] = agg
+        print(f"{model + ' · ' + prompt:<40}{agg['split']:>7}/{n:<2}{agg['n_sub'] / max(agg['split'], 1):>11.1f}"
+              f"{agg['T1'] / n:>11.3f}{agg['T2'] / n:>12.3f}{agg['S0'] / n:>10.3f}{agg['V1'] / n:>12.3f}{agg['V1_D1'] / n:>12.3f}"
+              f"{(sum(lat) / len(lat) if lat else 0):>10.1f}s")
+    print("\nCâu con của 3 câu khó (a066 so sánh 2 năm, a074 VNM/IMP, a075 giá GAS/VNM):")
+    for qid in ("a066", "a074", "a075"):
+        q = next(x for x in multi if x["id"] == qid)
+        print(f"  {qid} {q['question'][:100]}")
+        for model, prompt in configs:
+            print(f"     {model + ' · ' + prompt:<38} {cache[f'{model}|{prompt}'][qid]}")
+    json.dump({"ef_search": ef, "summary": summary}, open(os.path.join(REPORTS_DIR, "diag_multi_doc_m3.json"), "w",
+              encoding="utf-8"), ensure_ascii=False, indent=2)
+
+
 def run(db_path: str, slm_report: str):
     multi = [q for q in json.load(open(SETS["vague70"]["output"], encoding="utf-8"))["questions"] if q["category"] == "multi_doc"]
     false_trig = [q for path in (SETS["vague70"]["output"], SETS["full"]["output"])
@@ -348,9 +416,13 @@ if __name__ == "__main__":
     parser.add_argument("--slm-report", help="Report chế độ slm 17 câu multi_doc (câu con 3b + query_type)")
     parser.add_argument("--harm-check", action="store_true",
                         help="M1b: áp V1 cho toàn bộ bộ 131 + vague70 (không tách), so với S0")
+    parser.add_argument("--m3", action="store_true",
+                        help="M3: so prompt tách câu cũ vs theo đối tượng (3b, 7b) — cần --slm-report cho query_type")
     args = parser.parse_args()
     if args.harm_check:
         run_harm_check(args.db)
+    elif args.m3 and args.slm_report:
+        run_m3(args.db, args.slm_report)
     elif args.slm_report:
         run(args.db, args.slm_report)
     else:
