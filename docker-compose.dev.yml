@@ -1,40 +1,51 @@
 # ==============================================================
 # docker-compose.dev.yml — Development Override
 # ==============================================================
-# Dùng lệnh: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+# Dùng lệnh: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 #
 # Khác biệt với production:
-#   - Hot reload cho backend (mount source code)
-#   - Vite dev server thay vì Nginx build
-#   - FLASK_DEBUG=True
-#   - Expose thêm cổng MongoDB để dùng GUI (MongoDB Compass)
+#   - Backend chạy Flask debug (python run.py) + mount source code để hot reload
+#   - Vite dev server (cổng 5173) thay vì Nginx build
+#   - Publish cổng mongo/chroma/redis/backend ra 127.0.0.1 để debug (MongoDB Compass...).
+#     Cổng host cố tình LỆCH khỏi mặc định (27018/8001/6380) để không đụng MongoDB/Redis
+#     đang chạy sẵn trên máy dev.
 # ==============================================================
-
-version: "3.9"
 
 services:
   backend:
-    # TODO: Override command để chạy với Flask debug mode
-    # TODO: Mount toàn bộ backend/app/ để hot reload
-    command: python run.py
-    volumes:
-      - ./backend:/app
-      - ./backend/uploads:/app/uploads
+    command: ["python", "run.py"]
     environment:
       FLASK_ENV: development
       FLASK_DEBUG: "True"
+      TRUST_PROXY: "false"           # truy cập trực tiếp, không qua Nginx
+      CORS_ALLOWED_ORIGINS: http://localhost:5173
+    ports:
+      - "127.0.0.1:5000:5000"
+    volumes:
+      - ./backend:/app
 
   frontend:
-    # TODO: Chạy Vite dev server thay vì build Nginx
-    # TODO: Mount source code để hot reload
-    command: npm run dev -- --host
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: builder                # stage Node (có npm), không phải stage Nginx
+    command: ["npm", "run", "dev", "--", "--host"]
+    environment:
+      VITE_API_BASE_URL: http://backend:5000   # vite.config.js proxy /api tới đây
+    ports: !override
+      - "5173:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    ports:
-      - "5173:5173"
 
   mongo:
-    # TODO: Expose port để dùng với MongoDB Compass
     ports:
-      - "27017:27017"
+      - "127.0.0.1:${MONGO_HOST_PORT:-27018}:27017"
+
+  chromadb:
+    ports:
+      - "127.0.0.1:${CHROMA_HOST_PORT:-8001}:8000"
+
+  redis:
+    ports:
+      - "127.0.0.1:${REDIS_HOST_PORT:-6380}:6379"

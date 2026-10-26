@@ -2,77 +2,127 @@
 # docker-compose.yml — Production Orchestration
 # ==============================================================
 # Services:
-#   - backend  : Flask API (port 5000)
-#   - frontend : React/Vite (port 3000, served by Nginx)
-#   - mongo    : MongoDB (port 27017)
-#   - chromadb : ChromaDB vector store (port 8000)
+#   - frontend : React/Vite build, phục vụ bởi Nginx (cổng 3000) — reverse proxy /api/ → backend
+#   - backend  : Flask API chạy Gunicorn (chỉ mở trong mạng compose, vào qua frontend)
+#   - mongo    : MongoDB
+#   - chromadb : ChromaDB server (CHROMA_MODE=http)
+#   - redis    : rate-limit chung + marker đồng bộ BM25 giữa các worker
+#   Ollama KHÔNG nằm trong stack: backend gọi Ollama đang chạy trên máy host
+#   qua http://host.docker.internal:11434.
+#
+# Chuẩn bị:
+#   cp .env.example backend/.env   # điền SECRET_KEY, JWT_SECRET_KEY (bắt buộc), khóa API nếu dùng Gemini/Claude/OpenAI
+#   # Các biến hạ tầng (MONGO_URI, CHROMA_*, REDIS_URL, OLLAMA_BASE_URL, FLASK_ENV...) được
+#   # khai báo ở "environment" bên dưới và GHI ĐÈ backend/.env — .env dev local không cần sửa.
 #
 # Usage:
-#   docker-compose up --build
-#   docker-compose down -v  # xóa cả volumes
+#   docker compose up --build
+#   docker compose down            # giữ dữ liệu
+#   docker compose down -v         # xóa cả volumes (MẤT toàn bộ dữ liệu)
+#   docker compose exec backend python scripts/create_admin.py <email> <username> <mật-khẩu>   # admin đầu tiên
+#
+# Biến tùy chỉnh (đặt trong shell hoặc file .env cạnh compose):
+#   FRONTEND_PORT   cổng web trên host (mặc định 3000)
+#   GUNICORN_WORKERS  số worker (mặc định 1 — mỗi worker nạp riêng ~5-6GB model, xem backend/Dockerfile)
+#   HF_CACHE_DIR    thư mục cache HuggingFace trên host để khỏi tải lại model ~6.5GB,
+#                   vd C:/Users/<tên>/.cache/huggingface (mặc định: volume hf_cache, tải ở lần chạy đầu)
 # ==============================================================
-
-version: "3.9"
 
 services:
   backend:
-    # TODO: Build từ backend/Dockerfile
-    # TODO: Map port 5000:5000
-    # TODO: Mount .env file
-    # TODO: Depends on: mongo, chromadb
-    # TODO: Environment variables từ .env
     build:
       context: ./backend
       dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
     env_file:
-      - .env
-    depends_on:
-      - mongo
-      - chromadb
+      - ./backend/.env
+    environment:
+      FLASK_ENV: production
+      MONGO_URI: mongodb://mongo:27017/rag_db
+      # Multi-worker bắt buộc: Chroma server riêng (không dùng SQLite persistent) + Redis + BM25 sync
+      CHROMA_MODE: http
+      CHROMA_HOST: chromadb
+      CHROMA_PORT: "8000"
+      REDIS_URL: redis://redis:6379/0
+      BM25_SYNC_ENABLED: "true"
+      # Chạy sau Nginx của service frontend → đọc IP client thật từ X-Forwarded-For
+      TRUST_PROXY: "true"
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      CORS_ALLOWED_ORIGINS: http://localhost:${FRONTEND_PORT:-3000}
+      UPLOAD_FOLDER: /app/uploads
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-1}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # Linux không có sẵn; Docker Desktop đã tự có
     volumes:
-      - ./backend/uploads:/app/uploads
+      - uploads_data:/app/uploads
+      - ${HF_CACHE_DIR:-hf_cache}:/models
+    depends_on:
+      mongo:
+        condition: service_healthy
+      chromadb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health', timeout=5)"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
     restart: unless-stopped
 
   frontend:
-    # TODO: Build từ frontend/Dockerfile
-    # TODO: Map port 3000:80 (Nginx)
-    # TODO: Environment variables VITE_API_BASE_URL
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:80"
-    env_file:
-      - .env
+      - "${FRONTEND_PORT:-3000}:80"
     depends_on:
       - backend
     restart: unless-stopped
 
   mongo:
-    # TODO: MongoDB 7.x image
-    # TODO: Persistent volume cho data
-    # TODO: Tạo user/password qua environment
     image: mongo:7.0
-    ports:
-      - "27017:27017"
     volumes:
       - mongo_data:/data/db
-    environment:
-      MONGO_INITDB_DATABASE: rag_db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
     restart: unless-stopped
 
   chromadb:
-    # TODO: ChromaDB server image
-    # TODO: Persistent volume cho vector data
-    # TODO: Map port 8000:8000
-    image: chromadb/chroma:latest
-    ports:
-      - "8000:8000"
+    # Ghim đúng bản với chromadb==... trong backend/requirements.txt
+    image: chromadb/chroma:1.5.9
     volumes:
-      - ./chromadb_data:/chroma/chroma
+      - chroma_data:/data          # persist_path mặc định của image là /data
+    healthcheck:
+      # Image không có curl/wget — dùng bash /dev/tcp gọi heartbeat
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8000 && printf 'GET /api/v2/heartbeat HTTP/1.0\\r\\n\\r\\n' >&3 && head -1 <&3 | grep -q 200"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     restart: unless-stopped
 
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]   # giữ marker bm25:version qua lần restart
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+# mongo, chromadb, redis cố ý KHÔNG publish cổng ra host (chỉ truy cập được trong mạng compose);
+# muốn dùng MongoDB Compass / debug thì dùng docker-compose.dev.yml.
 volumes:
   mongo_data:
+  chroma_data:
+  redis_data:
+  uploads_data:
+  hf_cache:

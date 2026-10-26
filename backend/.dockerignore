@@ -1,0 +1,23 @@
+# Secret & cấu hình local — KHÔNG được vào image (truyền qua env_file/environment của compose)
+.env
+.env.*
+!.env.example
+
+# Dữ liệu runtime — mount volume, không đóng vào image
+uploads/
+chromadb_data/
+scripts/output/
+
+# Test & rác sinh ra khi chạy
+tests/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.venv*/
+ml_env/
+
+# Chính các file build
+Dockerfile
+.dockerignore

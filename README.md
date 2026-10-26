@@ -89,14 +89,26 @@ Kiến trúc **Layered / Clean Architecture** trên nền monolith Flask, gồm 
 git clone <repo-url>
 cd RAG
 
-# Cấu hình biến môi trường
-cp .env.example .env
+# Cấu hình biến môi trường (compose đọc backend/.env)
+cp .env.example backend/.env
 #   → điền SECRET_KEY, JWT_SECRET_KEY (bắt buộc)
 #   → (tùy chọn) GOOGLE_API_KEY nếu dùng Gemini
+#   → MONGO_URI / CHROMA_* / REDIS_URL / OLLAMA_BASE_URL do docker-compose.yml tự đặt, không cần sửa
 
-# Khởi động toàn bộ stack (backend · frontend · mongo · chromadb)
-docker-compose up --build
+# Khởi động toàn bộ stack (frontend · backend · mongo · chromadb · redis)
+docker compose up --build
+# → Web: http://localhost:3000 (Nginx proxy /api/ sang backend)
+
+# Tạo tài khoản admin đầu tiên (stack mới có Mongo/Chroma trống)
+docker compose exec backend python scripts/create_admin.py <email> <username> <mật-khẩu>
 ```
+
+Lưu ý khi chạy bằng Docker:
+- **Ollama không nằm trong stack**: backend gọi Ollama chạy sẵn trên máy host qua `http://host.docker.internal:11434`. Trên Windows, Ollama nghe ở `127.0.0.1` vẫn truy cập được từ container (Docker Desktop).
+- **Model embedding/reranker (~6.5GB) tải ở lần chạy đầu** vào volume `hf_cache`. Đã có cache HuggingFace trên máy thì dùng lại: `HF_CACHE_DIR=C:/Users/<tên>/.cache/huggingface docker compose up --build`.
+- **Mặc định 1 Gunicorn worker** (mỗi worker nạp riêng ~5-6GB model). Tăng bằng `GUNICORN_WORKERS` chỉ khi đủ RAM cho Docker.
+- Mongo/Chroma/Redis không mở cổng ra host. Cần MongoDB Compass hoặc debug: `docker compose -f docker-compose.yml -f docker-compose.dev.yml up` (mở 127.0.0.1:27018 / 8001 / 6380).
+- Dữ liệu nằm trong volume Docker (`docker compose down -v` sẽ xóa sạch). Kho tài liệu cũ chạy ngoài Docker không tự được chuyển sang — cần nạp lại.
 
 ### Cách 2 — Dev thủ công (single-machine)
 
@@ -124,7 +136,7 @@ python scripts/bulk_ingest.py     # nạp hàng loạt tài liệu vào kho
 
 ## ⚙️ Cấu hình then chốt
 
-Các biến quan trọng khi chuyển giữa dev và production (chi tiết đầy đủ ở [`SYSTEM_ARCHITECTURE.md`](SYSTEM_ARCHITECTURE.md) mục 7):
+Các biến quan trọng khi chuyển giữa dev và production:
 
 | Biến | Single-machine (dev) | Multi-worker (prod) | Ý nghĩa |
 |---|---|---|---|
