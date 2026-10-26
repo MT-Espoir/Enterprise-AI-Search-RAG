@@ -201,6 +201,8 @@ def summarize(records: list[dict]) -> dict:
 
 def print_summary(mode: str, s: dict):
     def fmt(m):
+        if m["mean"] is None:  # vd all_required@k trên bộ không có câu cần nhiều tài liệu
+            return "-"
         lo_hi = f" [{m['ci95'][0]:.3f}–{m['ci95'][1]:.3f}]" if m["ci95"] else ""
         return f"{m['mean']:.3f}{lo_hi}"
 
