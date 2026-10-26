@@ -31,6 +31,7 @@ import json
 import os
 import statistics
 import sys
+import time
 from collections import defaultdict
 from datetime import datetime, timezone
 
@@ -107,7 +108,10 @@ def score_ranking(chunk_ids: list[str], filenames: list[str], relevant_ids: set[
 
 def retrieve_like_production(mode: str, question: str, query_processor, pipeline: RAGPipeline,
                              retriever, reranker, timer: StageTimer, diversity_enabled: bool = False):
-    """Tái hiện RAGPipeline.run() nhánh QA tới hết Rerank (app/core/rag_pipeline.py)."""
+    """Tái hiện RAGPipeline.run() nhánh QA tới hết Rerank (app/core/rag_pipeline.py).
+
+    Trả (candidates, reranked, score_order, info): score_order = thứ tự điểm rerank thuần (= bản killswitch TẮT),
+    trùng reranked khi không chọn đa dạng — để so A/B trong CÙNG lượt chạy (cùng câu con SLM, không nhiễu sinh)."""
     info = {"query_type": None, "rewrite": False, "rewritten_query": None,
             "sub_queries": [], "bypass_retrieval": False, "diverse_selection": False}
     vector_query = None
@@ -122,7 +126,7 @@ def retrieve_like_production(mode: str, question: str, query_processor, pipeline
                     bypass_retrieval=plan.bypass_retrieval)
         if plan.bypass_retrieval:
             # Production không có doc_id → trả "Vui lòng chỉ định tài liệu", không retrieve
-            return [], [], info
+            return [], [], [], info
         effective_question = plan.rewritten_query if plan.rewrite else question
         if pipeline.decomposition_enabled and plan.query_type in ("complex", "comparison", "reasoning"):
             with timer.stage("preprocessing_ms"):
@@ -137,17 +141,20 @@ def retrieve_like_production(mode: str, question: str, query_processor, pipeline
             candidates = retriever.retrieve(question, vector_query=vector_query, acl_bypass=True)
 
     if not candidates:
-        return [], [], info
+        return [], [], [], info
     with timer.stage("rerank_ms"):
-        reranked = reranker.rerank(question, candidates)
+        score_order = reranker.rerank(question, candidates)
+        reranked = score_order
         # Như RAGPipeline._rerank_and_select: câu so sánh + killswitch → top-k production chọn đa dạng tài liệu;
         # phần sau top-k giữ thứ tự điểm (chỉ số @5 vẫn đo được)
         if diversity_enabled and is_comparison_query(question, plan):
-            top = select_diverse(reranked, PRODUCTION_RERANK_TOP_K)
+            t0 = time.perf_counter()
+            top = select_diverse(score_order, PRODUCTION_RERANK_TOP_K)
             chosen = {c.chunk_id for c in top}
-            reranked = top + [c for c in reranked if c.chunk_id not in chosen]
+            reranked = top + [c for c in score_order if c.chunk_id not in chosen]
             info["diverse_selection"] = True
-    return candidates, reranked, info
+            info["select_ms"] = round((time.perf_counter() - t0) * 1000.0, 3)
+    return candidates, reranked, score_order, info
 
 
 def summarize(records: list[dict]) -> dict:
@@ -163,6 +170,8 @@ def summarize(records: list[dict]) -> dict:
         "n": len(records),
         "retrieval": {"chunk": block("chunk", "retrieval"), "doc": block("doc", "retrieval")},
         "reranked": {"chunk": block("chunk", "reranked"), "doc": block("doc", "reranked")},
+        **({"reranked_off": {"chunk": block("chunk", "reranked_off"), "doc": block("doc", "reranked_off")}}
+           if "reranked_off" in records[0]["metrics"] else {}),
         "latency": summarize_latency([r["latency_ms"] for r in records]),
         "query_processor": {
             "rewrite_count": sum(r["query_plan"]["rewrite"] for r in records),
@@ -338,7 +347,7 @@ def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path:
         records = []
         for idx, q in enumerate(questions, 1):
             timer = StageTimer()
-            candidates, reranked, plan_info = retrieve_like_production(
+            candidates, reranked, score_order, plan_info = retrieve_like_production(
                 mode, q["question"], query_processor, pipeline, retriever, reranker, timer, diversity_enabled,
             )
             relevant_ids = set(q["relevant_chunk_ids"])
@@ -350,6 +359,10 @@ def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path:
                 "reranked": score_ranking([c.chunk_id for c in reranked], [c.filename for c in reranked],
                                           relevant_ids, relevant_groups, RERANK_K_VALUES, required_groups),
             }
+            if diversity_enabled:
+                metrics["reranked_off"] = score_ranking(
+                    [c.chunk_id for c in score_order], [c.filename for c in score_order],
+                    relevant_ids, relevant_groups, RERANK_K_VALUES, required_groups)
             records.append({
                 "id": q["id"],
                 "question": q["question"],
@@ -358,6 +371,8 @@ def run(split: str, modes: list[str], dataset_path: str = DATASET_PATH, db_path:
                 "query_plan": plan_info,
                 "retrieved": [{"chunk_id": c.chunk_id, "filename": c.filename, "page": c.page} for c in candidates],
                 "reranked_top": [c.chunk_id for c in reranked[:PRODUCTION_RERANK_TOP_K]],
+                **({"reranked_top_off": [c.chunk_id for c in score_order[:PRODUCTION_RERANK_TOP_K]]}
+                   if diversity_enabled else {}),
                 "metrics": metrics,
                 "latency_ms": timer.as_record(),
             })
